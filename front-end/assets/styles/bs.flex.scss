@@ -1,0 +1,134 @@
+html, body { height: 100% }
+
+body { overflow-x: hidden }
+
+main, 
+section,
+.wrapper { padding: calc(5rem + 4vw) 0 }
+
+.wrapper-sm { padding: calc(4rem + 3vw) 0 }
+
+@media(max-width:1320px){
+  [class*="container"] { padding: 0 1.5rem !important }
+}
+
+@media(max-width:767.98px){
+  [class*="container"] { padding: 0 2rem !important }
+}
+
+@import "scss/functions";
+
+@import "font-poppins.css";
+$font-family-base: "Poppins", Sans-serif;
+
+$primary: #4BDCBF; 
+$secondary: #75163E;
+$dark: #18465D;
+
+$btn-padding-x: 2rem;
+$btn-padding-y: 1rem;
+
+$prefix: "flex-";
+
+@import "scss/variables";
+@import "scss/maps";
+@import "scss/mixins";
+@import "scss/root"; 
+@import "scss/utilities";
+
+$theme-colors: map-remove($theme-colors, "info", "warning", "light");
+$colors: map-remove($colors, "blue", "indigo", "purple", "pink", "red", "orange", "yellow", "green", "teal", "cyan");
+
+// Layout & components
+// @import "scss/reboot";
+// @import "scss/type";
+@import "scss/images";
+@import "scss/containers";
+@import "scss/grid";
+@import "scss/tables";
+@import "scss/forms";
+@import "scss/buttons";
+@import "scss/transitions";
+@import "scss/dropdown";
+// @import "scss/button-group";
+@import "scss/nav";
+@import "scss/navbar";
+@import "scss/card";
+@import "scss/accordion";
+// @import "scss/breadcrumb";
+// @import "scss/pagination";
+// @import "scss/badge";
+@import "scss/alert";
+// @import "scss/progress";
+@import "scss/list-group";
+@import "scss/close";
+@import "scss/toasts";
+@import "scss/modal";
+// @import "scss/tooltip";
+// @import "scss/popover";
+@import "scss/carousel";
+// @import "scss/spinners";
+// @import "scss/offcanvas";
+// @import "scss/placeholders";
+
+// Helpers
+@import "scss/helpers";
+@import "scss/utilities/api";
+
+::-webkit-scrollbar { 
+  padding: 1px;
+  background: transparent;
+  height: .5rem;
+  width: .5rem }
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb { 
+  padding: 3px }
+
+::-webkit-scrollbar-thumb { background: var(--flex-primary) }
+::-webkit-scrollbar-thumb:hover { background: var(--flex-primary)  }
+
+[class~="ratio"]{
+  position: relative;
+  overflow: hidden;
+  display: block }
+
+[class~="ratio"] img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover }
+
+img[width]{
+  width: 100%;
+  height: auto;
+  aspect-ratio: attr(width) / attr(height) }
+
+.icon { 
+  display: inline-block;
+  position: relative }
+
+.icon-16 { width: 16px; height: 16px }
+.icon-24 { width: 24px; height: 24px }
+.icon-32 { width: 32px; height: 32px }
+.icon-48 { width: 48px; height: 48px }
+.icon-64 { width: 64px; height: 64px }
+.icon-96 { width: 96px; height: 96px }
+
+.icon.text-primary    { fill: var(--flex-primary); color: var(--flex-primary) }
+.icon.text-secondary  { fill: var(--flex-secondary); color: var(--flex-secondary) }
+.icon.text-white      { fill: #FFF }
+.icon.text-whatsapp   { fill: #03B35B }
+
+footer .brand-flexpoint {
+  display: inline-block;
+  text-indent: -1000000px;
+  background: url(https://www.flexpoint.com.br/addons/flexpoint-site-sign.png);
+  width: 25px;
+  height: 27px } 
+
+footer .brand-flexpoint.brand-black { background-position: bottom }
+footer .brand-flexpoint.brand-white { background-position: top }
