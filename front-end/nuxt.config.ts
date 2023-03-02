@@ -8,7 +8,7 @@ export default defineNuxtConfig({
             title: 'LES Group',
         }
     },
-    css: ["bootstrap/dist/css/bootstrap.min.css"], // add
+    css: ["~/assets/styles/style.scss"], // add
 
     
 })

@@ -1,0 +1,63 @@
+@import "/node_modules/bootstrap/scss/bootstrap.scss";
+@import url(font-poppins.min.css);
+
+$primary: #00c57e;
+$secondary: #005235;
+$dark: #003723;
+
+html,body,#__nuxt,main{ height: 100%;width: 100%; }
+
+body{
+    font-family: "Poppins", sans-serif;
+}
+
+.bg-gradient-primary{
+    background: rgb(0,197,126);
+    background: linear-gradient(216deg, rgba(0,197,126,1) 0%, rgba(0,82,53,1) 78%, rgba(0,82,53,1) 100%);
+}
+
+.navbar-brand{
+    width: 300px;
+}
+
+@media (max-width: 767.98px) {
+    .navbar-brand{
+        width: 200px;
+    }
+}
+
+.icon {
+    display: flex;
+    position: relative;
+}
+
+.icon-16 {
+    width: 16px;
+    height: 16px;
+}
+.icon-24 {
+    width: 24px;
+    height: 24px;
+}
+.icon-32 {
+    width: 32px;
+    height: 32px;
+}
+
+.icon-40 {
+    width: 40px;
+    height: 40px;
+}
+
+.icon.text-primary {
+    fill: $primary;
+    color: $primary;
+}
+.icon.text-secondary {
+    fill: $secondary;
+    color: $secondary;
+}
+.icon.text-dark {
+    fill: $dark;
+    color: $dark;
+}
