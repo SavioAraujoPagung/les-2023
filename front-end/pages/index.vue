@@ -1,3 +1,5 @@
 <template>
-    <h1 class="h1">Hello Index</h1>
+    <div>
+        <h1 class="h1">Hello Index</h1>
+    </div>
 </template>
