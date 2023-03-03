@@ -1,9 +1,10 @@
-@import "/node_modules/bootstrap/scss/bootstrap.scss";
-@import url(font-poppins.min.css);
 
 $primary: #00c57e;
 $secondary: #005235;
 $dark: #003723;
+@import "/node_modules/bootstrap/scss/bootstrap";
+@import url(font-poppins.min.css);
+
 // $navbar-dark-toggler-border-color:  rgba($white, .1) !default;
 
 html,body,#__nuxt,main{ height: 100%;width: 100%; }
