@@ -4,17 +4,6 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-    name:'MyModalHeader',
-    setup() {
-        return {}
-    },
-})
-</script>
-
 <style>
     .my-modal-header{
         display: flex;

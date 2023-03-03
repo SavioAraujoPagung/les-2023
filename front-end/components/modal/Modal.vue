@@ -1,24 +1,12 @@
 <template>
     <transition>
-        <div class="my-modal" id="modalAtorForm" aria-hidden="true" aria-labelledby="modalAtorFormLabel" tabindex="-1">
+        <div class="my-modal">
             <div class="my-modal-inner">
                 <slot></slot>
             </div>
         </div>
     </transition>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-    name:'MyModal',
-    setup() {
-
-        return {}   
-    },
-})
-</script>
 
 <style>
     .my-modal{

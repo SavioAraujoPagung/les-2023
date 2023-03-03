@@ -4,17 +4,6 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-    name: 'myModalFooter',
-    setup() {
-        return {}
-    },
-})
-</script>
-
 <style>
     .my-modal-footer{
         display: flex;
