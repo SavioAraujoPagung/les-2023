@@ -4,9 +4,9 @@
       <NuxtLink class="navbar-brand p-4" to="/">
         <img src="@/assets/img/brand.webp" alt="logo" class="img-fluid">
       </NuxtLink>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+      <button class="navbar-toggler text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
         aria-controls="sidebar">
-        <span class="navbar-toggler-icon"></span>
+        <i class="icon icon-32"><IconsMenu/></i>
       </button>
       <div class="offcanvas offcanvas-end bg-gradient-primary" tabindex="-1" id="sidebar"
         aria-labelledby="sidebarLabel">
