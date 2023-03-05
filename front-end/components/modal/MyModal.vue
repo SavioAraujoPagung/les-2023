@@ -1,6 +1,6 @@
 <template>
     <transition>
-        <div class="my-modal">
+        <div class="my-modal col-sm-12">
             <div class="my-modal-inner">
                 <slot></slot>
             </div>
@@ -33,6 +33,7 @@
     }
 
     .v-enter-active, .v-leave-active {
+        opacity: 1;
         transition: opacity 0.3s ease;
     }
     .v-enter-from, .v-leave-to {

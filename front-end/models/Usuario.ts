@@ -1,13 +1,19 @@
 import Default from "./Default";
 
 class Usuario extends Default{
-    nome: string;
-    cargo: number
+    name: string;
+    email: string;
+    gender: string;
+    office: string;
+    password: string;
 
     constructor() {
-        super("/diretor/");
-        this.nome = "";
-        this.cargo = 0;
+        super("/users/");
+        this.name = "";
+        this.email = "";
+        this.gender = "";
+        this.office = "";
+        this.password = "";
     }
 
 }
