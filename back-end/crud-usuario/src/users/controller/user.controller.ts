@@ -1,19 +1,27 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe, NotFoundException, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../model/user.entity';
 
 @Controller('users')
 export class UserController {
-  
+  private logger: Logger;
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>
-    ) {}
+    ) {
+      this.logger = new Logger('UserControllerRepository');
+    }
 
   @Post()
   async create(@Body() user: User): Promise<User> {
-    return this.repository.save(user);
+    try {
+      return this.repository.save(user);
+    } catch (error) {
+      this.logger.error(`Não foi possivel cadastrar um usuário. ${error}`);
+      throw new Error('Erro ao cadastrar um usuário');
+    }
+   
   }
   
   @Get()

@@ -27,10 +27,10 @@
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item">
-              <NuxtLink class="nav-link d-flex align-items-center gap-2 text-white" to="/logout">
+              <a href="javascript:;" @click="logout" class="nav-link d-flex align-items-center gap-2 text-white">
                 <i class="icon icon-16"><IconsBoxArrowLeft/></i>
                 Sair
-              </NuxtLink>
+              </a>
             </li>
           </ul>
         </div>
@@ -38,3 +38,12 @@
     </div>
   </nav>
 </template>
+
+<script setup>
+
+  const logout = () => {
+    navigateTo('login');
+    localStorage.removeItem("isLogged");
+  }
+
+</script>

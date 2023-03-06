@@ -18,6 +18,34 @@ class Usuario extends Default{
 
 }
 
+class UsuarioEdit{
+    name: string;
+    email: string;
+    gender: string;
+    office: string;
+    password: string;
+
+    constructor() {
+        this.name = "";
+        this.email = "";
+        this.gender = "";
+        this.office = "";
+        this.password = "";
+    }
+
+}
+
+class UsuarioAuth{
+    email: string;
+    password: string;
+
+    constructor() {
+        this.email = "";
+        this.password = "";
+    }
+
+}
+
 enum Cargos{
     "Administrador" = 1,
     "Fiscal de entrada" = 2,
@@ -28,4 +56,4 @@ enum Cargos{
     "Cozinheiro" = 7,
 }
 
-export {Usuario, Cargos}
+export {Usuario, UsuarioEdit,Cargos, UsuarioAuth}
