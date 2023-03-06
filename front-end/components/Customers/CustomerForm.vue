@@ -21,22 +21,22 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="password" name="password" id="password" class="form-control" v-model="entity.password" placeholder="password" required>
-                    <label for="password" class="form-label">Senha</label>
+                    <!-- <input type="password" name="password" id="password" class="form-control" v-model="entity.password" placeholder="password" required>
+                    <label for="password" class="form-label">Senha</label> -->
                 </div>
 
                 <div class="form-floating mb-3">
-                    <select name="gender" id="gender" class="form-control" v-model="entity.gender">
+                    <!-- <select name="gender" id="gender" class="form-control" v-model="entity.gender">
                         <option value="">Selecione</option>
                         <option value="m">Masculino</option>
                         <option value="f">Feminino</option>
-                    </select>
+                    </select> -->
                     <label for="gender" class="form-label">Sexo</label>
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="text" name="office" id="office" class="form-control" v-model="entity.office">
-                    <label for="office" class="form-label">Cargo</label>
+                    <!-- <input type="text" name="office" id="office" class="form-control" v-model="entity.office">
+                    <label for="office" class="form-label">Cargo</label> -->
                 </div>
 
             </modal-body>
@@ -50,8 +50,7 @@
 </template>
 
 <script lang="ts">
-import { useUserStore } from "~~/stores/UserStore";
-import { Cargos } from "~~/models/Usuario";
+import { useCustomerStore } from "~~/stores/CustomerStore";
 import { storeToRefs } from "pinia";
 
 
@@ -59,8 +58,8 @@ export default defineComponent({
     emits:['saved', 'close'],
     setup(props,{emit}) {
 
-        const { save, update, getById, resetEntity } = useUserStore();
-        const { errors, entity } = storeToRefs(useUserStore());
+        const { save, update, getById, resetEntity } = useCustomerStore();
+        const { errors, entity } = storeToRefs(useCustomerStore());
 
         const isOpen = ref(false);
 
@@ -87,7 +86,6 @@ export default defineComponent({
             formSave,
             isOpen,
             closeModal,
-            Cargos
         }   
     },
 })

@@ -4,7 +4,7 @@
         <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
     </header>
 
-    <div>
+    
         <table style="width: 100%">
             <tr>
                 <th>Nome</th>
@@ -21,12 +21,12 @@
                 <td>14/05/1998</td>
             </tr>
         </table>
-    </div>
+    
 </template>
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
-import { useClientStore } from '~~/stores/ClientStore';
+import { useCustomerStore } from '~~/stores/CustomerStore';
 export default defineComponent({
     setup() {
         
@@ -36,8 +36,8 @@ export default defineComponent({
 
         const isOpen = ref(false);
 
-        const { destroy, getAll, getById, resetEntity } = useClientStore()
-        const { entities } = storeToRefs(useClientStore());
+        const { destroy, getAll, getById, resetEntity } = useCustomerStore()
+        const { entities } = storeToRefs(useCustomerStore());
 
         const cancelChange = () => {
             resetEntity();
@@ -79,7 +79,8 @@ export default defineComponent({
 
         const showForm = () => {
             console.log("tessttteee")
-            modalForm.value = resolveComponent('ClientsSistemClientSistemForm')
+            modalForm.value = resolveComponent('CustomersCustomerForm')
+            console.log("tessttteee333333")
         }
 
         onMounted(getAll);

@@ -1,6 +1,6 @@
 import Default from "./Default";
 
-class Cliente extends Default{
+class Customer extends Default{
     name: string;
     cpf: string;
     phone: string;
@@ -17,7 +17,7 @@ class Cliente extends Default{
     }
 }
 
-class ClientEdit{
+class CustomerEdit{
     name: string;
     cpf: string;
     phone: string;
@@ -33,4 +33,4 @@ class ClientEdit{
     }
 }
 
-export {Cliente, ClientEdit}
+export {Customer, CustomerEdit}

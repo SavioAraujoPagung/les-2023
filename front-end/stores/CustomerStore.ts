@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import api from '~/services/api'
-import { Cliente, ClientEdit } from '~~/models/Cliente';
+import { Customer, CustomerEdit } from '~~/models/Customer';
 
-export const useClientStore = defineStore('client', () => {
-    const entity = reactive(new Cliente());
+export const useCustomerStore = defineStore('Customer', () => {
+    const entity = reactive(new Customer());
     const entities = ref([]);
     const path = entity.path;
     const errors = ref("");
@@ -23,7 +23,7 @@ export const useClientStore = defineStore('client', () => {
         const response = await api.delete(path + id);
     }
 
-    const resetEntity = () => Object.assign(entity, new Cliente());
+    const resetEntity = () => Object.assign(entity, new Customer());
 
     const getSubSet = (object:any, types:any) => {
         return types.reduce((obj:any, type:any) => {
@@ -39,7 +39,7 @@ export const useClientStore = defineStore('client', () => {
     }
 
     const update = async (data:any, id:any) => {
-        let object = getSubSet(data, Object.getOwnPropertyNames(new ClientEdit()));
+        let object = getSubSet(data, Object.getOwnPropertyNames(new CustomerEdit()));
         await api.put(path + id, object);
     }
   
