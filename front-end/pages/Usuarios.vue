@@ -35,10 +35,11 @@ export default defineComponent({
 
         const isOpen = ref(false);
 
-        const { destroy, getAll, getById } = useUserStore();
+        const { destroy, getAll, getById, resetEntity } = useUserStore();
         const { entities } = storeToRefs(useUserStore());
 
         const cancelChange = () => {
+            resetEntity();
             modalForm.value = resolveComponent('div');
         }
 
@@ -52,6 +53,7 @@ export default defineComponent({
                 showConfirmButton: false,
                 timer: 1500
             });
+            resetEntity();
             await getAll();
         }
 
