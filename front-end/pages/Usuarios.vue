@@ -26,9 +26,14 @@ import { storeToRefs } from 'pinia';
 import { Cargos } from '~~/models/Usuario';
 import { useUserStore } from '~~/stores/UserStore';
 
-export default defineComponent({
-    setup() {
+definePageMeta({
+    middleware: 'auth'
+});
 
+export default defineComponent({
+    
+    setup() {
+        
         const { $swal } = useNuxtApp()
 
         const modalForm = shallowRef(resolveComponent('div'));

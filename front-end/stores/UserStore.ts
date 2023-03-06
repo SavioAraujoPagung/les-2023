@@ -35,7 +35,6 @@ export const useUserStore = defineStore('user', () => {
     }
 
     const save = async (data:any) => {
-        console.log("🚀 ~ file: userStore.ts:29 ~ save ~ data:", data)
         await api.post(path, data);
     }
 

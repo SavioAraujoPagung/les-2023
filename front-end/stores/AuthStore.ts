@@ -1,22 +1,33 @@
 import { defineStore } from 'pinia';
 import api from '~/services/api'
-import Auth from '~/models/Auth'
+import { UsuarioAuth } from '~/models/Usuario'
 
 export const useAuthStore = defineStore('auth', () => {
     const isAuthenticated = ref(false);
-    const user = reactive(new Auth());
-    const path = "login";
+    const user = reactive(new UsuarioAuth());
+    const path = "users/login";
     const errors = ref("");
 
+    const getSubSet = (object:any, newObject:Object) => {
+        const types = Object.getOwnPropertyNames(newObject);
+        return types.reduce((obj:any, type:any) => {
+            return {
+            ...obj,
+            [type]: object[type]
+            }
+        }, {});
+    }
+
     const doLogin = async (data:any) => {
-        await api.post(path + "login", data).then((response) => {
+
+        await api.post(path, getSubSet(data, new UsuarioAuth())).then((response) => {
             localStorage.setItem('isLogged', 'true');
-            console.log("🚀 ~ file: AuthStore.ts:16 ~ response ~ response:", response)
         }).catch((error) => {
-            console.log("🚀 ~ file: AuthStore.ts:16 ~ awaitapi.post ~ error:", error)
+            errors.value = error.response.data.message;
         });
+        
     }
   
-    return { user, doLogin };
+    return { user, doLogin, errors };
   })
   

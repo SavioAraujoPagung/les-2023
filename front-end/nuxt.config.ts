@@ -3,6 +3,7 @@ export default defineNuxtConfig({
     typescript: {
         shim: false
     },
+    
     modules: ['@pinia/nuxt'],
     app: {
         head: {

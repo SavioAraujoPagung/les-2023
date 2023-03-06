@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d55d92d3-cdac-420a-8b30-8a384071f7ca" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-end/components/Users/UserForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/components/Users/UserForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-end/pages/Usuarios.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/pages/Usuarios.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-end/stores/AuthStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/stores/AuthStore.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-end/stores/UserStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/stores/UserStore.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,7 +55,7 @@
       <option name="presentableId" value="Default" />
       <updated>1678023660482</updated>
       <workItem from="1678023662053" duration="9505000" />
-      <workItem from="1678056804271" duration="1945000" />
+      <workItem from="1678056804271" duration="3694000" />
     </task>
     <servers />
   </component>

@@ -13,7 +13,7 @@
                         <label for="senha" class="form-label text-white">Senha</label>
                         <input type="password" name="senha" id="senha" class="form-control p-3" placeholder="Ex: senhateste" v-model="user.password">
                     </div>
-                    <button type="button" class="btn btn-dark text-white fw-bold mt-5 col-sm-12" @click="doLogin(user)">Entrar</button>
+                    <button type="button" class="btn btn-dark text-white fw-bold mt-5 col-sm-12" @click="submitLogin(user)">Entrar</button>
                 </div>
             </form>
 
@@ -22,16 +22,46 @@
 </template>
 
 <script lang="ts">
+import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/stores/AuthStore";
 definePageMeta({
     layout: false
 });
 export default defineComponent({
     setup() {
+        const { $swal } = useNuxtApp()
+        const { doLogin } = useAuthStore();
+        const { user, errors } = storeToRefs(useAuthStore());
 
-        const { user, doLogin } = useAuthStore();
+        const submitLogin = async (user:any) => {
+            if(user.password != "" && user.email != "") await doLogin(user);
+            if(errors.value !== ""){
+                $swal.fire({
+                    icon: 'error',
+                    title: errors.value,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+            else{
+                $swal.fire({
+                    icon: 'success',
+                    title: "Login efetuado com sucesso",
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                navigateTo('usuarios');
+            }
 
-        return { user, doLogin };
+            errors.value = "";
+
+        }
+
+        return { user, doLogin, submitLogin };
     },
 })
 </script>
