@@ -28,7 +28,11 @@ export const useUserStore = defineStore('user', () => {
     const save = async (data:any) => {
         await api.post(path, data);
     }
+
+    const update = async (data:any, id:any) => {
+        await api.put(path + id, data);
+    }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save };
+    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update };
   })
   

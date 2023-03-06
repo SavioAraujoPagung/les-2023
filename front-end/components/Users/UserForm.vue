@@ -50,24 +50,21 @@
 <script lang="ts">
 import { useUserStore } from "~~/stores/UserStore";
 import { Cargos } from "~~/models/Usuario";
+import { storeToRefs } from "pinia";
 
 
 export default defineComponent({
-    props:{
-        open:{
-            type:Boolean,
-            required:true
-        },
-    },
     emits:['saved', 'close'],
     setup(props,{emit}) {
 
-        const { errors, save, getById, entity, resetEntity } = useUserStore();
+        const { save, update, getById, resetEntity } = useUserStore();
+        const { errors, entity } = storeToRefs(useUserStore());
 
         const isOpen = ref(false);
 
         const formSave = async () => {
-            await save(entity);
+            if(entity.id == null) await save(entity);
+            else await update(toRefs(entity).value, entity.id);
             emit('saved');
         }
 

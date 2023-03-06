@@ -17,42 +17,60 @@
         </tbody>
     </DefaultTable>
 
-    <div v-else>
-        <h5>Nenhum registro encontrado...</h5>
-    </div>
-
-    <!-- <UsersUserForm :isOpen="false" /> -->
-
     <component :is="modalForm" :open="isOpen" @close="cancelChange" @saved="refreshList" />
 
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia';
 import { Cargos } from '~~/models/Usuario';
 import { useUserStore } from '~~/stores/UserStore';
 
 export default defineComponent({
     setup() {
-        
+
+        const { $swal } = useNuxtApp()
+
         const modalForm = shallowRef(resolveComponent('div'));
 
         const isOpen = ref(false);
 
-        const { entities, destroy, getAll } = useUserStore();
+        const { destroy, getAll, getById } = useUserStore();
+        const { entities } = storeToRefs(useUserStore());
 
         const cancelChange = () => {
             modalForm.value = resolveComponent('div');
         }
 
-        const refreshList = () => {
+        const refreshList = async () => {
             modalForm.value = resolveComponent('div');
+            $swal.fire({
+                icon: 'success',
+                title: 'Usuário cadastrado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            await getAll();
         }
 
-        const deleteElement = (id:any) => {
+        const deleteElement = async (id:any) => {
             destroy(id);
+            $swal.fire({
+                icon: 'success',
+                title: 'Usuário deletado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            document.getElementById("usuario" + id)?.classList.add("m-fadeOut");
+            await getAll();
         }
 
-        const showFormEdit = (id:any) => {
+        const showFormEdit = async (id:any) => {
+            await getById(id);
             showForm();
         }
 
