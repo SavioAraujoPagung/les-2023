@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d55d92d3-cdac-420a-8b30-8a384071f7ca" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-end/stores/AuthStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/stores/AuthStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-end/stores/UserStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/stores/UserStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-end/pages/FiscalEntrada.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/pages/FiscalEntrada.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,8 +41,13 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\mikae\\AppData\\Local\\JetBrains\\Toolbox\\apps\\IDEA-U\\ch-0\\223.7571.182\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "ts.external.directory.path": "C:\\Users\\mikae\\AppData\\Local\\JetBrains\\Toolbox\\apps\\IDEA-U\\ch-0\\223.8617.56\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -55,7 +59,8 @@
       <option name="presentableId" value="Default" />
       <updated>1678023660482</updated>
       <workItem from="1678023662053" duration="9505000" />
-      <workItem from="1678056804271" duration="3694000" />
+      <workItem from="1678056804271" duration="3943000" />
+      <workItem from="1678137356756" duration="922000" />
     </task>
     <servers />
   </component>

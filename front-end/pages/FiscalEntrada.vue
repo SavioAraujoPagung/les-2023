@@ -1,33 +1,41 @@
 <template>
     <header class="d-flex align-items-center justify-content-between mb-5">
-        <h1 class="text-primary fw-bold">Fiscal de entrada</h1>
+        <h1 class="text-primary fw-bold">Clientes</h1>
         <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
     </header>
 
     
-        <table style="width: 100%">
-            <tr>
+        <DefaultTable v-if="entities.length">
+            <DefaultTableThead>
                 <th>Nome</th>
                 <th>CPF</th>
                 <th>Telefone</th>
                 <th>Email</th>
                 <th>Nascimento</th>
-            </tr>
-            <tr>
-                <td>Savio</td>
-                <td>111.111.111-11</td>
-                <td>99999-9999</td>
-                <td>savio@pagung.les</td>
-                <td>14/05/1998</td>
-            </tr>
-        </table>
+            </DefaultTableThead>
+            <tbody>
+                <DefaultTableTrow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id" @delete="deleteElement(customer.id)" @edit="showFormEdit(customer.id)">
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.cpf }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.dateBirth }}</td>
+                </DefaultTableTrow>
+            </tbody>
+        </DefaultTable>
+
+        <component :is="modalForm" :open="isOpen" @close="cancelChange" @saved="refreshList" />
     
 </template>
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
 import { useCustomerStore } from '~~/stores/CustomerStore';
+definePageMeta({
+    middleware: 'auth'
+});
 export default defineComponent({
+
     setup() {
         
         const { $swal } = useNuxtApp()
@@ -78,9 +86,7 @@ export default defineComponent({
         }
 
         const showForm = () => {
-            console.log("tessttteee")
             modalForm.value = resolveComponent('CustomersCustomerForm')
-            console.log("tessttteee333333")
         }
 
         onMounted(getAll);

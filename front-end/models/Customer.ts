@@ -8,7 +8,7 @@ class Customer extends Default{
     dateBirth: string;
 
     constructor() {
-        super("/cliente/");
+        super("/customer/");
         this.name = "";
         this.cpf = "";
         this.phone = "";
