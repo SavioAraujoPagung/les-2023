@@ -15,6 +15,7 @@ export class UserController {
 
   @Post()
   async create(@Body() user: User): Promise<User> {
+    console.log(user)
     try {
       return this.repository.save(user);
     } catch (error) {

@@ -7,19 +7,15 @@
     
         <DefaultTable v-if="entities.length">
             <DefaultTableThead>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Telefone</th>
-                <th>Email</th>
-                <th>Nascimento</th>
+                <th class="col-m-4">Nome</th>
+                <th class="col-sm-4">CPF</th>
+                <th class="col-sm-4">Email</th>
             </DefaultTableThead>
             <tbody>
                 <DefaultTableTrow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id" @delete="deleteElement(customer.id)" @edit="showFormEdit(customer.id)">
                     <td>{{ customer.name }}</td>
                     <td>{{ customer.cpf }}</td>
-                    <td>{{ customer.phone }}</td>
                     <td>{{ customer.email }}</td>
-                    <td>{{ customer.dateBirth }}</td>
                 </DefaultTableTrow>
             </tbody>
         </DefaultTable>
@@ -96,3 +92,9 @@ export default defineComponent({
 })
 
 </script>
+
+<style scoped>
+    td, th{
+        padding: 1rem;
+    }
+</style>
