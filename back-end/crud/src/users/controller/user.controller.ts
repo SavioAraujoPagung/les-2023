@@ -15,7 +15,6 @@ export class UserController {
 
   @Post()
   async create(@Body() user: User): Promise<User> {
-    console.log(user)
     try {
       return this.repository.save(user);
     } catch (error) {
@@ -45,7 +44,7 @@ export class UserController {
     if(!userFound){
       throw new NotFoundException('Usuário não encontrado! Tente novamente!')
     }
-    this.repository.update({id}, user)
+    await this.repository.update({id}, user)
     return this.repository.findOne({where:{ id }})
   }
 

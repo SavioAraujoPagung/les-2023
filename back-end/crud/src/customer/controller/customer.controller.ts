@@ -44,7 +44,7 @@ export class CustomerController {
     if(!userFound){
       throw new NotFoundException('Cliente não encontrado! Tente novamente!')
     }
-    this.repository.update({id}, customer)
+    await this.repository.update({id}, customer)
     return this.repository.findOne({where:{ id }})
   }
 
