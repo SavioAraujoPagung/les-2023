@@ -63,9 +63,7 @@ export default defineComponent({
         const isOpen = ref(false);
 
         const formSave = async () => {
-            // console.log("🚀 ~ file: UserForm.vue:70 ~ formSave ~ entity:", entity.value.id);
-            // return false;
-            if(entity.value.id == null) await save(entity);
+            if(entity.value.id == null) await save(entity.value);
             else await update(entity.value, entity.value.id);
             emit('saved');
         }

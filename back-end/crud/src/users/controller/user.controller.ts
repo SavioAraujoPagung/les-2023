@@ -44,7 +44,7 @@ export class UserController {
     if(!userFound){
       throw new NotFoundException('Usuário não encontrado! Tente novamente!')
     }
-    this.repository.update({id}, user)
+    await this.repository.update({id}, user)
     return this.repository.findOne({where:{ id }})
   }
 
