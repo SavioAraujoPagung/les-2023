@@ -3,3 +3,8 @@
         <slot></slot>
     </table>
 </template>
+<style>
+    td, th{
+        padding: 1rem;
+    }
+</style>

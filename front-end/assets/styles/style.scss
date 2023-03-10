@@ -2,12 +2,16 @@
 $primary: #00c57e;
 $secondary: #005235;
 $dark: #003723;
+
+$btn-padding-x: 2rem;
+$btn-padding-y: 1rem;
+
 @import "/node_modules/bootstrap/scss/bootstrap";
 @import url(font-poppins.min.css);
 
 // $navbar-dark-toggler-border-color:  rgba($white, .1) !default;
 
-html,body,#__nuxt,main{ height: 100%;width: 100%; }
+html,body,#__nuxt,main{ height: 100% !important;width: 100%; }
 
 body{
     font-family: "Poppins", sans-serif;
@@ -75,3 +79,7 @@ body{
     opacity: 1;
     transition: visibility 0s linear 0s, opacity 300ms;
 }
+
+.object-fit-contain{ object-fit: contain }
+
+html body.swal2-height-auto{ height: 100% !important }

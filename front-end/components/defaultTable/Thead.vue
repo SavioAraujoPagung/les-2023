@@ -5,8 +5,8 @@
     </thead>
 </template>
 
-<style scoped>
+<!-- <style scoped>
     th{
         padding: 1rem;
     }
-</style>
+</style> -->

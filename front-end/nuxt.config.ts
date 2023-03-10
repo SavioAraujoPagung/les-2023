@@ -11,6 +11,6 @@ export default defineNuxtConfig({
         }
     },
 
-    css: ["~/assets/styles/style.scss"], // add
+    css: ["~/assets/styles/style.scss", "sweetalert2/dist/sweetalert2.min.css"], // add
 
 })
