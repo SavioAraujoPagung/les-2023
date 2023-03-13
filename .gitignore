@@ -1,2 +1,10 @@
 */node_modules
 /data
+*.log*
+*/.nuxt
+*/.nitro
+*/.cache
+*/.output
+*/.env
+*/dist
+*/.DS_Store
