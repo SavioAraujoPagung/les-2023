@@ -1,17 +1,20 @@
 import { defineStore } from 'pinia';
 import api from '~/services/api'
 import { Customer, CustomerEdit } from '~~/models/Customer';
-
+import customers from '~~/data/customer'
 export const useCustomerStore = defineStore('Customer', () => {
     const entity = reactive(new Customer());
-    const entities = ref([]);
-    const path = entity.path;
+    const entities = ref(customers);
+    const path = "./data/customer.json";
     const errors = ref("");
     // const doubleCount = computed(() => count.value * 2)
-
+    
     const getAll = async () => {
-        const response = await api.get(path);
-        entities.value = response.data;
+        //console.log("tessste")
+        
+        //document.
+        //const response = await api.get(path);
+        //entities.value = response.data;
     }
 
     const getById = async (id:any) => {
@@ -35,6 +38,7 @@ export const useCustomerStore = defineStore('Customer', () => {
     }
 
     const save = async (data:any) => {
+        console.log(data)
         await api.post(path, data);
     }
 

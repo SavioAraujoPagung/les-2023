@@ -1,7 +1,7 @@
-version: "3"
+version: "3.7"
 services:
   db:
-    image: postgres:latest
+    image: postgres:11.5
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -9,5 +9,4 @@ services:
       POSTGRES_DB: les2023
     ports:
       - "5433:5432"
-    volumes:
-      - ./data:/var/lib/postgresql/data
+      
