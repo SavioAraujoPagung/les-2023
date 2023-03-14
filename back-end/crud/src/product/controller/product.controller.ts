@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../model/product.entity';
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
   private logger: Logger;
   constructor(

@@ -12,15 +12,19 @@
                 <th class="col-sm-4">Email</th>
             </DefaultTableThead>
             <tbody>
-                <DefaultTableTrow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id" @delete="deleteElement(customer.id)" @edit="showFormEdit(customer.id)">
+                <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id"
+                @delete="deleteElement(customer.id)"
+                @edit="showFormEdit(customer.id)"
+                @checkin="doCheckin(customer.id)">
                     <td>{{ customer.name }}</td>
                     <td>{{ customer.cpf }}</td>
                     <td>{{ customer.email }}</td>
-                </DefaultTableTrow>
+                </CheckinTRow>
             </tbody>
         </DefaultTable>
 
         <component :is="modalForm" :open="isOpen" @close="cancelChange" @saved="refreshList" />
+        <component :is="openCheckin ? modalCheckin : 'div'" @close="cancelCheckin" @saved="saveCheckin" :customer_id="customer_id" />
     
 </template>
 
@@ -35,8 +39,12 @@ export default defineComponent({
     setup() {
         
         const { $swal } = useNuxtApp()
+        const openCheckin = ref(false);
+
+        const customer_id = ref(0);
 
         const modalForm = shallowRef(resolveComponent('div'));
+        const modalCheckin = shallowRef(resolveComponent('CheckinForm'));
 
         const isOpen = ref(false);
 
@@ -46,6 +54,26 @@ export default defineComponent({
         const cancelChange = () => {
             resetEntity();
             modalForm.value = resolveComponent('div');
+        }
+
+        const doCheckin = (id:any) => {
+            customer_id.value = id;
+            openCheckin.value = true;
+        }
+        const cancelCheckin = () => {
+            openCheckin.value = false;
+        }
+
+        const saveCheckin = () => {
+            $swal.fire({
+                icon: 'success',
+                title: 'Check-in realizado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000
+            });
+            openCheckin.value = false;
         }
 
         const refreshList = async () => {
@@ -87,7 +115,8 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, modalForm, isOpen, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { entities, modalForm, isOpen, cancelChange, refreshList, deleteElement, showFormEdit, showForm,
+            openCheckin, doCheckin, modalCheckin, cancelCheckin, customer_id, saveCheckin };
     },
 })
 

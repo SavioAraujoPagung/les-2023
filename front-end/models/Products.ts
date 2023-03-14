@@ -14,4 +14,16 @@ class Product extends Default{
 
 }
 
-export {Product}
+class ProductEdit{
+    name: string;
+    barcode: string;
+    cost: string;
+
+    constructor() {
+        this.name = "";
+        this.barcode = "";
+        this.cost = "";
+    }
+}
+
+export {Product, ProductEdit}
