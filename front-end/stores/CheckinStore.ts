@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import api from '~/services/api'
-import { Product, ProductEdit} from '~~/models/Products';
+import { Checkin, CustomerEdit} from '~~/models/Checkin';
 
-export const useProductStore = defineStore('product', () => {
-    const entity = reactive(new Product());
-    const entities = ref(new Array<Product>());
+export const useCheckinStore = defineStore('checkin', () => {
+    const entity = reactive(new Checkin());
+    const entities = ref(new Array<Checkin>());
     const path = entity.path;
     const errors = ref("");
 
@@ -22,7 +22,11 @@ export const useProductStore = defineStore('product', () => {
         const response = await api.delete(path + id);
     }
 
-    const resetEntity = () => Object.assign(entity,new Product());
+    const doCheckin = async () => {
+        await api.post(path, entity);
+    }
+
+    const resetEntity = () => Object.assign(entity,new Checkin());
 
     const getSubSet = (object:any, types:any) => {
         return types.reduce((obj:any, type:any) => {
@@ -38,10 +42,10 @@ export const useProductStore = defineStore('product', () => {
     }
 
     const update = async (data:any, id:any) => {
-        let object = getSubSet(data, Object.getOwnPropertyNames(new ProductEdit()));
+        let object = getSubSet(data, Object.getOwnPropertyNames(new CustomerEdit()));
         await api.put(path + id, object);
     }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update };
+    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update, doCheckin };
   })
   

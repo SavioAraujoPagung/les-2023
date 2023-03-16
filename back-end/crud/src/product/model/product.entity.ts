@@ -9,8 +9,8 @@ export class Product {
   name: string;
 
   @Column()
-  barCode: string;
+  barcode: string;
 
   @Column()
-  price: string;
+  cost: string;
 }

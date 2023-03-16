@@ -7,6 +7,7 @@
     <DefaultTable v-if="entities.length">
         <DefaultTableThead>
             <th>Nome</th>
+            <th>Preço</th>
             <th>C&oacute;digo de Barras</th>
         </DefaultTableThead>
         <tbody>
@@ -54,7 +55,7 @@ export default defineComponent({
             open.value = false;
             $swal.fire({
                 icon: 'success',
-                title: 'Usuário cadastrado com sucesso!',
+                title: 'Produto cadastrado com sucesso!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
@@ -68,13 +69,13 @@ export default defineComponent({
             destroy(id);
             $swal.fire({
                 icon: 'success',
-                title: 'Usuário deletado com sucesso!',
+                title: 'Produto deletado com sucesso!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 1500
             });
-            document.getElementById("usuario" + id)?.classList.add("m-fadeOut");
+            document.getElementById("produto" + id)?.classList.add("m-fadeOut");
             await getAll();
         }
 
