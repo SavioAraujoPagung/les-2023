@@ -26,4 +26,29 @@ class ProductEdit{
     }
 }
 
-export {Product, ProductEdit}
+class StockProduct extends Default{
+    barcode: string;
+    name: string;
+    qtd: number;
+
+    constructor() {
+        super("/stock/");
+        this.name = "";
+        this.barcode = "";
+        this.qtd = 0;
+    }
+
+}
+class SavedStockProduct{
+    barcode: string;
+    name: string;
+    qtd: number;
+
+    constructor() {
+        this.name = "";
+        this.barcode = "";
+        this.qtd = 0;
+    }
+}
+
+export {Product, ProductEdit, StockProduct, SavedStockProduct}
