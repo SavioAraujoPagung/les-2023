@@ -17,7 +17,7 @@
                 </DropdownItem>
                 <DropdownItem @click="emit('checkin')">
                     <i class="icon icon-16">
-                        <!-- <IconsEdit /> -->
+                        <broadcast/>
                     </i>
                     CheckIn
                 </DropdownItem>
@@ -27,8 +27,11 @@
 </template>
 
 <script lang="ts">
+import Broadcast from "../icons/Broadcast.vue"
+
 
 export default defineComponent({
+  components: { Broadcast },
     emits:['delete', 'edit', 'checkin'],
     setup(props, {emit}) {
         return {emit}

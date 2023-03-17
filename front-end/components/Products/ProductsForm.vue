@@ -31,6 +31,9 @@
                     </div>
                 </div>
     
+                <div class="col-sm-12 d-flex aling-items-center justify-content-center">
+                    <small class="text-opacity-25">Caso opte por escanear o código de barras o salvamento será feito de forma automática.</small>
+                </div>
             </modal-body>
             <modal-footer>
                 <button class="btn btn-outline-danger" type="button" @click="closeModal">Cancelar</button>
@@ -96,6 +99,12 @@ export default defineComponent({
             resetEntity();
             emit('close');
         }
+
+        onMounted(() => {
+            document.onkeydown = (event) => {
+                if (event.ctrlKey && event.key == 'j') event.preventDefault();
+            }
+        });
 
         return {
             entity,

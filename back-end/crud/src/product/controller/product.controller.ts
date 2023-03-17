@@ -23,6 +23,18 @@ export class ProductController {
     }
    
   }
+
+  @Get('/barcode/:barcode')
+  async findOneByBarcode(@Param('barcode') barcode: string): Promise<Product> {
+   
+    let product = await this.repository.findOneBy({barcode})
+    
+    if(!product){
+      throw new NotFoundException('Produto não encontrado! Tente novamente!')
+    }
+
+    return product;
+  }
   
   @Get()
   async findAll(): Promise<Product[]> {

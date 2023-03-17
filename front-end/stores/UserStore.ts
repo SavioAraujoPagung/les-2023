@@ -4,7 +4,7 @@ import { Usuario, UsuarioEdit } from '~~/models/Usuario';
 
 export const useUserStore = defineStore('user', () => {
     const entity = reactive(new Usuario());
-    const entities = ref([]);
+    const entities = ref(new Array<Usuario>());
     const path = entity.path;
     const errors = ref("");
     // const doubleCount = computed(() => count.value * 2)

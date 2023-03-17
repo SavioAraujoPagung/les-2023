@@ -17,7 +17,7 @@
         </tbody>
     </DefaultTable>
 
-    <component :is="modalForm" :open="isOpen" @close="cancelChange" @saved="refreshList" />
+    <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
 
 </template>
 
@@ -36,7 +36,7 @@ export default defineComponent({
         
         const { $swal } = useNuxtApp()
 
-        const modalForm = shallowRef(resolveComponent('div'));
+        const modalForm = shallowRef(resolveComponent('UsersUserForm'));
 
         const isOpen = ref(false);
 
@@ -45,11 +45,11 @@ export default defineComponent({
 
         const cancelChange = () => {
             resetEntity();
-            modalForm.value = resolveComponent('div');
+            isOpen.value = false;
         }
 
         const refreshList = async () => {
-            modalForm.value = resolveComponent('div');
+            isOpen.value = false;
             $swal.fire({
                 icon: 'success',
                 title: 'Usuário cadastrado com sucesso!',
@@ -82,7 +82,7 @@ export default defineComponent({
         }
 
         const showForm = () => {
-            modalForm.value = resolveComponent('UsersUserForm')
+            isOpen.value = true;
         }
 
         onMounted(getAll);

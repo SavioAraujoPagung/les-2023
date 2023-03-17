@@ -29,7 +29,6 @@ import { Cargos } from '~~/models/Usuario';
 import { useProductStore } from '~/stores/ProductStore';
 
 definePageMeta({
-    title: 'Produtos',
     middleware: 'auth'
 });
 

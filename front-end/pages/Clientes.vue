@@ -23,7 +23,7 @@
             </tbody>
         </DefaultTable>
 
-        <component :is="modalForm" :open="isOpen" @close="cancelChange" @saved="refreshList" />
+        <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
         <component :is="openCheckin ? modalCheckin : 'div'" @close="cancelCheckin" @saved="saveCheckin" :customer_id="customer_id" />
     
 </template>
@@ -31,9 +31,12 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia';
 import { useCustomerStore } from '~~/stores/CustomerStore';
+
 definePageMeta({
+    title: 'Clientes - LES Group',
     middleware: 'auth'
 });
+
 export default defineComponent({
 
     setup() {
@@ -43,7 +46,7 @@ export default defineComponent({
 
         const customer_id = ref(0);
 
-        const modalForm = shallowRef(resolveComponent('div'));
+        const modalForm = shallowRef(resolveComponent('CustomersCustomerForm'));
         const modalCheckin = shallowRef(resolveComponent('CheckinForm'));
 
         const isOpen = ref(false);
@@ -53,7 +56,7 @@ export default defineComponent({
 
         const cancelChange = () => {
             resetEntity();
-            modalForm.value = resolveComponent('div');
+            isOpen.value = false;
         }
 
         const doCheckin = (id:any) => {
@@ -77,7 +80,7 @@ export default defineComponent({
         }
 
         const refreshList = async () => {
-            modalForm.value = resolveComponent('div');
+            isOpen.value = false;
             $swal.fire({
                 icon: 'success',
                 title: 'Cliente cadastrado com sucesso!',
@@ -110,7 +113,7 @@ export default defineComponent({
         }
 
         const showForm = () => {
-            modalForm.value = resolveComponent('CustomersCustomerForm')
+            isOpen.value = true;
         }
 
         onMounted(getAll);

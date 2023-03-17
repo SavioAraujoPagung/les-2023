@@ -4,7 +4,7 @@ import { Customer, CustomerEdit } from '~~/models/Customer';
 
 export const useCustomerStore = defineStore('Customer', () => {
     const entity = reactive(new Customer());
-    const entities = ref([]);
+    const entities = ref(new Array<Customer>());
     const path = entity.path;
     const errors = ref("");
     // const doubleCount = computed(() => count.value * 2)
