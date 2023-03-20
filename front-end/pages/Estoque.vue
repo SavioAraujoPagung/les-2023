@@ -2,8 +2,8 @@
     <header class="d-flex align-items-center justify-content-between mb-5">
         <h1 class="text-primary fw-bold">Estoque</h1>
         <div class="d-flex align-items-center gap-2">
-            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm(true)"><i class="bi bi-border-all"></i>Adicionar produtos</a>
             <a href="javascript:;" class="btn btn-danger text-white" @click="showForm(false)"><i class="bi bi-border-all"></i>Remover produtos</a>
+            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm(true)"><i class="bi bi-border-all"></i>Adicionar produtos</a>
         </div>
     </header>
     
@@ -14,7 +14,7 @@
             <th>Quantidade</th>
         </thead>
         <tbody>
-            <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
+            <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id">
                 <td>{{ product.barcode }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.qtd }}</td>
@@ -47,45 +47,22 @@ export default defineComponent({
 
         const { $swal } = useNuxtApp()
 
-        const { destroy, getAllStock, getById, resetEntity } = useProductStore();
+        const { destroy, getAllStock, getById } = useProductStore();
         const { stock } = storeToRefs(useProductStore());
 
-        const cancelChange = () => {
-            resetEntity();
-            open.value = false;
-        }
+        const cancelChange = () => open.value = false;
 
         const refreshList = async () => {
             open.value = false;
             $swal.fire({
                 icon: 'success',
-                title: 'Produto cadastrado com sucesso!',
+                title: 'Produtos cadastrado com sucesso!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 1500
             });
-            resetEntity();
             await getAllStock();
-        }
-
-        const deleteElement = async (id:any) => {
-            destroy(id);
-            $swal.fire({
-                icon: 'success',
-                title: 'Produto deletado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            document.getElementById("produto" + id)?.classList.add("m-fadeOut");
-            await getAllStock();
-        }
-
-        const showFormEdit = async (id:any) => {
-            await getById(id);
-            // showForm();
         }
 
         const showForm = (increment:boolean) => {
@@ -96,7 +73,7 @@ export default defineComponent({
 
         onMounted(getAllStock);
 
-        return { stock, Cargos, modalForm, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm, isIncrement };
+        return { stock, Cargos, modalForm, open, cancelChange, refreshList, showForm, isIncrement };
 
     },
 })
