@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { check } from 'prettier';
 import { Customer } from 'src/customer/model/customer.entity';
@@ -43,16 +43,15 @@ export class CheckInController {
   }
 
   @Get('/rfid/:rfid_query')
-  async findOneByRfif(@Param('rfid_query') rfid_query: string): Promise<CheckIn> {
+  async findOneByRfif(@Param('rfid_query') rfid_query: string) {
    
-    let checkIn = await this.repository.findOneBy({rfid:rfid_query})
+    let checkIn = await this.repository.findOneBy({rfid:rfid_query, status: true })
     
-    if(!checkIn){
-      throw new NotFoundException('CheckIn não encontrado! Tente novamente!')
+    if(checkIn){
+      let id = Number(checkIn.customer_id)
+      checkIn.customer = await this.repositoryCustomer.findOne({where:{ id }})
+      throw new UnauthorizedException('Cliente com check-out pendente!')
     }
-    let id = Number(checkIn.customer_id)
-    checkIn.customer = await this.repositoryCustomer.findOne({where:{ id }})
-    return checkIn;
   }
 
   @Put(':id')
