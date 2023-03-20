@@ -18,8 +18,11 @@ export const useProductStore = defineStore('product', () => {
     }
 
     const getAllStock = async () => {
-        const response = await api.get(stockPath);
-        stock.value = response.data;
+        await api.get(stockPath).then((response) => {
+            stock.value = response.data
+        }).catch((error) => {
+            errors.value = error.response.data.message;
+        });
     }
 
     const getById = async (id:any) => {
