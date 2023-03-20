@@ -28,7 +28,7 @@ export const useCheckinStore = defineStore('checkin', () => {
 
     const doCheckout = async () => {
 
-        await api.get(path + entity.rfid).then((response) => {
+        await api.get(path + "rfid/" + entity.rfid).then((response) => {
             return;
         }).catch((error) => {
             errors.value = error.response.data.message;
