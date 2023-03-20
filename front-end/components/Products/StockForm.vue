@@ -1,7 +1,7 @@
 <template>
     
     <ModalMyModal>
-        <form v-on:submit.prevent="addProduct">
+        <form v-on:submit.prevent="changeQtd">
             <modal-header>
                 <h4 class="fw-bold text-dark">Adicione produtos no estoque</h4>
                 <button type="button" class="btn-close" @click="closeModal"></button>
@@ -65,6 +65,12 @@ import { SavedStockProduct } from "~~/models/Products";
 
 
 export default defineComponent({
+    props:{
+        isIncrement:{
+            type:Boolean,
+            required:true
+        },
+    },
     emits:['saved', 'close'],
     setup(props,{emit}) {
 
@@ -76,7 +82,7 @@ export default defineComponent({
         const numberBarCode = ref(null);
         const newItens = ref(new Array<SavedStockProduct>());
 
-        const addProduct = () => {
+        const changeQtd = () => {
             if(!entity.value.barcode.length){
                 $swal.fire({
                     icon: 'error',
@@ -95,7 +101,8 @@ export default defineComponent({
             
             
             if(index >= 0) {
-                newItens.value[index].qtd++;
+                if(props.isIncrement) newItens.value[index].qtd++;
+                else newItens.value[index].qtd--;
                 entity.value.barcode = "";
             }
             else{
@@ -104,7 +111,7 @@ export default defineComponent({
                     newItens.value.push({
                         barcode: response.data.barcode,
                         name: response.data.name,
-                        qtd: 1
+                        qtd: props.isIncrement ? 1 : -1
                     });
                 }).catch((error) => {
                     $swal.fire({
@@ -153,7 +160,7 @@ export default defineComponent({
             numberBarCode,
             Cargos,
             newItens,
-            addProduct
+            changeQtd
         }   
     },
 })

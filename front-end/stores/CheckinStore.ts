@@ -26,6 +26,17 @@ export const useCheckinStore = defineStore('checkin', () => {
         await api.post(path, entity);
     }
 
+    const doCheckout = async () => {
+
+        await api.get(path + entity.rfid).then((response) => {
+            return;
+        }).catch((error) => {
+            errors.value = error.response.data.message;
+        });
+
+        // await api.get(path + rfid);
+    }
+
     const resetEntity = () => Object.assign(entity,new Checkin());
 
     const getSubSet = (object:any, types:any) => {
@@ -46,6 +57,6 @@ export const useCheckinStore = defineStore('checkin', () => {
         await api.put(path + id, object);
     }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update, doCheckin };
+    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update, doCheckin, doCheckout };
   })
   

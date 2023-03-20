@@ -1,25 +1,28 @@
 <template>
     <header class="d-flex align-items-center justify-content-between mb-5">
         <h1 class="text-primary fw-bold">Estoque</h1>
-        <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar produtos</a>
+        <div class="d-flex align-items-center gap-2">
+            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm(true)"><i class="bi bi-border-all"></i>Adicionar produtos</a>
+            <a href="javascript:;" class="btn btn-danger text-white" @click="showForm(false)"><i class="bi bi-border-all"></i>Remover produtos</a>
+        </div>
     </header>
     
     <DefaultTable v-if="stock.length">
-        <DefaultTableThead>
+        <thead>
             <th>C&oacute;digo de Barras</th>
             <th>Nome</th>
             <th>Quantidade</th>
-        </DefaultTableThead>
+        </thead>
         <tbody>
-            <DefaultTableTrow v-for="(product, i) in stock" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
+            <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
                 <td>{{ product.barcode }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.qtd }}</td>
-            </DefaultTableTrow>
+            </tr>
         </tbody>
     </DefaultTable>
 
-    <component :is="open ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
+    <component :is="open ? modalForm : 'div'" @close="cancelChange" :isIncrement="isIncrement" @saved="refreshList" />
 
 </template>
 
@@ -38,11 +41,13 @@ export default defineComponent({
         
         const open = ref(false);
 
+        const isIncrement = ref(true);
+
         const modalForm = shallowRef(resolveComponent('ProductsStockForm'));
 
         const { $swal } = useNuxtApp()
 
-        const { destroy, getAll, getById, resetEntity } = useProductStore();
+        const { destroy, getAllStock, getById, resetEntity } = useProductStore();
         const { stock } = storeToRefs(useProductStore());
 
         const cancelChange = () => {
@@ -61,7 +66,7 @@ export default defineComponent({
                 timer: 1500
             });
             resetEntity();
-            await getAll();
+            await getAllStock();
         }
 
         const deleteElement = async (id:any) => {
@@ -75,21 +80,23 @@ export default defineComponent({
                 timer: 1500
             });
             document.getElementById("produto" + id)?.classList.add("m-fadeOut");
-            await getAll();
+            await getAllStock();
         }
 
         const showFormEdit = async (id:any) => {
             await getById(id);
-            showForm();
+            // showForm();
         }
 
-        const showForm = () => {
+        const showForm = (increment:boolean) => {
+            if(increment) isIncrement.value = true;
+            else isIncrement.value = false;
             open.value = true;
         }
 
-        onMounted(getAll);
+        onMounted(getAllStock);
 
-        return { stock, Cargos, modalForm, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { stock, Cargos, modalForm, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm, isIncrement };
 
     },
 })

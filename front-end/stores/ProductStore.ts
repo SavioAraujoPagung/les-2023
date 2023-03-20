@@ -19,7 +19,7 @@ export const useProductStore = defineStore('product', () => {
 
     const getAllStock = async () => {
         const response = await api.get(stockPath);
-        entities.value = response.data;
+        stock.value = response.data;
     }
 
     const getById = async (id:any) => {

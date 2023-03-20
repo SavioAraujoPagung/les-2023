@@ -15,7 +15,8 @@
                 <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id"
                 @delete="deleteElement(customer.id)"
                 @edit="showFormEdit(customer.id)"
-                @checkin="doCheckin(customer.id)">
+                @checkin="doCheckin(customer.id)"
+                @checkout="doCheckout(customer.id)">
                     <td>{{ customer.name }}</td>
                     <td>{{ customer.cpf }}</td>
                     <td>{{ customer.email }}</td>
@@ -24,7 +25,7 @@
         </DefaultTable>
 
         <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
-        <component :is="openCheckin ? modalCheckin : 'div'" @close="cancelCheckin" @saved="saveCheckin" :customer_id="customer_id" />
+        <component :is="openCheck ? modalCheck : 'div'" :isCheckin="isCheckin"  @close="cancelCheckin" @saved="saveCheckin" :customer_id="customer_id" />
     
 </template>
 
@@ -42,12 +43,14 @@ export default defineComponent({
     setup() {
         
         const { $swal } = useNuxtApp()
-        const openCheckin = ref(false);
+        const openCheck = ref(false);
+
+        const isCheckin = ref(false);
 
         const customer_id = ref(0);
 
         const modalForm = shallowRef(resolveComponent('CustomersCustomerForm'));
-        const modalCheckin = shallowRef(resolveComponent('CheckinForm'));
+        const modalCheck = shallowRef(resolveComponent('CheckinForm'));
 
         const isOpen = ref(false);
 
@@ -61,10 +64,17 @@ export default defineComponent({
 
         const doCheckin = (id:any) => {
             customer_id.value = id;
-            openCheckin.value = true;
+            isCheckin.value = true;
+            openCheck.value = true;
+        }
+
+        const doCheckout = (id:any) => {
+            customer_id.value = id;
+            isCheckin.value = false;
+            openCheck.value = true;
         }
         const cancelCheckin = () => {
-            openCheckin.value = false;
+            openCheck.value = false;
         }
 
         const saveCheckin = () => {
@@ -76,7 +86,7 @@ export default defineComponent({
                 showConfirmButton: false,
                 timer: 4000
             });
-            openCheckin.value = false;
+            openCheck.value = false;
         }
 
         const refreshList = async () => {
@@ -119,7 +129,7 @@ export default defineComponent({
         onMounted(getAll);
 
         return { entities, modalForm, isOpen, cancelChange, refreshList, deleteElement, showFormEdit, showForm,
-            openCheckin, doCheckin, modalCheckin, cancelCheckin, customer_id, saveCheckin };
+            openCheck, doCheckin, modalCheck, cancelCheckin, customer_id, saveCheckin, doCheckout, isCheckin };
     },
 })
 

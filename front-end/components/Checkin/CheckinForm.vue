@@ -34,20 +34,38 @@ export default defineComponent({
         customer_id: {
             type: String,
             default:"0"
-        }
+        },
+        isCheckin:{
+            type:Boolean,
+            required:true
+        },
     },
     setup(props,{emit}) {
 
-        const { save, update, getById, resetEntity, doCheckin } = useCheckinStore();
+        const { save, update, getById, resetEntity, doCheckin, doCheckout } = useCheckinStore();
         const { errors, entity } = storeToRefs(useCheckinStore());
 
         const isOpen = ref(false);
 
+        const { $swal } = useNuxtApp();
+
         const formSave = async () => {
-            console.log("🚀 ~ file: CheckinForm.vue:45 ~ formSave ~ props.customer_id:", props.customer_id);
             entity.value.customer_id = props.customer_id;
-            await doCheckin();
-            emit('saved');
+            if(props.isCheckin) await doCheckin();
+            else{
+                await doCheckout();
+                if(errors.value.length > 0){
+                    $swal.fire({
+                        icon: 'error',
+                        title: errors.value,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                }
+                else emit('saved');
+            }
         }
 
         const closeModal = () =>{

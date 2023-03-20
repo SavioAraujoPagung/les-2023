@@ -16,6 +16,7 @@
         </div>
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end">
+            
             <li class="nav-item">
               <NuxtLink class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/usuarios">
                 <i class="icon icon-16">
@@ -24,14 +25,42 @@
                 Usu&aacute;rios
               </NuxtLink>
             </li>
-          </ul>
-          <ul class="navbar-nav">
+
+            <li class="nav-item">
+              <NuxtLink class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/clientes">
+                <i class="icon icon-16">
+                  <IconsCustomer/>
+                </i>
+                Clientes
+              </NuxtLink>
+            </li>
+            
+            <li class="nav-item">
+              <NuxtLink class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/estoque">
+                <i class="icon icon-16">
+                  <IconsBox/>
+                </i>
+                Estoque
+              </NuxtLink>
+            </li>
+
+            <li class="nav-item">
+              <NuxtLink class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/produtos">
+                <i class="icon icon-16">
+                  <IconsBag/>
+                </i>
+                Produtos
+              </NuxtLink>
+            </li>
+
             <li class="nav-item">
               <a href="javascript:;" @click="logout" class="nav-link d-flex align-items-center gap-2 text-white">
                 <i class="icon icon-16"><IconsBoxArrowLeft/></i>
                 Sair
               </a>
             </li>
+
+
           </ul>
         </div>
       </div>
