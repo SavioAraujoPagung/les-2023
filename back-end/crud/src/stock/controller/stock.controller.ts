@@ -35,7 +35,7 @@ export class StockController {
 
   @Get()
   async findAll(): Promise<Stock[]> {
-    return this.repository.find();
+    return await this.repository.find();
   }
 
   @Get(':barcode')

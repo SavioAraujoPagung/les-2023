@@ -30,7 +30,13 @@ export class CheckInController {
   
   @Get()
   async findAll(): Promise<CheckIn[]> {
-    return this.repository.find();
+    const checkIns = await this.repository.find()
+    let qtd = checkIns.length;
+    for(let i = 0; i<qtd; i++){
+      let id = Number(checkIns[i].customer_id)
+      checkIns[i].customer = await this.repositoryCustomer.findOne({where:{ id }})
+    }
+    return checkIns;
   }
 
   @Get(':id')
@@ -46,6 +52,7 @@ export class CheckInController {
   async findOneByRfif(@Param('rfid_query') rfid_query: string) {
    
     let checkIn = await this.repository.findOneBy({rfid:rfid_query, status: true })
+    console.log("🚀 ~ file: checkin.controller.ts:49 ~ CheckInController ~ checkIn:", checkIn)
     
     if(checkIn){
       let id = Number(checkIn.customer_id)
