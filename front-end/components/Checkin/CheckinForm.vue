@@ -51,7 +51,10 @@ export default defineComponent({
 
         const formSave = async () => {
             entity.value.customer_id = props.customer_id;
-            if(props.isCheckin) await doCheckin();
+            if(props.isCheckin){
+                await doCheckin();
+                emit('saved');
+            }
             else{
                 await doCheckout();
                 if(errors.value.length > 0){
