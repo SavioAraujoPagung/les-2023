@@ -42,7 +42,7 @@ export default defineComponent({
     },
     setup(props,{emit}) {
 
-        const { save, update, getById, resetEntity, doCheckin, doCheckout } = useCheckinStore();
+        const { save, update, getById, resetEntity, doCheckin, doCheckout, clearErrors } = useCheckinStore();
         const { errors, entity } = storeToRefs(useCheckinStore());
 
         const isOpen = ref(false);
@@ -66,8 +66,11 @@ export default defineComponent({
                         showConfirmButton: false,
                         timer: 4000
                     });
+                    clearErrors();
                 }
                 else emit('saved');
+
+
             }
         }
 

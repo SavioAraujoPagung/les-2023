@@ -21,12 +21,6 @@
                     </i>
                     CheckIn
                 </DropdownItem>
-                <DropdownItem @click="emit('checkout')">
-                    <i class="icon icon-16">
-                        <broadcast/>
-                    </i>
-                    CheckOut
-                </DropdownItem>
             </DropdownActionDropdown>
         </td>
     </tr>

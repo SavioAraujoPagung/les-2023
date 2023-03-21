@@ -2,6 +2,7 @@
     <header class="d-flex align-items-center justify-content-between mb-5">
         <h1 class="text-primary fw-bold">Clientes</h1>
         <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
+        <a href="javascript:;" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
     </header>
 
     
@@ -80,7 +81,7 @@ export default defineComponent({
         const saveCheckin = () => {
             $swal.fire({
                 icon: 'success',
-                title: 'Check-in realizado com sucesso!',
+                title: (isCheckin.value ? 'Check-in' : 'Check-Out') + ' realizado com sucesso!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
