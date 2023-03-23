@@ -5,6 +5,6 @@
 </template>
 <style>
     td, th{
-        padding: 1rem;
+        padding: 1rem !important;
     }
 </style>

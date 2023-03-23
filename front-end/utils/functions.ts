@@ -11,4 +11,15 @@ export const geraStringAleatoria = (tamanho:number) => {
     return stringAleatoria;
 }
 
+export const isset = (elem:any) => typeof elem !== "undefined" ? true : false;
+
+export const getSubSet = (object:any, types:any) => {
+    return types.reduce((obj:any, type:any) => {
+        return {
+        ...obj,
+        [type]: object[type]
+        }
+    }, {});
+}
+
 // export default {formatDate, geraStringAleatoria};
