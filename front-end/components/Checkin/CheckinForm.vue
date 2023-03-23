@@ -32,7 +32,7 @@ export default defineComponent({
     emits:['saved', 'close'],
     props:{
         customer_id: {
-            type: String,
+            type: Number,
             default:"0"
         },
         isCheckin:{
@@ -51,8 +51,8 @@ export default defineComponent({
         const { $swal } = useNuxtApp();
 
         const formSave = async () => {
-            entity.value.customer_id = props.customer_id;
             if(props.isCheckin){
+                entity.value.customer_id = props.customer_id.toString();
                 await doCheckin();
                 emit('saved');
             }
@@ -71,11 +71,10 @@ export default defineComponent({
                 }
                 else emit('saved');
 
-
             }
         }
 
-        onMounted(() => rfid.value ? rfid.value?.focus() : false );
+        onMounted(() => rfid.value ? (<HTMLElement> rfid.value).focus() : false );
 
         const closeModal = () =>{
             resetEntity();

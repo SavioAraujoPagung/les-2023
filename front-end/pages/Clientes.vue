@@ -1,8 +1,10 @@
 <template>
     <header class="d-flex align-items-center justify-content-between mb-5">
         <h1 class="text-primary fw-bold">Clientes</h1>
-        <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
-        <a href="javascript:;" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
+        <div class="d-flex align-items-center gap-3">
+            <a href="javascript:;" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
+            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
+        </div>
     </header>
 
     
@@ -16,8 +18,7 @@
                 <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id"
                 @delete="deleteElement(customer.id)"
                 @edit="showFormEdit(customer.id)"
-                @checkin="doCheckin(customer.id)"
-                @checkout="doCheckout(customer.id)">
+                @checkin="doCheckin(customer.id)">
                     <td>{{ customer.name }}</td>
                     <td>{{ customer.cpf }}</td>
                     <td>{{ customer.email }}</td>
@@ -69,8 +70,7 @@ export default defineComponent({
             openCheck.value = true;
         }
 
-        const doCheckout = (id:any) => {
-            customer_id.value = id;
+        const doCheckout = () => {
             isCheckin.value = false;
             openCheck.value = true;
         }
