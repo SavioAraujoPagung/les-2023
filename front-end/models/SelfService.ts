@@ -5,7 +5,7 @@ export default class SelfService extends Default{
     qtd: number;
 
     constructor() {
-        super("/selfService/");
+        super("/solicitation/");
         this.name = "";
         this.qtd = 0
     }
