@@ -52,7 +52,6 @@ export class CheckInController {
   async findOneByRfif(@Param('rfid_query') rfid_query: string) {
    
     let checkIn = await this.repository.findOneBy({rfid:rfid_query, status: true })
-    console.log("🚀 ~ file: checkin.controller.ts:49 ~ CheckInController ~ checkIn:", checkIn)
     
     if(checkIn){
       let id = Number(checkIn.customer_id)
