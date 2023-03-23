@@ -25,6 +25,9 @@
                 </CheckinTRow>
             </tbody>
         </DefaultTable>
+        <div class="d-flex align-items-center justify-content-center p-5" v-else>
+            <LoadersCubeLoader />
+        </div>
 
         <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
         <component :is="openCheck ? modalCheck : 'div'" :isCheckin="isCheckin"  @close="cancelCheckin" @saved="saveCheckin" :customer_id="customer_id" />

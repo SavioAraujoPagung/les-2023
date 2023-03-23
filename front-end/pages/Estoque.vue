@@ -21,6 +21,9 @@
             </tr>
         </tbody>
     </DefaultTable>
+    <div class="d-flex align-items-center justify-content-center p-5" v-else>
+        <LoadersCubeLoader />
+    </div>
 
     <component :is="open ? modalForm : 'div'" @close="cancelChange" :isIncrement="isIncrement" @saved="refreshList" />
 
