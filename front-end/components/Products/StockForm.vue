@@ -6,22 +6,26 @@
                 <h4 class="fw-bold text-dark">Adicione produtos no estoque</h4>
                 <button type="button" class="btn-close" @click="closeModal"></button>
             </modal-header>
-            <modal-body>
+            <modal-body class="row">
                 
-                <div class="form-floating mb-3">
-                    <input type="text" name="nome" id="nome" disabled class="form-control" v-model="entity.name" placeholder="nome" required>
-                    <label for="nome" class="form-label">Nome</label>
+                <div class="col-sm-9">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="nome" id="nome" disabled class="form-control" v-model="entity.name" placeholder="nome" required>
+                        <label for="nome" class="form-label">Nome</label>
+                    </div>
                 </div>
 
-                <div class="form-floating mb-3">
-                    <input type="text" name="cost" id="cost" disabled class="form-control" v-model="entity.cost" placeholder="cost" required>
-                    <label for="cost" class="form-label">Valor unidade</label>
+                <div class="col-sm-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="cost" id="cost" disabled class="form-control" v-model="entity.cost" placeholder="cost" required>
+                        <label for="cost" class="form-label">Valor unidade</label>
+                    </div>
                 </div>
                 
                 <div class="col-sm-12 mb-3">
-                    <div class="form-floating mb-3">
-                        <input type="text" ref="numberBarCode" class="form-control" v-model="entity.barcode" aria-label="Código de barras" id="numberBarCode" aria-describedby="buttonBarCode">
-                        <label for="numberBarCode" class="form-label">Código de barras</label>
+                    <div class="input-group mb-3">
+                        <input type="text" ref="numberBarCode" class="form-control" v-model="entity.barcode" aria-label="Código de barras" placeholder="Código de barras" id="numberBarCode" aria-describedby="buttonBarCode">
+                        <button class="btn btn-primary fw-bold text-white" type="submit">Adicionar</button>
                     </div>
                     <div class="ratio ratio-21x9">
                         <canvas class="object-fit-contain" ref="barcode"></canvas>
@@ -48,7 +52,6 @@
             </modal-body>
             <modal-footer>
                 <button class="btn btn-outline-danger" type="button" @click="closeModal">Cancelar</button>
-                <button class="btn btn-primary fw-bold text-white d-none" type="submit">Salvar</button>
                 <button class="btn btn-primary fw-bold text-white" type="button" @click="formSave">Confirmar</button>
             </modal-footer>
         </form>
