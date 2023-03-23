@@ -9,7 +9,7 @@
             <modal-body>
                 
                 <div class="form-floating mb-3">
-                    <input type="text" name="rfid" id="rfid" class="form-control" v-model="entity.rfid" placeholder="rfid" required>
+                    <input type="text" name="rfid" id="rfid" ref="rfid" class="form-control" v-model="entity.rfid" placeholder="rfid" required>
                     <label for="rfid" class="form-label">RFID</label>
                 </div>
                 
@@ -46,6 +46,7 @@ export default defineComponent({
         const { errors, entity } = storeToRefs(useCheckinStore());
 
         const isOpen = ref(false);
+        const rfid = ref(null);
 
         const { $swal } = useNuxtApp();
 
@@ -74,6 +75,8 @@ export default defineComponent({
             }
         }
 
+        onMounted(() => rfid.value ? rfid.value?.focus() : false );
+
         const closeModal = () =>{
             resetEntity();
             emit('close');
@@ -85,6 +88,7 @@ export default defineComponent({
             formSave,
             isOpen,
             closeModal,
+            rfid
         }   
     },
 })
