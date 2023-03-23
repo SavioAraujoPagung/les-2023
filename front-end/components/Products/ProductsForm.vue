@@ -3,7 +3,7 @@
     <ModalMyModal>
         <form v-on:submit.prevent="formSave">
             <modal-header>
-                <h4 class="fw-bold text-dark">Formul&aacute;lio de Produtos</h4>
+                <h4 class="fw-bold text-dark">Formul&aacute;rio de Produtos</h4>
                 <button type="button" class="btn-close" @click="closeModal"></button>
             </modal-header>
             <modal-body>

@@ -78,7 +78,7 @@ export default defineComponent({
                 showConfirmButton: false,
                 timer: 1500
             });
-            document.getElementById("produto" + id)?.classList.add("m-fadeOut");
+            document.getElementById("product" + id)?.classList.add("m-fadeOut");
             await getAll();
         }
 
