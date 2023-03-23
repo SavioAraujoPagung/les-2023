@@ -147,7 +147,7 @@ export default defineComponent({
         }
 
         onMounted(() => {
-            numberBarCode.value.focus();
+            numberBarCode.value ? (<HTMLElement> numberBarCode.value).focus() : false;
             document.onkeydown = (event) => {
                 if (event.ctrlKey && event.key == 'j') event.preventDefault();
             }
