@@ -61,6 +61,15 @@
                 Self Service
               </NuxtLink>
             </li>
+            
+            <li class="nav-item">
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/solicitacaocozinha">
+                <i class="icon icon-16">
+                  <IconsKitchen/>
+                </i>
+                Cozinha
+              </NuxtLink>
+            </li>
 
             <li class="nav-item">
               <a href="javascript:;" @click="logout" class="nav-link d-flex align-items-center gap-2 text-white">

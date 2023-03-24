@@ -12,5 +12,3 @@ export default class SelfService extends Default{
         this.qtd = 0
     }
 }
-
-// export {Customer, CustomerEdit}
