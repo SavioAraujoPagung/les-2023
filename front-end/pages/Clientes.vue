@@ -8,23 +8,25 @@
     </header>
 
     
-        <DefaultTable v-if="entities.length">
-            <DefaultTableThead>
-                <th class="col-m-4">Nome</th>
-                <th class="col-sm-4">CPF</th>
-                <th class="col-sm-4">Email</th>
-            </DefaultTableThead>
-            <tbody>
-                <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id"
-                @delete="deleteElement(customer.id)"
-                @edit="showFormEdit(customer.id)"
-                @checkin="doCheckin(customer.id)">
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.cpf }}</td>
-                    <td>{{ customer.email }}</td>
-                </CheckinTRow>
-            </tbody>
-        </DefaultTable>
+        <div v-if="!loading">
+            <DefaultTable v-if="entities.length">
+                <DefaultTableThead>
+                    <th class="col-m-4">Nome</th>
+                    <th class="col-sm-4">CPF</th>
+                    <th class="col-sm-4">Email</th>
+                </DefaultTableThead>
+                <tbody>
+                    <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id"
+                    @delete="deleteElement(customer.id)"
+                    @edit="showFormEdit(customer.id)"
+                    @checkin="doCheckin(customer.id)">
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.cpf }}</td>
+                        <td>{{ customer.email }}</td>
+                    </CheckinTRow>
+                </tbody>
+            </DefaultTable>
+        </div>
         <div class="d-flex align-items-center justify-content-center p-5" v-else>
             <LoadersCubeLoader />
         </div>
@@ -60,7 +62,7 @@ export default defineComponent({
         const isOpen = ref(false);
 
         const { destroy, getAll, getById, resetEntity } = useCustomerStore()
-        const { entities } = storeToRefs(useCustomerStore());
+        const { entities, loading } = storeToRefs(useCustomerStore());
 
         const cancelChange = () => {
             resetEntity();
@@ -133,7 +135,7 @@ export default defineComponent({
         onMounted(getAll);
 
         return { entities, modalForm, isOpen, cancelChange, refreshList, deleteElement, showFormEdit, showForm,
-            openCheck, doCheckin, modalCheck, cancelCheckin, customer_id, saveCheckin, doCheckout, isCheckin };
+            openCheck, doCheckin, modalCheck, cancelCheckin, customer_id, saveCheckin, doCheckout, isCheckin, loading };
     },
 })
 

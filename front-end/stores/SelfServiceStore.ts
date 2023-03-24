@@ -7,10 +7,17 @@ export const useSelfServiceStore = defineStore('SelfService', () => {
     const entities = ref(new Array<SelfService>());
     const path = entity.path;
     const errors = ref("");
+    const loading = ref(true);
 
     const getAll = async () => {
-        const response = await api.get(path);
-        entities.value = response.data;
+        loading.value = true;
+        await api.get(path).then((response) => {
+            entities.value = response.data;
+        })
+        .catch((error) => {
+            errors.value = error.message;
+        })
+        .finally(() => loading.value = false);
     }
 
     const getById = async (id:any) => {
@@ -37,21 +44,12 @@ export const useSelfServiceStore = defineStore('SelfService', () => {
 
     const save = async (data:any) => {
         await api.post(path, data).then((response) => {
-            console.log("🚀 ~ file: SelfServiceStore.ts:40 ~ awaitapi.post ~ response:", response)
             return response.data;
         }).catch((error) => {
-            console.log("🚀 ~ file: SelfServiceStore.ts:40 ~ awaitapi.post ~ response:", error)
-            errors.value = error.response.data.message;
+            errors.value = error.message;
         });
-
-        // await api.post(path, data);
-    }
-
-    const update = async (data:any, id:any) => {
-        // let object = getSubSet(data, Object.getOwnPropertyNames(new SelfServiceEdit()));
-        // await api.put(path + id, object);
     }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update, resetErrors};
+    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, resetErrors, loading };
   })
   

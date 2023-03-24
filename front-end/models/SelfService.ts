@@ -1,12 +1,14 @@
 import Default from "./Default";
 
 export default class SelfService extends Default{
-    name: string;
+    foodName: string;
+    status: boolean;
     qtd: number;
 
     constructor() {
         super("/solicitation/");
-        this.name = "";
+        this.foodName = "";
+        this.status = false;
         this.qtd = 0
     }
 }

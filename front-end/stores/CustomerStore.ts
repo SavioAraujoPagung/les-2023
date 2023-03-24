@@ -7,11 +7,17 @@ export const useCustomerStore = defineStore('Customer', () => {
     const entities = ref(new Array<Customer>());
     const path = entity.path;
     const errors = ref("");
-    // const doubleCount = computed(() => count.value * 2)
+    const loading = ref(true);
 
     const getAll = async () => {
-        const response = await api.get(path);
-        entities.value = response.data;
+        loading.value = true;
+        await api.get(path).then((response) => {
+            entities.value = response.data;
+        })
+        .catch((error) => {
+            errors.value = error.message;
+        })
+        .finally(() => loading.value = false);
     }
 
     const getById = async (id:any) => {
@@ -35,7 +41,11 @@ export const useCustomerStore = defineStore('Customer', () => {
     }
 
     const save = async (data:any) => {
-        await api.post(path, data);
+        await api.post(path, data).then((response) => {
+            return response.data;
+        }).catch((error) => {
+            errors.value = error.message;
+        });
     }
 
     const update = async (data:any, id:any) => {
@@ -43,6 +53,6 @@ export const useCustomerStore = defineStore('Customer', () => {
         await api.put(path + id, object);
     }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update};
+    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, loading, update};
   })
   

@@ -6,6 +6,7 @@ export const useProductStore = defineStore('product', () => {
     const entity = reactive(new Product());
     const entities = ref(new Array<Product>());
     const productPath = entity.path;
+    const loading = ref(true);
     
     const stock = ref(new Array<StockProduct>());
     const stockPath = new StockProduct().path;
@@ -13,16 +14,25 @@ export const useProductStore = defineStore('product', () => {
     const errors = ref("");
 
     const getAll = async () => {
-        const response = await api.get(productPath);
-        entities.value = response.data;
+        loading.value = true;
+        await api.get(productPath).then((response) => {
+            entities.value = response.data;
+        })
+        .catch((error) => {
+            errors.value = error.message;
+        })
+        .finally(() => loading.value = false);
     }
 
     const getAllStock = async () => {
+        loading.value = true;
         await api.get(stockPath).then((response) => {
-            stock.value = response.data
-        }).catch((error) => {
-            errors.value = error.response.data.message;
-        });
+            stock.value = response.data;
+        })
+        .catch((error) => {
+            errors.value = error.message;
+        })
+        .finally(() => loading.value = false);
     }
 
     const getById = async (id:any) => {
@@ -59,7 +69,11 @@ export const useProductStore = defineStore('product', () => {
     }
 
     const save = async (data:any) => {
-        await api.post(productPath, data);
+        await api.post(productPath, data).then((response) => {
+            return response.data;
+        }).catch((error) => {
+            errors.value = error.message;
+        });
     }
 
     const update = async (data:any, id:any) => {
@@ -67,6 +81,6 @@ export const useProductStore = defineStore('product', () => {
         await api.put(productPath + id, object);
     }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, update, getAllStock, getByBarcode, stock, saveAllInStock };
+    return { entity, entities, errors, getAll, loading, getById, destroy, resetEntity, save, update, getAllStock, getByBarcode, stock, saveAllInStock };
   })
   

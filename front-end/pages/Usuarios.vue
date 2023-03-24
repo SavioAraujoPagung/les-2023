@@ -4,18 +4,23 @@
         <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
     </header>
     
-    <DefaultTable v-if="entities.length">
-        <DefaultTableThead>
-            <th>Nome</th>
-            <th>Fun&ccedil;&atilde;o</th>
-        </DefaultTableThead>
-        <tbody>
-            <DefaultTableTrow v-for="(usuario, i) in entities" :key="i" :id="'usuario'+usuario.id" @delete="deleteElement(usuario.id)" @edit="showFormEdit(usuario.id)">
-                <td>{{ usuario.name }}</td>
-                <td>{{ usuario.office }}</td>
-            </DefaultTableTrow>
-        </tbody>
-    </DefaultTable>
+    <div v-if="entities.length">
+        <DefaultTable v-if="!loading">
+            <DefaultTableThead>
+                <th>Nome</th>
+                <th>Fun&ccedil;&atilde;o</th>
+            </DefaultTableThead>
+            <tbody>
+                <DefaultTableTrow v-for="(usuario, i) in entities" :key="i" :id="'usuario'+usuario.id" @delete="deleteElement(usuario.id)" @edit="showFormEdit(usuario.id)">
+                    <td>{{ usuario.name }}</td>
+                    <td>{{ usuario.office }}</td>
+                </DefaultTableTrow>
+            </tbody>
+        </DefaultTable>
+        <div v-else>
+            <h5 class="text-dak">Nenhum registro encontrado</h5>
+        </div>
+    </div>
 
     <div class="d-flex align-items-center justify-content-center p-5" v-else>
         <LoadersCubeLoader />
@@ -45,7 +50,7 @@ export default defineComponent({
         const isOpen = ref(false);
 
         const { destroy, getAll, getById, resetEntity } = useUserStore();
-        const { entities } = storeToRefs(useUserStore());
+        const { entities, loading } = storeToRefs(useUserStore());
 
         const cancelChange = () => {
             resetEntity();
@@ -91,7 +96,7 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, isOpen, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { entities, Cargos, modalForm, isOpen, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
 
     },
 })

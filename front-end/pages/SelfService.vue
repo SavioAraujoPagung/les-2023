@@ -4,18 +4,23 @@
         <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
     </header>
     
-    <DefaultTable v-if="entities.length">
-        <DefaultTableThead>
-            <th>Nome</th>
-            <th>Quantidade</th>
-        </DefaultTableThead>
-        <tbody>
-            <DefaultTableTrow v-for="(dish, i) in entities" :key="i" :id="'dish'+dish.id" @delete="deleteElement(dish.id)" @edit="showFormEdit(dish.id)">
-                <td>{{ dish.name }}</td>
-                <td>{{ dish.qtd }}</td>
-            </DefaultTableTrow>
-        </tbody>
-    </DefaultTable>
+    <div v-if="!loading">
+        <DefaultTable v-if="entities.length" >
+            <DefaultTableThead>
+                <th>Nome</th>
+                <th>Quantidade</th>
+            </DefaultTableThead>
+            <tbody>
+                <SelfServiceTrow v-for="(dish, i) in entities" :key="i" :id="'dish'+dish.id" @delete="deleteElement(dish.id)">
+                    <td>{{ dish.foodName }}</td>
+                    <td>{{ dish.qtd }}</td>
+                </SelfServiceTrow>
+            </tbody>
+        </DefaultTable>
+        <div v-else>
+            <h5 class="text-dak">Nenhum registro encontrado</h5>
+        </div>
+    </div>
 
     <div class="d-flex align-items-center justify-content-center p-5" v-else>
         <LoadersCubeLoader />
@@ -45,7 +50,7 @@ export default defineComponent({
         const { $swal } = useNuxtApp()
 
         const { destroy, getAll, getById, resetEntity } = useSelfServiceStore();
-        const { entities } = storeToRefs(useSelfServiceStore());
+        const { entities, loading } = storeToRefs(useSelfServiceStore());
 
         const cancelChange = () => {
             resetEntity();
@@ -67,7 +72,7 @@ export default defineComponent({
         }
 
         const deleteElement = async (id:any) => {
-            destroy(id);
+            await destroy(id);
             $swal.fire({
                 icon: 'success',
                 title: 'Produto deletado com sucesso!',
@@ -80,18 +85,13 @@ export default defineComponent({
             await getAll();
         }
 
-        const showFormEdit = async (id:any) => {
-            await getById(id);
-            showForm();
-        }
-
         const showForm = () => {
             open.value = true;
         }
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { entities, Cargos, modalForm, open, cancelChange, refreshList, deleteElement, showForm, loading };
 
     },
 })

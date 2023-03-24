@@ -4,20 +4,25 @@
         <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
     </header>
     
-    <DefaultTable v-if="entities.length">
-        <DefaultTableThead>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>C&oacute;digo de Barras</th>
-        </DefaultTableThead>
-        <tbody>
-            <DefaultTableTrow v-for="(product, i) in entities" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
-                <td>{{ product.name }}</td>
-                <td>{{ product.cost }}</td>
-                <td>{{ product.barcode }}</td>
-            </DefaultTableTrow>
-        </tbody>
-    </DefaultTable>
+    <div v-if="!loading">
+        <DefaultTable v-if="entities.length">
+            <DefaultTableThead>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>C&oacute;digo de Barras</th>
+            </DefaultTableThead>
+            <tbody>
+                <DefaultTableTrow v-for="(product, i) in entities" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.cost }}</td>
+                    <td>{{ product.barcode }}</td>
+                </DefaultTableTrow>
+            </tbody>
+        </DefaultTable>
+        <div v-else>
+            <h5 class="text-dak">Nenhum registro encontrado</h5>
+        </div>
+    </div>
     
     <div class="d-flex align-items-center justify-content-center p-5" v-else>
         <LoadersCubeLoader />
@@ -47,7 +52,7 @@ export default defineComponent({
         const { $swal } = useNuxtApp()
 
         const { destroy, getAll, getById, resetEntity } = useProductStore();
-        const { entities } = storeToRefs(useProductStore());
+        const { entities, loading } = storeToRefs(useProductStore());
 
         const cancelChange = () => {
             resetEntity();
@@ -93,7 +98,7 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { entities, Cargos, modalForm, loading, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
 
     },
 })

@@ -10,7 +10,7 @@
                 
                 <div class="col-sm-6">
                     <div class="form-floating mb-3">
-                        <input type="text" name="nome" id="nome" class="form-control" v-model="entity.name" placeholder="nome" required>
+                        <input type="text" name="nome" id="nome" class="form-control" v-model="entity.foodName" placeholder="nome" required>
                         <label for="nome" class="form-label">Nome</label>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(product, i) in newItens" :key="i" :id="'newProduct'+i">
-                                <td>{{ product.name }}</td>
+                                <td>{{ product.foodName }}</td>
                                 <td>{{ product.qtd }}</td>
                                 <td>
                                     <a href="javascript:;" class="icon icon-16 text-primary" @click="increment(i)">
@@ -71,7 +71,7 @@ export default defineComponent({
     emits:['saved', 'close'],
     setup(props,{emit}) {
 
-        const { save, update, resetEntity, resetErrors } = useSelfServiceStore();
+        const { save, resetEntity, resetErrors } = useSelfServiceStore();
         const { errors, entity } = storeToRefs(useSelfServiceStore());
 
         const { $swal } = useNuxtApp();
@@ -91,9 +91,7 @@ export default defineComponent({
         }
 
         const formSave = async () => {
-            const response = await save(newItens.value);
-            console.log("🚀 ~ file: SelfServiceForm.vue:95 ~ formSave ~ response:")
-            console.log("🚀 ~ file: SelfServiceForm.vue:95 ~ formSave ~ response:", response)
+            await save(newItens.value);
             if(errors.value.length > 0){
                 $swal.fire({
                     icon: 'error',
@@ -109,7 +107,18 @@ export default defineComponent({
         }
 
         const addItens = () => {
-            let index = newItens.value.findIndex(obj => obj.name === entity.value.name);
+            if(!entity.value.foodName.length || entity.value.qtd <= 0){
+                $swal.fire({
+                    icon: 'error',
+                    title: "É necessário escrever algum nome de prato e/ou a quantidade do mesmo deve ser maior que 0 para adiciona-lo!",
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+                return false;
+            }
+            let index = newItens.value.findIndex(obj => obj.foodName === entity.value.foodName);
             if(index >= 0 && isset(newItens.value[index])) newItens.value[index].qtd += entity.value.qtd
             else newItens.value.push(getSubSet(entity.value, Object.getOwnPropertyNames(new SelfService())));
         }
