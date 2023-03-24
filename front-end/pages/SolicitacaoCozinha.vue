@@ -5,7 +5,7 @@
     </header>
     
     <div v-if="!loading">
-        <DefaultTable v-if="entities.length">
+        <DefaultTable v-if="entities.length > 0">
             <DefaultTableThead>
                 <th>C&oacute;digo de Barras</th>
                 <th>Nome</th>

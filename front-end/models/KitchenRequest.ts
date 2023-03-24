@@ -7,7 +7,7 @@ export default class KitchenRequest extends Default{
     qtd: number;
 
     constructor() {
-        super("/solicitation/");
+        super("/Kitchenrequest/");
         this.idProduct = 0;
         this.product = new Product();
         this.qtd = 0
