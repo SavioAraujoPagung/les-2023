@@ -37,7 +37,7 @@ export default defineComponent({
 
         const dropdown = ref(null)
 
-        const clickOutListener = (evt:any) => { if(!dropdown.value?.contains(evt.target)) isOpen.value = false };
+        const clickOutListener = (evt:any) => { if(dropdown.value && !( <HTMLElement> dropdown.value)?.contains(evt.target)) isOpen.value = false };
 
         onMounted(()=>{ document.addEventListener("click", clickOutListener) });
 
@@ -92,7 +92,7 @@ export default defineComponent({
     }
 
     .v-enter-active, .v-leave-active {
-        transition: opacity 0.5s ease;
+        transition: opacity 0.3s ease;
     }
     .v-enter-from, .v-leave-to {
         opacity: 0;
