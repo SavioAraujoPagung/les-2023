@@ -11,9 +11,9 @@
                 <th>Fun&ccedil;&atilde;o</th>
             </DefaultTableThead>
             <tbody>
-                <DefaultTableTrow v-for="(usuario, i) in entities" :key="i" :id="'usuario'+usuario.id" @delete="deleteElement(usuario.id)" @edit="showFormEdit(usuario.id)">
-                    <td>{{ usuario.name }}</td>
-                    <td>{{ usuario.office }}</td>
+                <DefaultTableTrow v-for="(user, i) in entities" :key="i" :id="'user'+user.id" @delete="deleteElement(user.id)" @edit="showFormEdit(user.id)">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.office }}</td>
                 </DefaultTableTrow>
             </tbody>
         </DefaultTable>
@@ -71,19 +71,7 @@ export default defineComponent({
             await getAll();
         }
 
-        const deleteElement = async (id:any) => {
-            destroy(id);
-            $swal.fire({
-                icon: 'success',
-                title: 'Usuário deletado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            document.getElementById("usuario" + id)?.classList.add("m-fadeOut");
-            await getAll();
-        }
+        const deleteElement = async (id:any) => destroy(id, document.getElementById("user" + id));
 
         const showFormEdit = async (id:any) => {
             await getById(id);

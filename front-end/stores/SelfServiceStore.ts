@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import api from '~/services/api'
 import SelfService from '~/models/SelfService'
+import Swal from 'sweetalert2';
 
 export const useSelfServiceStore = defineStore('SelfService', () => {
     const entity = reactive(new SelfService());
@@ -25,8 +26,29 @@ export const useSelfServiceStore = defineStore('SelfService', () => {
         Object.assign(entity,response.data);
     }
 
-    const destroy = async (id:any) => {
-        const response = await api.delete(path + id);
+    const destroy = async (id:any, elem:any = undefined) => {
+        await api.delete(path + id).then(async (response) => {
+            if(elem) await fadeOut(elem);
+            Swal.fire({
+                icon: 'success',
+                title: 'registro deletado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).finally(async () => {
+            await getAll();
+        });
     }
 
     const resetEntity = () => Object.assign(entity, new SelfService());

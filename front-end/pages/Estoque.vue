@@ -7,20 +7,25 @@
         </div>
     </header>
     
-    <DefaultTable v-if="stock.length">
-        <thead>
-            <th>C&oacute;digo de Barras</th>
-            <th>Nome</th>
-            <th>Quantidade</th>
-        </thead>
-        <tbody>
-            <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id">
-                <td>{{ product.barcode }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.qtd }}</td>
-            </tr>
-        </tbody>
-    </DefaultTable>
+    <div v-if="!loading">
+        <DefaultTable v-if="stock.length">
+            <thead>
+                <th>C&oacute;digo de Barras</th>
+                <th>Nome</th>
+                <th>Quantidade</th>
+            </thead>
+            <tbody>
+                <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id">
+                    <td>{{ product.barcode }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.qtd }}</td>
+                </tr>
+            </tbody>
+        </DefaultTable>
+        <div v-else>
+            <h5 class="text-dak">Nenhum registro encontrado</h5>
+        </div>
+    </div>
     <div class="d-flex align-items-center justify-content-center p-5" v-else>
         <LoadersCubeLoader />
     </div>
@@ -51,7 +56,7 @@ export default defineComponent({
         const { $swal } = useNuxtApp()
 
         const { destroy, getAllStock, getById } = useProductStore();
-        const { stock } = storeToRefs(useProductStore());
+        const { stock, loading } = storeToRefs(useProductStore());
 
         const cancelChange = () => open.value = false;
 
@@ -76,7 +81,7 @@ export default defineComponent({
 
         onMounted(getAllStock);
 
-        return { stock, Cargos, modalForm, open, cancelChange, refreshList, showForm, isIncrement };
+        return { stock, Cargos, modalForm, open, cancelChange, refreshList, showForm, isIncrement, loading };
 
     },
 })

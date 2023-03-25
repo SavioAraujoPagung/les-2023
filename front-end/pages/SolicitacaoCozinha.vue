@@ -72,19 +72,7 @@ export default defineComponent({
             await getAll();
         }
 
-        const deleteElement = async (id:any) => {
-            await destroy(id);
-            $swal.fire({
-                icon: 'success',
-                title: 'Produto deletado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            document.getElementById("dish" + id)?.classList.add("m-fadeOut");
-            await getAll();
-        }
+        const deleteElement = async (id:any) => destroy(id, document.getElementById("product" + id));
 
         const showForm = () => {
             open.value = true;

@@ -72,7 +72,7 @@ export default defineComponent({
                     confirmButtonColor: '#00c57e',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Sim, gerar código'
-                    }).then((result) => {
+                }).then((result) => {
                     if (result.isConfirmed) {
                         var string = geraStringAleatoria(11);
                         $swal.fire({
@@ -86,7 +86,7 @@ export default defineComponent({
                     }
                 })
             }
-            JsBarcode(barcode.value, entity.value.barcode);
+            if(entity.value.barcode !== "" ) JsBarcode(barcode.value, entity.value.barcode);
         }
 
         const formSave = async () => {

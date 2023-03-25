@@ -7,8 +7,8 @@
     <div v-if="!loading">
         <DefaultTable v-if="entities.length" >
             <DefaultTableThead>
-                <th>Nome</th>
-                <th>Quantidade</th>
+                <th class="col-sm-7">Nome</th>
+                <th class="col-sm-3">Quantidade(g)</th>
             </DefaultTableThead>
             <tbody>
                 <SelfServiceTrow v-for="(dish, i) in entities" :key="i" :id="'dish'+dish.id" @delete="deleteElement(dish.id)">
@@ -71,19 +71,7 @@ export default defineComponent({
             await getAll();
         }
 
-        const deleteElement = async (id:any) => {
-            await destroy(id);
-            $swal.fire({
-                icon: 'success',
-                title: 'Produto deletado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            document.getElementById("dish" + id)?.classList.add("m-fadeOut");
-            await getAll();
-        }
+        const deleteElement = async (id:any) => destroy(id, document.getElementById("dish" + id));
 
         const showForm = () => {
             open.value = true;

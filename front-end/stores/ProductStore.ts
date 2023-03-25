@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import Swal from 'sweetalert2';
 import api from '~/services/api'
 import { Product, ProductEdit, StockProduct} from '~~/models/Products';
 
@@ -53,8 +54,29 @@ export const useProductStore = defineStore('product', () => {
         await api.post(stockPath, data);
     }
 
-    const destroy = async (id:any) => {
-        const response = await api.delete(productPath + id);
+    const destroy = async (id:any, elem:any = undefined) => {
+        await api.delete(productPath + id).then(async (response) => {
+            if(elem) await fadeOut(elem);
+            Swal.fire({
+                icon: 'success',
+                title: 'registro deletado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).finally(async () => {
+            await getAll();
+        });
     }
 
     const resetEntity = () => Object.assign(entity,new Product());

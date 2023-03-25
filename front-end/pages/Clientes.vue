@@ -26,6 +26,9 @@
                     </CheckinTRow>
                 </tbody>
             </DefaultTable>
+            <div v-else>
+                <h5 class="text-dak">Nenhum registro encontrado</h5>
+            </div>
         </div>
         <div class="d-flex align-items-center justify-content-center p-5" v-else>
             <LoadersCubeLoader />
@@ -109,19 +112,8 @@ export default defineComponent({
             await getAll();
         }
 
-        const deleteElement = async (id:any) => {
-            destroy(id);
-            $swal.fire({
-                icon: 'success',
-                title: 'Cliente deletado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            document.getElementById("Cliente" + id)?.classList.add("m-fadeOut");
-            await getAll();
-        }
+        const deleteElement = async (id:any) => destroy(id, document.getElementById("customer" + id));
+
 
         const showFormEdit = async (id:any) => {
             await getById(id);

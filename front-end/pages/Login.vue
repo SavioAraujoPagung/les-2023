@@ -6,7 +6,7 @@
                 <h1 class="fw-bold text-white display-6">Faça seu login</h1>
                 <div class="mt-5 col-sm-10">
                     <div class="mb-3">
-                        <label for="usuario" class="form-label text-white">Usuário</label>
+                        <label for="usuario" class="form-label text-white">E-mail</label>
                         <input type="text" name="usuario" id="usuario" class="form-control p-3" placeholder="Ex: usuarioteste" v-model="user.email">
                     </div>
                     <div>
