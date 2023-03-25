@@ -26,6 +26,18 @@ class ProductEdit{
     }
 }
 
+class ProductForPrint{
+    idProduct: number | null;
+    product: Product;
+    qtd: number;
+
+    constructor() {
+        this.idProduct = 0;
+        this.product = new Product();
+        this.qtd = 0
+    }
+}
+
 class StockProduct extends Default{
     barcode: string;
     name: string;
@@ -51,4 +63,4 @@ class SavedStockProduct{
     }
 }
 
-export {Product, ProductEdit, StockProduct, SavedStockProduct}
+export {Product, ProductEdit, StockProduct, SavedStockProduct, ProductForPrint}

@@ -62,35 +62,42 @@
             </modal-body>
             <modal-footer>
                 <button class="btn btn-outline-danger" type="button" @click="closeModal">Cancelar</button>
-                <button class="btn btn-primary fw-bold text-white" type="submit">Confirmar</button>
+                <button class="btn btn-primary fw-bold text-white" type="submit">Imprimir</button>
             </modal-footer>
         </form>
     </ModalMyModal>
-
+    <div class="d-none" id="barcodesModal">
+        <div class="row row-cols-3">
+            <template v-for="(selectedProduct, i) in selectedItens" :key="i">
+                <div class="col" v-for="(newBarcode, k) in selectedProduct.qtd" :key="k">
+                    <small class="text-center d-block text-uppercase">{{ selectedProduct.product.name }}</small>
+                    <ProductsBarcode :barcode="selectedProduct.product.barcode" />
+                </div>
+            </template>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
 
 import { storeToRefs } from "pinia";
-import KitchenRequest from "~~/models/KitchenRequest";
-import { useKitchenRequestStore } from "~~/stores/KitchenRequestStore";
+import { ProductForPrint } from "~~/models/Products";
 import { useProductStore } from "~~/stores/ProductStore";
 
 export default defineComponent({
     emits:['saved', 'close'],
     setup(props,{emit}) {
 
-        const { save, resetEntity, resetErrors } = useKitchenRequestStore();
-        const { errors, entity } = storeToRefs(useKitchenRequestStore());
-        
         const { getAll } = useProductStore();
         const { entities } = storeToRefs(useProductStore());
 
-        const newEntities = ref(new Array<KitchenRequest>());
+        const newEntities = ref(new Array<ProductForPrint>());
 
-        const filteredEntities = ref(new Array<KitchenRequest>());
+        const filteredEntities = ref(new Array<ProductForPrint>());
 
-        const selectedItens = ref(new Array<KitchenRequest>());
+        const selectedItens = ref(new Array<ProductForPrint>());
+
+        const barcodesModal = ref(null);
 
         const searchBar = ref(null);
 
@@ -111,10 +118,12 @@ export default defineComponent({
             
         }
 
-        const closeModal = () =>{
-            resetEntity();
-            emit('close');
+        const formSave = () => {
+            printDoc("barcodesModal");
+            // document.getElementById("barcodesModal")?.classList.remove('d-none');
         }
+
+        const closeModal = () => emit('close');
 
         const increment = (product:any) => {
             const index = selectedItens.value.indexOf(product);
@@ -137,37 +146,17 @@ export default defineComponent({
 
         }
 
-        const formSave = async () => {
-            if(!selectedItens.value.length){
-                $swal.fire({
-                    icon: 'error',
-                    title: "É necessário adicionar algum produto para poder solicitar ao estoquista!",
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-                return false;
-            }
-            await save(selectedItens.value);
-            if(errors.value.length > 0){
-                $swal.fire({
-                    icon: 'error',
-                    title: errors.value,
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
-            else emit('saved');
-            resetErrors();
+        const addItens = (event:any, product:ProductForPrint) => {
+            const index = newEntities.value.indexOf(product);
+            if(index >= 0) newEntities.value.splice(index,1);
+            product.qtd++;
+            selectedItens.value.push(product);
         }
 
         onMounted(async () => {
             await getAll();
             entities.value.forEach(el => {
-                let kitchenItem = new KitchenRequest();
+                let kitchenItem = new ProductForPrint();
                 kitchenItem.idProduct = el.id;
                 kitchenItem.product = el;
                 newEntities.value.push(kitchenItem);
@@ -175,27 +164,19 @@ export default defineComponent({
             filteredEntities.value = newEntities.value;
         });
 
-        const addItens = (event:any, product:KitchenRequest) => {
-            const index = newEntities.value.indexOf(product);
-            if(index >= 0) newEntities.value.splice(index,1);
-            product.qtd++;
-            selectedItens.value.push(product);
-        }
-
         return {
-            entity,
-            errors,
             closeModal,
             addItens,
             increment,
             decrement,
-            formSave,
             entities,
             newEntities,
             searchBar,
             selectedItens,
             searchElements,
-            filteredEntities
+            filteredEntities,
+            barcodesModal,
+            formSave,
         }   
     },
 })

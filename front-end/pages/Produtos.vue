@@ -1,7 +1,10 @@
 <template>
     <header class="d-flex align-items-center justify-content-between mb-5">
         <h1 class="text-primary fw-bold">Produtos</h1>
-        <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
+        <div class="d-flex align-items-center gap-2">
+            <a href="javascript:;" class="btn btn-dark" @click="toggleModalBarcode">Gerar códigos de barras</a>
+            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
+        </div>
     </header>
     
     <div v-if="!loading">
@@ -29,6 +32,7 @@
     </div>
 
     <component :is="open ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
+    <component :is="openModalBarcode ? modalBarcode : 'div'" @close="toggleModalBarcode" @saved="toggleModalBarcode" />
 
 </template>
 
@@ -46,8 +50,10 @@ export default defineComponent({
     setup() {
         
         const open = ref(false);
+        const openModalBarcode = ref(false);
 
         const modalForm = shallowRef(resolveComponent('ProductsForm'));
+        const modalBarcode = shallowRef(resolveComponent('ProductsBarCodesForm'));
 
         const { $swal } = useNuxtApp()
 
@@ -58,6 +64,8 @@ export default defineComponent({
             resetEntity();
             open.value = false;
         }
+
+        const toggleModalBarcode = () => openModalBarcode.value = !openModalBarcode.value;
 
         const refreshList = async () => {
             open.value = false;
@@ -86,7 +94,7 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, loading, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { entities, Cargos, modalForm, loading, open, cancelChange, refreshList, deleteElement, showFormEdit, showForm, toggleModalBarcode, openModalBarcode, modalBarcode };
 
     },
 })
