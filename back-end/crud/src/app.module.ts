@@ -8,6 +8,8 @@ import { Product } from './product/model/product.entity';
 import { ProductModule } from './product/modules/product.module';
 import { Solicitation } from './solicitation/model/solicitation.entity';
 import { SolicitationModule } from './solicitation/modules/solicitation.module';
+import { SolicitationStock } from './solicitationStock/model/solicitationStock.entity';
+import { SolicitationStockModule } from './solicitationStock/modules/solicitationStock.module';
 import { Stock } from './stock/model/stock.entity';
 import { StockModule } from './stock/modules/stock.module';
 import { User } from './users/model/user.entity';
@@ -22,6 +24,7 @@ import { UserModule } from './users/modules/user.module';
     CheckInModule, 
     StockModule, 
     SolicitationModule,
+    SolicitationStockModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -29,7 +32,7 @@ import { UserModule } from './users/modules/user.module';
       username: 'postgres',
       password: 'les2023',
       database: 'les2023',
-      entities: [User, Customer, Product, CheckIn, Stock, Solicitation],
+      entities: [User, Customer, Product, CheckIn, Stock, Solicitation, SolicitationStock],
       synchronize: true,
     }),  
   ],
