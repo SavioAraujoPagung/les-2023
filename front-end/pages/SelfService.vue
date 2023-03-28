@@ -11,10 +11,15 @@
                 <th class="col-sm-3">Quantidade(g)</th>
             </DefaultTableThead>
             <tbody>
-                <SelfServiceTrow v-for="(dish, i) in entities" :key="i" :id="'dish'+dish.id" @delete="deleteElement(dish.id)">
+                <tr v-for="(dish, i) in entities" :key="i" :id="'dish'+dish.id">
                     <td>{{ dish.foodName }}</td>
                     <td>{{ dish.qtd }}</td>
-                </SelfServiceTrow>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-dark" @click="deleteElement(dish.id)">
+                            Executar
+                        </button>
+                    </td>
+                </tr>
             </tbody>
         </DefaultTable>
         <div v-else>

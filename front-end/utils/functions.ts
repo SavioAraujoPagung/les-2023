@@ -60,8 +60,11 @@ export const printDoc = (id:string) => {
     </body>
     </html>`);
 
-    WinPrint?.document.close();
-    WinPrint?.focus();
-    WinPrint?.print();
-    WinPrint?.close();
+    setTimeout(() => {
+        WinPrint?.document.close()
+        WinPrint?.focus();
+        WinPrint?.print();
+        WinPrint?.close();
+    }, 50);
+    
 }
