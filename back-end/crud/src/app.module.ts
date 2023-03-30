@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Cart } from './cart/model/cart.entity';
+import { CartModule } from './cart/modules/cart.module';
 import { CheckIn } from './checkin/model/checkin.entity';
 import { CheckInModule } from './checkin/modules/checkin.module';
 import { Customer } from './customer/model/customer.entity';
@@ -25,6 +27,7 @@ import { UserModule } from './users/modules/user.module';
     StockModule, 
     SolicitationModule,
     SolicitationStockModule,
+    CartModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -32,7 +35,7 @@ import { UserModule } from './users/modules/user.module';
       username: 'postgres',
       password: 'les2023',
       database: 'les2023',
-      entities: [User, Customer, Product, CheckIn, Stock, Solicitation, SolicitationStock],
+      entities: [User, Customer, Product, CheckIn, Stock, Solicitation, SolicitationStock, Cart],
       synchronize: true,
     }),  
   ],
