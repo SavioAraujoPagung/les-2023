@@ -65,17 +65,17 @@
                 <button class="btn btn-primary fw-bold text-white" type="submit">Imprimir</button>
             </modal-footer>
         </form>
-    </ModalMyModal>
-    <div class="d-none" id="barcodesModal">
-        <div class="row row-cols-3">
-            <template v-for="(selectedProduct, i) in selectedItens" :key="i">
-                <div class="col" v-for="(newBarcode, k) in selectedProduct.qtd" :key="k">
-                    <small class="text-center d-block text-uppercase">{{ selectedProduct.product.name }}</small>
-                    <ProductsBarcode :barcode="selectedProduct.product.barcode" />
-                </div>
-            </template>
+        <div class="d-none" id="barcodesModal">
+            <div class="row row-cols-3">
+                <template v-for="(selectedProduct, i) in selectedItens" :key="i">
+                    <div class="col mt-3" v-for="(newBarcode, k) in selectedProduct.qtd" :key="k">
+                        <small style="font-size: .5rem;" class="fw-bold text-center d-block text-uppercase">{{ selectedProduct.product.name }}</small>
+                        <ProductsBarcode :barcode="selectedProduct.product.barcode" />
+                    </div>
+                </template>
+            </div>
         </div>
-    </div>
+    </ModalMyModal>
 </template>
 
 <script lang="ts">
@@ -119,8 +119,8 @@ export default defineComponent({
         }
 
         const formSave = () => {
+            if(selectedItens.value.length <= 0) return false;
             printDoc("barcodesModal");
-            // document.getElementById("barcodesModal")?.classList.remove('d-none');
         }
 
         const closeModal = () => emit('close');

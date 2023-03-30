@@ -12,7 +12,7 @@ export const useKitchenRequestStore = defineStore('KitchenRequest', () => {
 
     const getAll = async () => {
         loading.value = true;
-        await api.get(path).then((response) => {
+        await api.get(path + "status").then((response) => {
             entities.value = response.data;
         })
         .catch((error) => {
@@ -31,7 +31,7 @@ export const useKitchenRequestStore = defineStore('KitchenRequest', () => {
             if(elem) await fadeOut(elem);
             Swal.fire({
                 icon: 'success',
-                title: 'registro deletado com sucesso!',
+                title: 'registro executado com sucesso!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,

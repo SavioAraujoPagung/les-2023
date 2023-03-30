@@ -12,11 +12,12 @@
                 <th>Quantidade</th>
             </DefaultTableThead>
             <tbody>
-                <DefaultTableTrow v-for="(product, i) in entities" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)">
-                    <td>{{ product.product.barcode }}</td>
-                    <td>{{ product.product.name }}</td>
+                <tr v-for="(product, i) in entities" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)">
+                    <td>{{ product.barcode }}</td>
+                    <td>{{ product.foodName }}</td>
                     <td>{{ product.qtd }}</td>
-                </DefaultTableTrow>
+                    <td class="text-center"><a href="#" class="btn btn-dark btn-sm" @click="deleteElement(product.id)">Executado</a></td>
+                </tr>
             </tbody>
         </DefaultTable>
         <div v-else>

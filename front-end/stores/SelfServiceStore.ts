@@ -31,7 +31,7 @@ export const useSelfServiceStore = defineStore('SelfService', () => {
             if(elem) await fadeOut(elem);
             Swal.fire({
                 icon: 'success',
-                title: 'registro deletado com sucesso!',
+                title: 'registro executado com sucesso!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,

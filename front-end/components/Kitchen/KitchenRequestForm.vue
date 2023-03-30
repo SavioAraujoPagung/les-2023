@@ -22,8 +22,8 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(product, i) in filteredEntities" :key="i" :id="'newProduct'+i">
-                                    <td>{{ product.product.barcode }}</td>
-                                    <td>{{ product.product.name }}</td>
+                                    <td>{{ product.barcode }}</td>
+                                    <td>{{ product.foodName }}</td>
                                     <td>
                                         <button class="fw-bold text-white btn btn-primary btn-sm" type="button" @click="addItens($event, product)">+</button>
                                     </td>
@@ -42,8 +42,8 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(product, i) in selectedItens" :key="i" :id="'newProduct'+i">
-                                    <td>{{ product.product.barcode }}</td>
-                                    <td>{{ product.product.name }}</td>
+                                    <td>{{ product.barcode }}</td>
+                                    <td>{{ product.foodName }}</td>
                                     <td>{{ product.qtd }}</td>
                                     <td>
                                         <a href="javascript:;" class="icon icon-16 text-primary" @click="increment(product)">
@@ -104,8 +104,8 @@ export default defineComponent({
 
             filteredEntities.value = newEntities.value.filter(obj => {
                 if(searchBar.value &&
-                ((obj.product.barcode.includes((<HTMLInputElement>searchBar.value).value))
-                || (obj.product.name.includes((<HTMLInputElement>searchBar.value).value)))) return true;
+                ((obj.barcode.includes((<HTMLInputElement>searchBar.value).value))
+                || (obj.foodName.includes((<HTMLInputElement>searchBar.value).value)))) return true;
                 return false;
             });
             
@@ -168,8 +168,9 @@ export default defineComponent({
             await getAll();
             entities.value.forEach(el => {
                 let kitchenItem = new KitchenRequest();
-                kitchenItem.idProduct = el.id;
-                kitchenItem.product = el;
+                // kitchenItem.idProduct = el.id;
+                kitchenItem.barcode = el.barcode;
+                kitchenItem.foodName = el.name;
                 newEntities.value.push(kitchenItem);
             })
             filteredEntities.value = newEntities.value;

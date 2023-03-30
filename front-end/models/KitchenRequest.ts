@@ -2,13 +2,19 @@ import Default from "./Default";
 import { Product } from "./Products";
 
 export default class KitchenRequest extends Default{
-    idProduct: number | null;
+    // idProduct: number | null;
+    foodName: String;
+    barcode: String;
+    status: boolean;
     product: Product;
     qtd: number;
 
     constructor() {
-        super("/Kitchenrequest/");
-        this.idProduct = 0;
+        super("/solicitationStock/");
+        // this.idProduct = 0;
+        this.foodName = "";
+        this.barcode = "";
+        this.status = true;
         this.product = new Product();
         this.qtd = 0
     }
