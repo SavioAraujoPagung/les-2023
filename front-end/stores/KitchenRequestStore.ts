@@ -27,27 +27,39 @@ export const useKitchenRequestStore = defineStore('KitchenRequest', () => {
     }
 
     const destroy = async (id:any, elem:any = undefined) => {
-        await api.delete(path + id).then(async (response) => {
-            if(elem) await fadeOut(elem);
-            Swal.fire({
-                icon: 'success',
-                title: 'registro executado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        }).catch((error) => {
-            Swal.fire({
-                icon: 'error',
-                title: error.message,
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        }).finally(async () => {
-            await getAll();
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Esta ação não pode ser revertida!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c57e',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, executar o registro!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await api.delete(path + id).then(async (response) => {
+                    if(elem) await fadeOut(elem);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'registro executado com sucesso!',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }).catch((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }).finally(async () => {
+                    await getAll();
+                });
+            }
         });
     }
 
