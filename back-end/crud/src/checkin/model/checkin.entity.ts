@@ -1,19 +1,17 @@
 import { Customer } from 'src/customer/model/customer.entity';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class CheckIn {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  rfid: string;
+  @Column({default: false})
+  pago: boolean;
 
   @Column()
-  status: boolean;
+  time: string;
 
-  @Column()
-  customer_id: string;
-
+  @ManyToOne(()=> Customer)
   customer: Customer;
 }
