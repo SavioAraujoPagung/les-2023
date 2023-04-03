@@ -20,7 +20,10 @@ export class CheckInController {
   async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
     const checkIn = new CheckIn()
     const now = new Date();
-    const customer = await this.findCustomer(rfid) //new Customer()
+    const customer = await this.findCustomer(rfid)
+    if (!customer.active) {
+      throw new BadRequestException("Cliente está inativo") ;
+    }
     
     checkIn.time = now.toUTCString();
     checkIn.customer = customer
