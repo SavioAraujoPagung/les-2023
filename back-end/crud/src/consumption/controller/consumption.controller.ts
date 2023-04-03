@@ -1,14 +1,19 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Consumption } from '../model/Consumption.entity';
+import { ProductConsumption } from 'src/productConsumption/model/ProductConsumption.entity';
 
 @Controller('consumption')
 export class ConsumptionController {
   private logger: Logger;
   constructor(
     @InjectRepository(Consumption)
-    private readonly repository: Repository<Consumption>
+    private readonly repository: Repository<Consumption>,
+
+    @InjectRepository(ProductConsumption)
+    private readonly product: Repository<ProductConsumption>
+
     ) {
       this.logger = new Logger('CustomerControllerRepository');
     }
@@ -16,27 +21,17 @@ export class ConsumptionController {
   @Post()
   async create(@Body() consumption: Consumption): Promise<Consumption> {
     try {
+      const prod = await this.product.findOne({where:{ id: consumption.productConsumption.id }})
+      prod.qtd -= consumption.qtd
+      await this.product.save(prod)
+
       return this.repository.save(consumption);
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar um cliente. ${error}`);
-      throw new Error('Erro ao cadastrar um cliente');
+      throw new BadRequestException('Impossível registar consumo de produto!');
     }
    
   } 
-  
-  @Get()
-  async findAll(): Promise<Consumption[]> {
-    return this.repository.find();
-  }
-
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Consumption> {
-    const user = await this.repository.findOne({where:{ id }});
-    if(!user){
-      throw new NotFoundException('Cliente não encontrado! Tente novamente!')
-    }
-    return user;
-  }
 
   @Put(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() consumption: Consumption): Promise<Consumption> {
