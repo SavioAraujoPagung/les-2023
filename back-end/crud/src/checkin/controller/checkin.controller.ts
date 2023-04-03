@@ -2,7 +2,7 @@ import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFound
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customer/model/customer.entity';
 import { Repository } from 'typeorm';
-import { CheckIn } from '../model/checkin.entity';
+import { CheckIn, Payment } from '../model/checkin.entity';
 
 @Controller('check-in')
 export class CheckInController {
@@ -38,13 +38,10 @@ export class CheckInController {
    
   }
 
-  @Post('/pago/:id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<CheckIn> {
-    const checkIn = await this.repository.findOne({where:{ id }});
-    if(!checkIn){
-      throw new NotFoundException('Produto não encontrado! Tente novamente!');
-    }
-    return checkIn;
+  @Post('/pagar')
+  async payment(@Body() payment: string[]): Promise<CheckIn> {
+    //TODO fazer isso aqui de pagar
+    return
   }
 
   async isOnline(filter: string): Promise<boolean> {
