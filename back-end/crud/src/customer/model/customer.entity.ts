@@ -1,9 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { CheckIn } from 'src/checkin/model/checkin.entity';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Customer {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  rfid: string;
 
   @Column()
   name: string;
@@ -19,4 +20,7 @@ export class Customer {
 
   @Column()
   dateBirth: string;
+
+  @OneToMany(() => CheckIn, ({ customer }) => customer)
+  checkins: CheckIn[];
 }

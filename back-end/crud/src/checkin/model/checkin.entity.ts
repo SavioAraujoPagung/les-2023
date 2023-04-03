@@ -1,19 +1,24 @@
+import { Consumption } from 'src/consumption/model/Consumption.entity';
 import { Customer } from 'src/customer/model/customer.entity';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class CheckIn {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  rfid: string;
+  @Column({default: false})
+  pago: boolean;
 
   @Column()
-  status: boolean;
+  time: string;
 
-  @Column()
-  customer_id: string;
-
+  @ManyToOne(()=> Customer, ({checkins}) => checkins)
   customer: Customer;
+
+  consumptions: Consumption[]
+}
+
+export class Payment {
+  rfid: string[];
 }

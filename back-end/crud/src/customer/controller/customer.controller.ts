@@ -29,35 +29,13 @@ export class CustomerController {
     return this.repository.find();
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Customer> {
-    const user = await this.repository.findOne({where:{ id }});
+  @Get(':rfid')
+  async findOne(@Param('rfid', ParseIntPipe) rfid: string): Promise<Customer> {
+    const user = await this.repository.findOne({where:{ rfid }});
     if(!user){
       throw new NotFoundException('Cliente não encontrado! Tente novamente!')
     }
     return user;
   }
 
-  @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() customer: Customer): Promise<Customer> {
-    const userFound = await this.repository.findOne({where:{ id }});
-    if(!userFound){
-      throw new NotFoundException('Cliente não encontrado! Tente novamente!')
-    }
-    await this.repository.update({id}, customer)
-    return this.repository.findOne({where:{ id }})
-  }
-
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<string> {
-    const userFound = await this.repository.findOne({where:{ id }});
-    if(!userFound){
-      throw new NotFoundException('Cliente não encontrado! Tente novamente!')
-    }
-    const userDeleted = await this.repository.delete({id})
-
-    if(userDeleted.affected > 0){
-      return `Cliente ${id} deletado com sucesso!`;
-    }
-  }
 }
