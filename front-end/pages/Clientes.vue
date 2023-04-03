@@ -1,8 +1,11 @@
 <template>
     <header class="d-flex align-items-center justify-content-between mb-5">
         <h1 class="text-primary fw-bold">Clientes</h1>
-        <div class="d-flex align-items-center gap-3">
-            <a href="javascript:;" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
+        <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <a href="javascript:;" aria-label="Realizar checkout" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
+                <a href="javascript:;" aria-label="Realizar checkin" class="btn btn-dark text-white" @click="doCheckin"><i class="bi bi-border-all"></i>Realizar Check-In</a>
+            </div>
             <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
         </div>
     </header>
