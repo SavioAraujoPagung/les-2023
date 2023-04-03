@@ -1,3 +1,4 @@
+import { Consumption } from 'src/consumption/model/Consumption.entity';
 import { Customer } from 'src/customer/model/customer.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
@@ -14,6 +15,8 @@ export class CheckIn {
 
   @ManyToOne(()=> Customer, ({checkins}) => checkins)
   customer: Customer;
+
+  consumptions: Consumption[]
 }
 
 export class Payment {

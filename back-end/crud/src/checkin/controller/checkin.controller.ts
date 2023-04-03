@@ -38,6 +38,11 @@ export class CheckInController {
    
   }
 
+  @Get('/:rfid')
+  async find(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
+    return await this.getRridOnline(rfid)
+  }
+
   @Post('/pagar')
   async payment(@Body() payment: string[]): Promise<CheckIn> {
     //TODO fazer isso aqui de pagar
@@ -59,6 +64,23 @@ export class CheckInController {
     };
 
     return false;
+  }
+
+  async getRridOnline(filter: string): Promise<CheckIn> {
+    const checkIn = await this.repository.find({
+      relations: ['customer'],
+      where: [
+        { customer: { rfid: filter } }, 
+      ],
+    });
+    
+    for (let i = 0; i < checkIn.length; i++) {
+      if (!checkIn[i].pago) {
+        return checkIn[i];
+      }
+    };
+
+    throw new NotFoundException("Não há checkin para este RFID!");
   }
 
   async findCustomer(filter: string): Promise<Customer> {
