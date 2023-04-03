@@ -18,7 +18,3 @@ export class CheckIn {
 
   consumptions: Consumption[]
 }
-
-export class Payment {
-  rfid: string[];
-}

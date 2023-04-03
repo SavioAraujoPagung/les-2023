@@ -23,4 +23,7 @@ export class Customer {
 
   @OneToMany(() => CheckIn, ({ customer }) => customer)
   checkins: CheckIn[];
+
+  @Column({default: true})
+  active: boolean;
 }
