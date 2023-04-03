@@ -1,15 +1,16 @@
-import Default from "./Default";
-
-class Customer extends Default{
+class Customer{
+    rfid: string;
     name: string;
+    path: string;
     cpf: string;
     phone: string;
     email: string;
     dateBirth: string;
 
     constructor() {
-        super("/customer/");
+        this.rfid = "";
         this.name = "";
+        this.path = "/customer/";
         this.cpf = "";
         this.phone = "";
         this.email = "";
@@ -18,6 +19,7 @@ class Customer extends Default{
 }
 
 class CustomerEdit{
+    rfid: string;
     name: string;
     cpf: string;
     phone: string;
@@ -25,6 +27,7 @@ class CustomerEdit{
     dateBirth: string;
 
     constructor() {
+        this.rfid = "";
         this.name = "";
         this.cpf = "";
         this.phone = "";

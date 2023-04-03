@@ -7,19 +7,19 @@
         </div>
     </header>
 
-    
         <div v-if="!loading">
             <DefaultTable v-if="entities.length">
                 <DefaultTableThead>
-                    <th class="col-m-4">Nome</th>
-                    <th class="col-sm-4">CPF</th>
-                    <th class="col-sm-4">Email</th>
+                    <th class="col-m-3">RFID</th>
+                    <th class="col-m-3">Nome</th>
+                    <th class="col-sm-3">CPF</th>
+                    <th class="col-sm-3">Email</th>
                 </DefaultTableThead>
                 <tbody>
-                    <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.id"
-                    @delete="deleteElement(customer.id)"
-                    @edit="showFormEdit(customer.id)"
-                    @checkin="doCheckin(customer.id)">
+                    <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.rfid"
+                    @delete="deleteElement(customer.rfid)"
+                    @edit="showFormEdit(customer.rfid)">
+                        <td>{{ customer.rfid }}</td>
                         <td>{{ customer.name }}</td>
                         <td>{{ customer.cpf }}</td>
                         <td>{{ customer.email }}</td>
@@ -65,7 +65,7 @@ export default defineComponent({
         const isOpen = ref(false);
 
         const { destroy, getAll, getById, resetEntity } = useCustomerStore()
-        const { entities, loading } = storeToRefs(useCustomerStore());
+        const { entities, loading, isEdit } = storeToRefs(useCustomerStore());
 
         const cancelChange = () => {
             resetEntity();
@@ -100,14 +100,7 @@ export default defineComponent({
 
         const refreshList = async () => {
             isOpen.value = false;
-            $swal.fire({
-                icon: 'success',
-                title: 'Cliente cadastrado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            isEdit.value = false;
             resetEntity();
             await getAll();
         }
@@ -115,8 +108,9 @@ export default defineComponent({
         const deleteElement = async (id:any) => destroy(id, document.getElementById("customer" + id));
 
 
-        const showFormEdit = async (id:any) => {
-            await getById(id);
+        const showFormEdit = async (rfid:any) => {
+            await getById(rfid);
+            isEdit.value = true;
             showForm();
         }
 
