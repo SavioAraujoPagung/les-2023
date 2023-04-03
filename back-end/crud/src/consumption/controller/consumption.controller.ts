@@ -26,6 +26,10 @@ export class ConsumptionController {
     try {
       const prod = await this.product.findOne({where:{ id: consumption.productConsumption.id }})
       prod.qtd -= consumption.qtd
+
+      consumption.productConsumption = prod
+      consumption.productId = prod.id
+
       await this.product.save(prod)
 
       return this.repository.save(consumption);
@@ -36,7 +40,7 @@ export class ConsumptionController {
    
   } 
 
-  @Get(':rfid')
+  @Get('/pagar/:rfid')
   async valueConsumption(@Param('rfid', ParseIntPipe) rfid: string): Promise<string> {
     try {
       console.log(rfid)
@@ -56,7 +60,29 @@ export class ConsumptionController {
       this.logger.error(`Não foi possivel cadastrar um cliente. ${error}`);
       throw new BadRequestException('Impossível consultar valor consumido!');
     }
-   
+  } 
+
+  @Get(':rfid')
+  async consumptionByRFID(@Param('rfid', ParseIntPipe) rfid: string): Promise<Consumption[]> {
+    try {
+      const checkin = await this.getRridOnline(rfid)
+      const consumptions = await this.repository.find({
+        where: { 
+          checkin: { id: checkin.id }
+        },
+      })
+
+      for (let i = 0; i < consumptions.length; i++) {
+        console.log(consumptions[i].productConsumption)
+        consumptions[i].productConsumption = await this.product.findOne({where: {id: consumptions[i].productId }})
+      };
+
+      return consumptions
+
+    } catch (error) {
+      this.logger.error(`Não foi possivel cadastrar um cliente. ${error}`);
+      throw new BadRequestException('Impossível consultar valor consumido!');
+    }
   } 
 
   @Put(':id')

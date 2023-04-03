@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductConsumption } from '../model/ProductConsumption.entity';
 
-@Controller('products')
+@Controller('product-consumption')
 export class ProductConsumptionController {
   private logger: Logger;
   constructor(
@@ -21,20 +21,7 @@ export class ProductConsumptionController {
       this.logger.error(`Não foi possivel cadastrar um produto. ${error}`);
       throw new Error('Erro ao cadastrar um produto');
     }
-   
   }
-
-  // @Get('/barcode/:barcode')
-  // async findOneByBarcode(@Param('barcode') barcode: string): Promise<ProductConsumption> {
-   
-  //   // let product = await this.repository.findOneBy({barcode})
-    
-  //   // if(!product){
-  //   //   throw new NotFoundException('Produto não encontrado! Tente novamente!')
-  //   // }
-
-  //   // return product;
-  // }
   
   @Get()
   async findAll(): Promise<ProductConsumption[]> {

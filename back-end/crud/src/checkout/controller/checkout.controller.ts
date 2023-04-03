@@ -2,40 +2,39 @@ import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFound
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customer/model/customer.entity';
 import { Repository } from 'typeorm';
-import { CheckIn, Payment } from '../model/checkin.entity';
+import { CheckOut } from '../model/checkout.entity';
+import { CheckIn } from 'src/checkin/model/checkin.entity';
 
-@Controller('check-in')
-export class CheckInController {
+@Controller('check-out')
+export class CheckOutController {
   private logger: Logger;
   constructor(
+    @InjectRepository(CheckOut)
+    private readonly repository: Repository<CheckOut>,
     @InjectRepository(CheckIn)
-    private readonly repository: Repository<CheckIn>,
+    private readonly checkIn: Repository<CheckIn>,
     @InjectRepository(Customer)
-    private readonly repositoryCustomer: Repository<Customer>
+    private readonly customer: Repository<Customer>,
+
     ) {
       this.logger = new Logger('CheckInControllerRepository');
     }
 
   @Post('/:rfid')
-  async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
-    const checkIn = new CheckIn()
+  async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckOut> {
     const now = new Date();
-    const customer = await this.findCustomer(rfid) //new Customer()
-    
-    checkIn.time = now.toUTCString();
-    checkIn.customer = customer
+    const checkOut = new CheckOut()
 
-    if (await this.isOnline(rfid)) {
-      throw new BadRequestException("Cliente já esta online") ;
-    }
+    checkOut.checkin = await this.getCheckIn(rfid)
+    checkOut.time = now.toUTCString();
+    console.log(checkOut)
 
     try {
-      const c = this.repository.save(checkIn);
+      const c = this.repository.save(checkOut);
       return c;
     } catch (error) {
       throw new BadRequestException("Verifique se seu cartao é válido!");
     }
-   
   }
 
   @Get('/:rfid')
@@ -43,31 +42,30 @@ export class CheckInController {
     return await this.getRridOnline(rfid)
   }
 
-  @Post('/pagar')
-  async payment(@Body() payment: string[]): Promise<CheckIn> {
-    //TODO fazer isso aqui de pagar
-    return
-  }
-
-  async isOnline(filter: string): Promise<boolean> {
-    const checkIn = await this.repository.find({
+  async getCheckIn(filter: string): Promise<CheckIn> {
+    const checkIns = await this.checkIn.find({
       relations: ['customer'],
       where: [
         { customer: { rfid: filter } }, 
       ],
+      order: { id: 'DESC' }
     });
     
-    for (let i = 0; i < checkIn.length; i++) {
-      if (!checkIn[i].pago) {
-        return true;
+    if (checkIns.length == 0) {
+      throw new BadRequestException("Não há Checkin para este RFID");
+    }
+
+    for (let i = 0; i < checkIns.length; i++) {
+      if (!checkIns[i].pago) {
+        throw new BadRequestException("Pagamento pendente. Cliente ainda não passou pelo caixa");
       }
     };
 
-    return false;
+    return checkIns[0]
   }
 
   async getRridOnline(filter: string): Promise<CheckIn> {
-    const checkIn = await this.repository.find({
+    const checkIn = await this.checkIn.find({
       relations: ['customer'],
       where: [
         { customer: { rfid: filter } }, 
@@ -84,7 +82,7 @@ export class CheckInController {
   }
 
   async findCustomer(filter: string): Promise<Customer> {
-    const customer =  await this.repositoryCustomer.findOne({
+    const customer =  await this.customer.findOne({
       where: [
         { rfid: filter }, 
       ],
@@ -96,5 +94,4 @@ export class CheckInController {
 
     return customer;
   }
-
 }

@@ -10,14 +10,14 @@ import { Solicitation } from './solicitation/model/solicitation.entity';
 import { SolicitationModule } from './solicitation/modules/solicitation.module';
 import { SolicitationStock } from './solicitationStock/model/solicitationStock.entity';
 import { SolicitationStockModule } from './solicitationStock/modules/solicitationStock.module';
-import { Stock } from './stock/model/stock.entity';
 import { Consumption } from './consumption/model/consumption.entity';
-import { StockModule } from './stock/modules/stock.module';
 import { User } from './users/model/user.entity';
 import { UserModule } from './users/modules/user.module';
 import { ConsumptionModule } from './consumption/modules/consumption.module';
 import { ProductConsumptionModule } from './productConsumption/modules/productConsumption.module';
 import { ProductConsumption } from './productConsumption/model/ProductConsumption.entity';
+import { CheckOut } from './checkout/model/checkout.entity';
+import { CheckOutModule } from './checkout/modules/checkout.module';
 
 
 @Module({
@@ -25,8 +25,8 @@ import { ProductConsumption } from './productConsumption/model/ProductConsumptio
     UserModule, 
     CustomerModule, 
     ProductModule, 
-    CheckInModule, 
-    StockModule, 
+    CheckInModule,
+    CheckOutModule, 
     SolicitationModule,
     SolicitationStockModule,
     ConsumptionModule,
@@ -38,8 +38,9 @@ import { ProductConsumption } from './productConsumption/model/ProductConsumptio
       username: 'postgres',
       password: 'les2023',
       database: 'les2023',
-      entities: [User, Customer, Product, CheckIn, Stock, Solicitation, SolicitationStock, Consumption, ProductConsumption],
+      entities: [User, Customer, Product, CheckIn, Solicitation, SolicitationStock, ProductConsumption, Consumption, CheckOut],
       synchronize: true,
+      autoLoadEntities: true,
     }),  
   ],
   // controllers: [AppController, UserController],

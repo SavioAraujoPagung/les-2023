@@ -7,11 +7,14 @@ export class Consumption {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(()=> CheckIn, ({consumptions}) => Consumption)
+  @ManyToOne(()=> CheckIn, ({consumptions}) => consumptions)
   checkin: CheckIn;
 
   @ManyToOne(()=> ProductConsumption)
   productConsumption: ProductConsumption;
+
+  @Column()
+  productId: number; 
 
   @Column()
   qtd: number; 
