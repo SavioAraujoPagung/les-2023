@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customer/model/customer.entity';
 import { Repository } from 'typeorm';
-import { CheckIn, Payment } from '../model/checkin.entity';
+import { CheckIn } from '../model/checkin.entity';
 
 @Controller('check-in')
 export class CheckInController {
@@ -20,7 +20,10 @@ export class CheckInController {
   async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
     const checkIn = new CheckIn()
     const now = new Date();
-    const customer = await this.findCustomer(rfid) //new Customer()
+    const customer = await this.findCustomer(rfid)
+    if (!customer.active) {
+      throw new BadRequestException("Cliente está inativo") ;
+    }
     
     checkIn.time = now.toUTCString();
     checkIn.customer = customer
@@ -43,10 +46,18 @@ export class CheckInController {
     return await this.getRridOnline(rfid)
   }
 
-  @Post('/pagar')
-  async payment(@Body() payment: string[]): Promise<CheckIn> {
+  @Post('/pagar/:rfid')
+  async paymentCheckin(@Body() payment: CheckIn[]): Promise<CheckIn[]> {
+    var checkins: CheckIn[]
+
+    //fazendo aqui 
+    for (let i = 0; i < payment.length; i++) {
+      checkins.push(await this.getRridOnline(payment[i].customer.rfid))
+    };
+
+
     //TODO fazer isso aqui de pagar
-    return
+    return null
   }
 
   async isOnline(filter: string): Promise<boolean> {
