@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { CheckIn } from 'src/checkin/model/checkin.entity';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Customer {
@@ -19,4 +20,7 @@ export class Customer {
 
   @Column()
   dateBirth: string;
+
+  @OneToMany(() => CheckIn, ({ customer }) => customer)
+  checkins: CheckIn[];
 }

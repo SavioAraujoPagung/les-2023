@@ -1,5 +1,5 @@
 import { Customer } from 'src/customer/model/customer.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class CheckIn {
@@ -12,6 +12,10 @@ export class CheckIn {
   @Column()
   time: string;
 
-  @ManyToOne(()=> Customer)
+  @ManyToOne(()=> Customer, ({checkins}) => checkins)
   customer: Customer;
+}
+
+export class Payment {
+  rfid: string[];
 }

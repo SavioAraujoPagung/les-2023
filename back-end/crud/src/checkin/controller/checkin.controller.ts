@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { check } from 'prettier';
 import { Customer } from 'src/customer/model/customer.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CheckIn } from '../model/checkin.entity';
 
 @Controller('check-in')
@@ -17,23 +16,66 @@ export class CheckInController {
       this.logger = new Logger('CheckInControllerRepository');
     }
 
-  @Post()
-  async create(@Body() checkIn: CheckIn): Promise<CheckIn> {
+  @Post('/:rfid')
+  async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
+    const checkIn = new CheckIn()
+    const now = new Date();
+    const customer = await this.findCustomer(rfid) //new Customer()
+    
+    checkIn.time = now.toDateString()
+    checkIn.customer = customer
+
+    if (await this.isOnline(rfid)) {
+      throw new BadRequestException("Cliente já esta online") ;
+    }
+
     try {
-      return this.repository.save(checkIn);
+      const c = this.repository.save(checkIn);
+      return c;
     } catch (error) {
-      this.logger.error(`Não foi possivel realizar um check-in. ${error}`);
-      throw new Error('Erro ao realizar um check-in');
+      throw new BadRequestException("Verifique se seu cartao é válido!");
     }
    
   }
-  
+
   @Post('/pago/:id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<CheckIn> {
     const checkIn = await this.repository.findOne({where:{ id }});
     if(!checkIn){
-      throw new NotFoundException('Produto não encontrado! Tente novamente!')
+      throw new NotFoundException('Produto não encontrado! Tente novamente!');
     }
     return checkIn;
   }
+
+  async isOnline(filter: string): Promise<boolean> {
+    const checkIn = await this.repository.find({
+      relations: ['customer'],
+      where: [
+        { customer: { rfid: filter } }, 
+      ],
+    });
+    
+    for (let i = 0; i < checkIn.length; i++) {
+      if (!checkIn[i].pago) {
+        return true;
+      }
+    };
+
+    return false;
+  }
+
+  async findCustomer(filter: string): Promise<Customer> {
+    const customer =  await this.repositoryCustomer.findOne({
+      where: [
+        { rfid: filter }, 
+      ],
+    });
+
+    if (customer == null) {
+      throw new BadRequestException("Cliente não encontrado");
+    }
+
+    return customer;
+  }
+
 }
