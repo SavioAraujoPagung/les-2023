@@ -24,7 +24,7 @@ export class CheckInController {
     if (!customer.active) {
       throw new BadRequestException("Cliente está inativo") ;
     }
-    
+
     checkIn.time = now.toUTCString();
     checkIn.customer = customer
 
@@ -48,16 +48,18 @@ export class CheckInController {
 
   @Post('/pagar/:rfid')
   async paymentCheckin(@Body() payment: CheckIn[]): Promise<CheckIn[]> {
-    var checkins: CheckIn[]
-
     //fazendo aqui 
     for (let i = 0; i < payment.length; i++) {
-      checkins.push(await this.getRridOnline(payment[i].customer.rfid))
+      payment[i] = await this.getRridOnline(payment[i].customer.rfid);
+      payment[i].pago = true;
     };
 
+    for (let i = 0; i < payment.length; i++) {
+      await this.repository.save(payment[i])
+    };
 
     //TODO fazer isso aqui de pagar
-    return null
+    return payment
   }
 
   async isOnline(filter: string): Promise<boolean> {
