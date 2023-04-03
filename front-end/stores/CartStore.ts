@@ -30,20 +30,18 @@ export const useCartStore = defineStore('cart', () => {
 
     const getCustomerCart = async (rfid:string) => {
         loading.value = true;
-        await api.get("/check-in/rfid/" + rfid).then((response) => {
-            entity.customer = response.data.customer;
-        })
-        .catch((error) => {
+        await api.get("/check-in/" + rfid).then((response) => {
+            entity.customer = response.data.customer
+        }).catch((error) => {
             Swal.fire({
                 icon: 'error',
-                title: error.message,
+                title: error.response.data.message,
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 3000
             });
-        })
-        .finally(() => loading.value = false);
+        });
     }
 
     const getById = async (id:any) => {

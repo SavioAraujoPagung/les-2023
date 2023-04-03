@@ -3,12 +3,13 @@ import Default from "./Default";
 
 export type ItemCart = {
     name: string;
-    finalPrice: number
+    qtd: number;
+    price: number;
 }
 
 export default class Cart extends Default{
 
-    itensCart: ItemCart[];
+    productsConsumption: ItemCart[];
     
     isPaid: boolean;
 
@@ -18,7 +19,7 @@ export default class Cart extends Default{
 
     constructor() {
         super("/cart/");
-        this.itensCart = [];
+        this.productsConsumption = [];
         this.isPaid = false;
         this.customerId = null;
         this.customer = null;

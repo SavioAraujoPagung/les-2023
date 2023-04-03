@@ -22,14 +22,49 @@
         <div class="row">
             <div class="col">
                 <div>
-                    <small>Nome</small>
-                    <p>{{ entity.customer?.name }}</p>
+                    <small>RFID</small>
+                    <p>{{ entity.customer?.rfid }}</p>
                 </div>
                 <div>
                     <small>Nome</small>
                     <p>{{ entity.customer?.name }}</p>
                 </div>
             </div>
+            <div class="col">
+                <div>
+                    <small>CPF</small>
+                    <p>{{ entity.customer?.cpf }}</p>
+                </div>
+                <div>
+                    <small>Data de nascimento</small>
+                    <p>{{ formatDate(new Date(entity.customer?.dateBirth || '')) }}</p>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <small>Telefone</small>
+                    <p>{{ entity.customer?.phone }}</p>
+                </div>
+                <div>
+                    <small>E-mail</small>
+                    <p>{{ entity.customer?.email }}</p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr><th colspan="3">Produtos consumidos</th></tr>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
         </div>
         <div>
             Valor total a ser pago: R$ 150,00
