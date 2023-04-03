@@ -70,6 +70,15 @@
                 Cozinha
               </NuxtLink>
             </li>
+            
+            <li class="nav-item">
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/caixa">
+                <i class="icon icon-16">
+                  <IconsWallet/>
+                </i>
+                Caixa
+              </NuxtLink>
+            </li>
 
             <li class="nav-item">
               <a href="javascript:;" @click="logout" class="nav-link d-flex align-items-center gap-2 text-white">
