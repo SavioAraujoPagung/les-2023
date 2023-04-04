@@ -12,7 +12,18 @@ export const useCartStore = defineStore('cart', () => {
     const loading = ref(true);
 
     const getCustomerCart = async (rfid:string) => {
-        
+        if (entities.value.some(e => e.rfid === rfid)) {
+            Swal.fire({
+                icon: 'error',
+                title: "Cliente já inserido",
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return false;
+        }
+
         loading.value = true;
 
         if(entities.value.length <= 0){
@@ -79,11 +90,13 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     const pay = async () => {
-        await api.post('/check-in/pagar/' + entity.customer?.rfid, {
-                "customer": {
-                    "rfid": entity.customer?.rfid
-                }
-        }).then((response) => {
+        let savedEntities = new Array();
+        entities.value.forEach(customer => {
+            savedEntities.push({
+                customer:customer.rfid
+            });
+        });
+        await api.post('/check-in/pagar/' + entity.customer?.rfid, savedEntities).then((response) => {
             Swal.fire({
                 icon: 'success',
                 title: "Pagamento efetuado com sucesso!",

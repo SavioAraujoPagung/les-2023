@@ -107,8 +107,6 @@ export default defineComponent({
         
         const { $swal } = useNuxtApp()
 
-        const modalForm = shallowRef(resolveComponent('UsersUserForm'));
-
         const showCart = ref(false);
 
         const rfid = ref(null);
@@ -156,7 +154,6 @@ export default defineComponent({
         return {
             entities,
             Cargos,
-            modalForm,
             showCart,
             loading,
             cancelChange,
