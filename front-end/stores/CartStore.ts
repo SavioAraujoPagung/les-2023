@@ -104,7 +104,10 @@ export const useCartStore = defineStore('cart', () => {
         });
     }
 
-    const resetEntity = () => Object.assign(entity,new Cart());
+    const resetEntity = () => {
+        Object.assign(entity,new Cart());
+        entities.value = new Array<Customer>();
+    }
 
     const getSubSet = (object:any, types:any) => {
         return types.reduce((obj:any, type:any) => {
