@@ -2,36 +2,65 @@ import { defineStore } from 'pinia';
 import Swal from 'sweetalert2';
 import api from '~/services/api'
 import Cart from '~~/models/Cart';
+import { Customer } from '~~/models/Customer';
 
 export const useCartStore = defineStore('cart', () => {
     const entity = reactive(new Cart());
-    const entities = ref(new Array<Cart>());
+    const entities = ref(new Array<Customer>());
     const path = entity.path;
     const errors = ref("");
     const loading = ref(true);
 
-    const getAll = async () => {
+    const getCustomerCart = async (rfid:string) => {
+        
         loading.value = true;
-        await api.get(path).then((response) => {
-            entities.value = response.data;
-        })
-        .catch((error) => {
+
+        if(entities.value.length <= 0){
+
+            await api.get("/customer/" + rfid).then((response) => {
+                entity.customer = response.data;
+                entities.value.push(response.data);
+            }).catch((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.response.data.message,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            });
+
+        }
+        else{
+            await api.get("/customer/" + rfid).then((response) => {
+                entities.value.push(response.data);
+            }).catch((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.response.data.message,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            });
+        }
+
+        await api.get("/consumption/" + rfid).then((response) => {
+            entity.productCart.push(response.data);
+        }).catch((error) => {
             Swal.fire({
                 icon: 'error',
-                title: error.message,
+                title: error.response.data.message,
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 3000
             });
-        })
-        .finally(() => loading.value = false);
-    }
-
-    const getCustomerCart = async (rfid:string) => {
-        loading.value = true;
-        await api.get("/check-in/" + rfid).then((response) => {
-            entity.customer = response.data.customer
+        });
+        await api.get("/consumption/pagar/" + rfid).then((response) => {
+            entity.total = response.data
         }).catch((error) => {
             Swal.fire({
                 icon: 'error',
@@ -49,41 +78,29 @@ export const useCartStore = defineStore('cart', () => {
         Object.assign(entity,response.data);
     }
 
-    const destroy = async (id:any, elem:any = undefined) => {
-
-        Swal.fire({
-            title: 'Tem certeza?',
-            text: "Esta ação não pode ser revertida!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#00c57e',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sim, deletar o registro!'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                await api.delete(path + id).then(async (response) => {
-                    if(elem) await fadeOut(elem);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'registro deletado com sucesso!',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                }).catch((error) => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: error.message,
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                }).finally(async () => {
-                    await getAll();
-                });
-            }
+    const pay = async () => {
+        await api.post('/check-in/pagar/' + entity.customer?.rfid, {
+                "customer": {
+                    "rfid": entity.customer?.rfid
+                }
+        }).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: "Pagamento efetuado com sucesso!",
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         });
     }
 
@@ -115,14 +132,13 @@ export const useCartStore = defineStore('cart', () => {
         entity,
         entities,
         errors,
-        getAll,
         getById,
-        destroy,
         resetEntity,
         save,
         loading,
         update,
-        getCustomerCart
+        getCustomerCart,
+        pay
     };
   })
   

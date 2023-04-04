@@ -48,7 +48,7 @@ export class CheckInController {
 
   @Post('/pagar/:rfid')
   async paymentCheckin(@Body() payment: CheckIn[]): Promise<CheckIn[]> {
-    //fazendo aqui 
+    //fazendo aqui  
     for (let i = 0; i < payment.length; i++) {
       payment[i] = await this.getRridOnline(payment[i].customer.rfid);
       payment[i].pago = true;

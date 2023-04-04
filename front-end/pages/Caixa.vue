@@ -5,17 +5,27 @@
     
     <div v-if="!showCart">
         <form class="" v-on:submit.prevent="getCustomerInformation">
-            <div class="input-group">
+            <div class="input-group mb-3">
                 <input type="text" class="form-control" name="rfid" id="rfid" ref="rfid" autofocus>
-                <button class="btn btn-primary" type="submit">Enviar</button>
+                <button class="btn btn-dark" type="submit">Inserir</button>
             </div>
+            <button class="btn btn-primary" type="button" @click="toggleCart">Confirmar dados</button>
+            <table v-if="entities.length">
+                <thead>
+                    <tr><th>Clientes inseridos</th></tr>
+                    <tr>
+                        <th>RFID</th>
+                        <th>Nome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(customer, i) in entities" :key="i">
+                        <td>{{ customer.rfid }}</td>
+                        <td>{{ customer.name }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </form>
-        <div class="d-flex flex-column align-items-center justify-content-center">
-            <div class="d-block">
-                <i class="icon icon-256 text-black text-opacity-25"><IconsBroadcast/></i>
-            </div>
-            <h2 class="display-6 text-black text-opacity-25">Aproxime o cartão RFID</h2>
-        </div>
     </div>
 
     <div v-else>
@@ -54,20 +64,29 @@
         <div>
             <table class="table table-striped">
                 <thead>
-                    <tr><th colspan="3">Produtos consumidos</th></tr>
+                    <tr><th colspan="3" class="text-uppercase text-primary">Produtos consumidos</th></tr>
                     <tr>
                         <th>Nome</th>
                         <th>Quantidade</th>
-                        <th>Valor Unidade</th>
+                        <th>Valor Unidade(R$)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    <tr v-for="(product, i) in entity.productCart" :key="i">
+                        <td>{{ product.productConsumption?.name }}</td>
+                        <td>{{ product.qtd }}</td>
+                        <td>{{ product.price }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div>
-            Valor total a ser pago: R$ 150,00
+            <h5 class="text-primary fw-bold">Valor total a ser pago: R$ {{ entity.total }} </h5>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between">
+            <button class="btn btn-danger" @click="cancelChange">Cancelar</button>
+            <button class="btn btn-primary" @click="pay">Pagar</button>
         </div>
     </div>
 
@@ -94,7 +113,7 @@ export default defineComponent({
 
         const rfid = ref(null);
 
-        const { destroy, getAll, getById, resetEntity, getCustomerCart } = useCartStore();
+        const { getById, resetEntity, getCustomerCart, pay } = useCartStore();
         const { entities, loading, entity } = storeToRefs(useCartStore());
 
         const cancelChange = () => {
@@ -106,17 +125,14 @@ export default defineComponent({
             showCart.value = false;
             $swal.fire({
                 icon: 'success',
-                title: 'Usuário cadastrado com sucesso!',
+                title: 'Pagamento efetuado com sucesso!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 1500
             });
             resetEntity();
-            await getAll();
         }
-
-        const deleteElement = async (id:any) => destroy(id, document.getElementById("user" + id));
 
         const showFormEdit = async (id:any) => {
             await getById(id);
@@ -128,18 +144,31 @@ export default defineComponent({
         }
 
         const getCustomerInformation = async () => {
-            console.log("🚀 ~ file: Caixa.vue:97 ~ getCustomerInformation ~ rfid.value:", rfid.value)
             if(rfid.value && (<HTMLInputElement>rfid.value).value != ""){
-               await getCustomerCart((<HTMLInputElement>rfid.value).value)
-                .finally(() => {
-                    showCart.value = true;
-                });
+               await getCustomerCart((<HTMLInputElement>rfid.value).value);
             }
         }
 
-        onMounted(getAll);
+        const toggleCart = () => {
+            showCart.value = !showCart.value;
+        }
 
-        return { entities, Cargos, modalForm, showCart, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm, getCustomerInformation, entity, rfid };
+        return {
+            entities,
+            Cargos,
+            modalForm,
+            showCart,
+            loading,
+            cancelChange,
+            refreshList,
+            showFormEdit,
+            showForm,
+            getCustomerInformation,
+            entity,
+            rfid,
+            pay,
+            toggleCart
+        };
 
     },
 })
