@@ -48,7 +48,7 @@ export const useCartStore = defineStore('cart', () => {
         }
 
         await api.get("/consumption/" + rfid).then((response) => {
-            entity.productCart.push(response.data);
+            entity.productCart.push(...response.data);
         }).catch((error) => {
             Swal.fire({
                 icon: 'error',
