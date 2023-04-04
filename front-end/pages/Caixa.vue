@@ -7,15 +7,14 @@
         <form class="" v-on:submit.prevent="getCustomerInformation">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="rfid" id="rfid" ref="rfid" autofocus>
-                <button class="btn btn-dark" type="submit">Inserir</button>
+                <button class="btn btn-dark fw-bold" type="submit">+</button>
             </div>
-            <button class="btn btn-primary" type="button" @click="toggleCart">Confirmar dados</button>
-            <table v-if="entities.length">
+            <DefaultTable v-if="entities.length" class="mt-3">
                 <thead>
-                    <tr><th>Clientes inseridos</th></tr>
+                    <tr><th class="col-sm-12 h4 fw-bold text-center" colspan="2">Clientes inseridos</th></tr>
                     <tr>
-                        <th>RFID</th>
-                        <th>Nome</th>
+                        <th class="col-sm-4">RFID</th>
+                        <th class="col-sm-8">Nome</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,7 +23,8 @@
                         <td>{{ customer.name }}</td>
                     </tr>
                 </tbody>
-            </table>
+            </DefaultTable>
+            <button class="btn btn-primary mt-3 fw-bold" type="button" @click="toggleCart">Confirmar dados</button>
         </form>
     </div>
 
@@ -32,61 +32,61 @@
         <div class="row">
             <div class="col">
                 <div>
-                    <small>RFID</small>
-                    <p>{{ entity.customer?.rfid }}</p>
+                    <small class="fw-bold text-dark">RFID</small>
+                    <p class="lh-1">{{ entity.customer?.rfid }}</p>
                 </div>
                 <div>
-                    <small>Nome</small>
-                    <p>{{ entity.customer?.name }}</p>
-                </div>
-            </div>
-            <div class="col">
-                <div>
-                    <small>CPF</small>
-                    <p>{{ entity.customer?.cpf }}</p>
-                </div>
-                <div>
-                    <small>Data de nascimento</small>
-                    <p>{{ formatDate(new Date(entity.customer?.dateBirth || '')) }}</p>
+                    <small class="fw-bold text-dark">Nome</small>
+                    <p class="lh-1">{{ entity.customer?.name }}</p>
                 </div>
             </div>
             <div class="col">
                 <div>
-                    <small>Telefone</small>
-                    <p>{{ entity.customer?.phone }}</p>
+                    <small class="fw-bold text-dark">CPF</small>
+                    <p class="lh-1">{{ entity.customer?.cpf }}</p>
                 </div>
                 <div>
-                    <small>E-mail</small>
-                    <p>{{ entity.customer?.email }}</p>
+                    <small class="fw-bold text-dark">Data de nascimento</small>
+                    <p class="lh-1">{{ formatDate(new Date(entity.customer?.dateBirth || '')) }}</p>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <small class="fw-bold text-dark">Telefone</small>
+                    <p class="lh-1">{{ entity.customer?.phone }}</p>
+                </div>
+                <div>
+                    <small class="fw-bold text-dark">E-mail</small>
+                    <p class="lh-1">{{ entity.customer?.email }}</p>
                 </div>
             </div>
         </div>
         <div>
-            <table class="table table-striped">
+            <DefaultTable class="mt-5">
                 <thead>
-                    <tr><th colspan="3" class="text-uppercase text-primary">Produtos consumidos</th></tr>
+                    <tr><th colspan="3" class="h4 fw-bold text-center text-uppercase text-primary">Produtos consumidos</th></tr>
                     <tr>
-                        <th>Nome</th>
-                        <th>Quantidade</th>
-                        <th>Valor Unidade(R$)</th>
+                        <th class="col-sm-6">Nome</th>
+                        <th class="col-sm-3 text-center">Quantidade</th>
+                        <th class="col-sm-3 text-center">Valor Unidade(R$)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(product, i) in entity.productCart" :key="i">
                         <td>{{ product.productConsumption?.name }}</td>
-                        <td>{{ product.qtd }}</td>
-                        <td>{{ product.price }}</td>
+                        <td class="text-center">{{ product.qtd }}</td>
+                        <td class="text-center">{{ product.price }}</td>
                     </tr>
                 </tbody>
-            </table>
+            </DefaultTable>
         </div>
-        <div>
-            <h5 class="text-primary fw-bold">Valor total a ser pago: R$ {{ entity.total }} </h5>
+        <div class="d-flex align-items-center justify-content-end mb-5">
+            <h2 class="text-primary fw-bold">Valor total a ser pago: R$ {{ entity.total }} </h2>
         </div>
 
         <div class="d-flex align-items-center justify-content-between">
-            <button class="btn btn-danger" @click="cancelChange">Cancelar</button>
-            <button class="btn btn-primary" @click="pay">Pagar</button>
+            <button class="btn btn-danger fw-bold" @click="cancelChange">Cancelar</button>
+            <button class="btn btn-primary fw-bold" @click="pay">Pagar</button>
         </div>
     </div>
 
