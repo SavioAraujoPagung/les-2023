@@ -86,7 +86,7 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <button class="btn btn-danger fw-bold" @click="cancelChange">Cancelar</button>
-            <button class="btn btn-primary fw-bold" @click="pay">Pagar</button>
+            <button class="btn btn-primary fw-bold" @click="payCart">Pagar</button>
         </div>
     </div>
 
@@ -111,7 +111,7 @@ export default defineComponent({
 
         const rfid = ref(null);
 
-        const { getById, resetEntity, getCustomerCart, pay } = useCartStore();
+        const { getById, resetEntity, getCustomerCart, pay, resetCustomers } = useCartStore();
         const { entities, loading, entity } = storeToRefs(useCartStore());
 
         const cancelChange = () => {
@@ -141,6 +141,12 @@ export default defineComponent({
             showCart.value = true;
         }
 
+        const payCart = async () => {
+            await pay();
+            showCart.value = false;
+            resetCustomers();
+        }
+
         const getCustomerInformation = async () => {
             if(rfid.value && (<HTMLInputElement>rfid.value).value != ""){
                await getCustomerCart((<HTMLInputElement>rfid.value).value);
@@ -162,6 +168,7 @@ export default defineComponent({
             showForm,
             getCustomerInformation,
             entity,
+            payCart,
             rfid,
             pay,
             toggleCart

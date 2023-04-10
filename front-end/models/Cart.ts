@@ -31,7 +31,7 @@ export default class Cart extends Default{
     
     isPaid: boolean;
 
-    total:string;
+    total:number;
 
     customerId: number | null;
 
@@ -42,7 +42,7 @@ export default class Cart extends Default{
         this.productCart = new Array<productCart>();
         this.isPaid = false;
         this.customerId = null;
-        this.total = "0";
+        this.total = 0.0;
         this.customer = null;
     }
 

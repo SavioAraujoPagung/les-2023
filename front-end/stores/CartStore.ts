@@ -61,6 +61,8 @@ export const useCartStore = defineStore('cart', () => {
         await api.get("/consumption/" + rfid).then((response) => {
             entity.productCart.push(...response.data);
         }).catch((error) => {
+            let index = entities.value.findIndex(e => e.rfid === rfid)
+            entities.value.splice(index, 1);
             Swal.fire({
                 icon: 'error',
                 title: error.response.data.message,
@@ -71,7 +73,7 @@ export const useCartStore = defineStore('cart', () => {
             });
         });
         await api.get("/consumption/pagar/" + rfid).then((response) => {
-            entity.total = response.data
+            entity.total += +response.data
         }).catch((error) => {
             Swal.fire({
                 icon: 'error',
@@ -84,6 +86,8 @@ export const useCartStore = defineStore('cart', () => {
         });
     }
 
+    const resetCustomers = () => entities.value = new Array<Customer>();
+
     const getById = async (id:any) => {
         const response = await api.get(path + id );
         Object.assign(entity,response.data);
@@ -93,7 +97,9 @@ export const useCartStore = defineStore('cart', () => {
         let savedEntities = new Array();
         entities.value.forEach(customer => {
             savedEntities.push({
-                customer:customer.rfid
+                customer:{
+                    rfid: customer.rfid
+                }
             });
         });
         await api.post('/check-in/pagar/' + entity.customer?.rfid, savedEntities).then((response) => {
@@ -154,6 +160,7 @@ export const useCartStore = defineStore('cart', () => {
         loading,
         update,
         getCustomerCart,
+        resetCustomers,
         pay
     };
   })
