@@ -26,6 +26,9 @@ export class CheckOutController {
     const checkOut = new CheckOut()
 
     checkOut.checkin = await this.getCheckIn(rfid)
+
+    await this.getCheckOutByCheckIn(checkOut.checkin.id)
+
     checkOut.time = now.toUTCString();
     console.log(checkOut)
 
@@ -40,6 +43,22 @@ export class CheckOutController {
   @Get('/:rfid')
   async find(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
     return await this.getRridOnline(rfid)
+  }
+
+  async getCheckOutByCheckIn(filter: number): Promise<Boolean> {
+    const checkOut = await this.repository.findOne({
+      relations: ['checkin'],
+      where: [
+        { checkin: { id: filter } }, 
+      ],
+      order: { id: 'DESC' }
+    });
+
+    if (checkOut != null) {
+      throw new BadRequestException("Cliente não esta online");
+    }
+
+    return true
   }
 
   async getCheckIn(filter: string): Promise<CheckIn> {
