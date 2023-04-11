@@ -38,7 +38,7 @@ export const useCustomerStore = defineStore('Customer', () => {
             confirmButtonText: 'Sim, deletar o registro!'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await api.delete(path + rfid).then(async (response) => {
+                await api.put(path + rfid).then(async (response) => {
                     if(elem) await fadeOut(elem);
                     Swal.fire({
                         icon: 'success',

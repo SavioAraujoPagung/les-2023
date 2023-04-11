@@ -38,7 +38,7 @@
         </div>
 
         <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
-        <component :is="openCheck ? modalCheck : 'div'" :isCheckin="isCheckin"  @close="cancelCheckin" @saved="saveCheckin" :customer_id="customer_id" />
+        <component :is="openCheck ? modalCheck : 'div'" :isCheckin="isCheckin"  @close="cancelCheckin" @saved="saveCheckin" />
     
 </template>
 
@@ -60,8 +60,6 @@ export default defineComponent({
 
         const isCheckin = ref(false);
 
-        const customer_id = ref(0);
-
         const modalForm = shallowRef(resolveComponent('CustomersCustomerForm'));
         const modalCheck = shallowRef(resolveComponent('CheckinForm'));
 
@@ -76,7 +74,6 @@ export default defineComponent({
         }
 
         const doCheckin = (id:any) => {
-            customer_id.value = id;
             isCheckin.value = true;
             openCheck.value = true;
         }
@@ -124,7 +121,7 @@ export default defineComponent({
         onMounted(getAll);
 
         return { entities, modalForm, isOpen, cancelChange, refreshList, deleteElement, showFormEdit, showForm,
-            openCheck, doCheckin, modalCheck, cancelCheckin, customer_id, saveCheckin, doCheckout, isCheckin, loading };
+            openCheck, doCheckin, modalCheck, cancelCheckin, saveCheckin, doCheckout, isCheckin, loading };
     },
 })
 

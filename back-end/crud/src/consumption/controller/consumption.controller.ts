@@ -41,7 +41,7 @@ export class ConsumptionController {
   } 
 
   @Get('/pagar/:rfid')
-  async valueConsumption(@Param('rfid', ParseIntPipe) rfid: string): Promise<string> {
+  async valueConsumption(@Param('rfid') rfid: string): Promise<string> {
     try {
       console.log(rfid)
       const checkin = await this.getRridOnline(rfid)
@@ -63,7 +63,7 @@ export class ConsumptionController {
   } 
 
   @Get(':rfid')
-  async consumptionByRFID(@Param('rfid', ParseIntPipe) rfid: string): Promise<Consumption[]> {
+  async consumptionByRFID(@Param('rfid') rfid: string): Promise<Consumption[]> {
     try {
       const checkin = await this.getRridOnline(rfid)
       const consumptions = await this.repository.find({

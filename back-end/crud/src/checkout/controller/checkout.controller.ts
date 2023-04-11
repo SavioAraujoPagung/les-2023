@@ -21,7 +21,7 @@ export class CheckOutController {
     }
 
   @Post('/:rfid')
-  async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckOut> {
+  async create(@Param('rfid') rfid: string): Promise<CheckOut> {
     const now = new Date();
     const checkOut = new CheckOut()
 
@@ -41,7 +41,7 @@ export class CheckOutController {
   }
 
   @Get('/:rfid')
-  async find(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
+  async find(@Param('rfid') rfid: string): Promise<CheckIn> {
     return await this.getRridOnline(rfid)
   }
 
