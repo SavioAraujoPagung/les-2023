@@ -97,7 +97,6 @@ export class CheckInController {
   }
 
   async findCustomer(filter: string): Promise<Customer> {
-    console.log("🚀 ~ file: checkin.controller.ts:100 ~ CheckInController ~ findCustomer ~ filter:", filter)
     const customer =  await this.repositoryCustomer.findOne({
       where: [
         { rfid: filter }, 

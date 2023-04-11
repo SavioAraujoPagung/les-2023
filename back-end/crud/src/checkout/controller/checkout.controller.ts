@@ -55,7 +55,7 @@ export class CheckOutController {
     });
 
     if (checkOut != null) {
-      throw new BadRequestException("Cliente não esta online");
+      throw new BadRequestException("Este cliente não realizou um check-in");
     }
 
     return true
