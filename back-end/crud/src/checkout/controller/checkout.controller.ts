@@ -69,7 +69,14 @@ export class CheckOutController {
       ],
       order: { id: 'DESC' }
     });
-    
+
+    const consumptions = await this.repository.find({where: { checkIns[0]: { id: checkIns[0].id } },})
+    let value = 0
+
+    for (let i = 0; i < consumptions.length; i++) {
+      value += consumptions[i].price;
+    }
+
     if (checkIns.length == 0) {
       throw new BadRequestException("Não há Checkin para este RFID");
     }
