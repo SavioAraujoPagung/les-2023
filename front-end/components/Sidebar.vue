@@ -54,6 +54,15 @@
             </li>
             
             <li class="nav-item">
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/choop">
+                <i class="icon icon-16">
+                  <IconsBeer/>
+                </i>
+                Choop
+              </NuxtLink>
+            </li>
+            
+            <li class="nav-item">
               <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/selfservice">
                 <i class="icon icon-16">
                   <IconsDish/>

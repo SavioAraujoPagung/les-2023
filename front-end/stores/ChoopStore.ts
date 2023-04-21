@@ -54,6 +54,42 @@ export const useChoopStore = defineStore('choop', () => {
         await api.post(stockPath, data);
     }
 
+    const makeConsumption = async (data:object) => {
+        await Swal.fire({
+            title: 'Tem certeza que deseja realizar este pedido?',
+            text: "Esta ação não pode ser revertida e a cobrança será gerada automaticamente ao seu cartão!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c57e',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, realizar pedido!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await api.post(productPath + "saida/", data).then(async (response) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pedido realizado com sucesso!',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }).catch((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }).finally(async () => {
+                    await getAll();
+                });
+            }
+        });
+    }
+
     const destroy = async (id:any, elem:any = undefined) => {
         Swal.fire({
             title: 'Tem certeza?',
@@ -115,6 +151,6 @@ export const useChoopStore = defineStore('choop', () => {
         await api.put(productPath + id, object);
     }
   
-    return { entity, entities, errors, getAll, loading, getById, destroy, resetEntity, save, update, getAllStock, getByRFID, stock, saveAllInStock };
+    return { entity, entities, errors, getAll, loading, getById, destroy, resetEntity, save, update, getAllStock, getByRFID, stock, saveAllInStock, makeConsumption };
   })
   
