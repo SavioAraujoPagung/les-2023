@@ -1,21 +1,22 @@
 import { defineStore } from 'pinia';
 import Swal from 'sweetalert2';
 import api from '~/services/api'
-import Choop from '~~/models/Choop';
+import { Choop, ChoopEdit, StockChoop} from '~~/models/Choop';
 
 export const useChoopStore = defineStore('choop', () => {
-    
     const entity = reactive(new Choop());
     const entities = ref(new Array<Choop>());
+    const productPath = entity.path;
     const loading = ref(true);
     
-    const stock = ref(new Array<Choop>());
+    const stock = ref(new Array<StockChoop>());
+    const stockPath = new StockChoop().path;
     
     const errors = ref("");
 
     const getAll = async () => {
         loading.value = true;
-        await api.get(entity.path).then((response) => {
+        await api.get(productPath).then((response) => {
             entities.value = response.data;
         })
         .catch((error) => {
@@ -24,18 +25,33 @@ export const useChoopStore = defineStore('choop', () => {
         .finally(() => loading.value = false);
     }
 
+    const getAllStock = async () => {
+        loading.value = true;
+        await api.get(stockPath).then((response) => {
+            stock.value = response.data;
+        })
+        .catch((error) => {
+            errors.value = error.message;
+        })
+        .finally(() => loading.value = false);
+    }
+
     const getById = async (id:any) => {
-        const response = await api.get(entity.path + id );
+        const response = await api.get(productPath + id );
         Object.assign(entity,response.data);
     }
 
     const getByRFID = async () => {
-        const response = await api.get(entity.path + "rfid/" + entity.rfid );
+        const response = await api.get(productPath + "barcode/" + entity.rfid );
         Object.assign(entity,{
             name: response.data.name,
             cost: response.data.cost
         });
         return response;
+    }
+
+    const saveAllInStock = async (data:any) => {
+        await api.post(stockPath, data);
     }
 
     const destroy = async (id:any, elem:any = undefined) => {
@@ -49,7 +65,7 @@ export const useChoopStore = defineStore('choop', () => {
             confirmButtonText: 'Sim, deletar o registro!'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await api.delete(entity.path + id).then(async (response) => {
+                await api.delete(productPath + id).then(async (response) => {
                     if(elem) await fadeOut(elem);
                     Swal.fire({
                         icon: 'success',
@@ -87,12 +103,18 @@ export const useChoopStore = defineStore('choop', () => {
     }
 
     const save = async (data:any) => {
-        await api.post(entity.path, data).then((response) => {
+        await api.post(productPath, data).then((response) => {
             return response.data;
         }).catch((error) => {
             errors.value = error.message;
         });
     }
+
+    const update = async (data:any, id:any) => {
+        let object = getSubSet(data, Object.getOwnPropertyNames(new ChoopEdit()));
+        await api.put(productPath + id, object);
+    }
   
-    return { entity, entities, errors, getAll, loading, getById, destroy, resetEntity, save, stock };
+    return { entity, entities, errors, getAll, loading, getById, destroy, resetEntity, save, update, getAllStock, getByRFID, stock, saveAllInStock };
   })
+  
