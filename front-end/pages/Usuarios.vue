@@ -1,12 +1,13 @@
 <template>
     <div>
+        <Head><Title>{{ title }}</Title></Head>
         <header class="d-flex align-items-center justify-content-between mb-5">
             <h1 class="text-primary fw-bold">Usu&aacute;rios</h1>
             <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
         </header>
         
-        <div v-if="entities.length">
-            <DefaultTable v-if="!loading">
+        <div v-if="!loading">
+            <DefaultTable v-if="entities.length">
                 <DefaultTableThead>
                     <th>Nome</th>
                     <th>Fun&ccedil;&atilde;o</th>
@@ -41,14 +42,12 @@ definePageMeta({
     middleware: 'auth'
 });
 
-useHead({
-    title: "Usuários - LES Group",
-})
-
 export default defineComponent({
     
     setup() {
         
+        const title = ref('Usuários - LES GROUP');
+
         const { $swal } = useNuxtApp()
 
         const modalForm = shallowRef(resolveComponent('UsersUserForm'));
@@ -90,7 +89,7 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, isOpen, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { entities, Cargos, modalForm, isOpen, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm, title };
 
     },
 })
