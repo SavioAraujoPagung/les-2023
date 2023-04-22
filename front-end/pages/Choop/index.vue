@@ -16,6 +16,10 @@
 
     const openChoops = ref(true);
 
+    useHead({
+        title: 'Choops - LES GROUP'
+    });
+
     const toggleComponents = (event:any, type:boolean) => {
         if(openChoops.value !== type) openChoops.value = !openChoops.value;
         document.querySelector("#navChoop .active")?.classList.remove("active");
