@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Consumption } from '../model/Consumption.entity';
-import { ProductConsumption } from 'src/productConsumption/model/ProductConsumption.entity';
+import { Consumption } from '../model/consumption.entity';
+import { ProductConsumption } from 'src/productConsumption/model/productConsumption.entity';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
 @Controller('consumption')
 export class ConsumptionController {

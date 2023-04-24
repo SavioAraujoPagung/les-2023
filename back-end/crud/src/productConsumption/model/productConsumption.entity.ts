@@ -1,5 +1,4 @@
-import { Consumption } from 'src/consumption/model/Consumption.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ProductConsumption {

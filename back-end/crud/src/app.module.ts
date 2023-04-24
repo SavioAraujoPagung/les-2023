@@ -15,9 +15,10 @@ import { User } from './users/model/user.entity';
 import { UserModule } from './users/modules/user.module';
 import { ConsumptionModule } from './consumption/modules/consumption.module';
 import { ProductConsumptionModule } from './productConsumption/modules/productConsumption.module';
-import { ProductConsumption } from './productConsumption/model/ProductConsumption.entity';
+import { ProductConsumption } from './productConsumption/model/productConsumption.entity';
 import { CheckOut } from './checkout/model/checkout.entity';
 import { CheckOutModule } from './checkout/modules/checkout.module';
+import { ChoppStockModule } from './chopp-stock/modules/choppStock.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { CheckOutModule } from './checkout/modules/checkout.module';
     SolicitationStockModule,
     ConsumptionModule,
     ProductConsumptionModule,
+    ChoppStockModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

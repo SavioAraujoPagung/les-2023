@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProductConsumption } from '../model/ProductConsumption.entity';
+import { ProductConsumption } from '../model/productConsumption.entity';
 
 @Controller('product-consumption')
 export class ProductConsumptionController {

@@ -1,4 +1,4 @@
-import { Consumption } from 'src/consumption/model/Consumption.entity';
+import { Consumption } from 'src/consumption/model/consumption.entity';
 import { Customer } from 'src/customer/model/customer.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 

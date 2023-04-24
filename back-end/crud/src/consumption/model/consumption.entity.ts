@@ -1,5 +1,5 @@
 import { CheckIn } from 'src/checkin/model/checkin.entity';
-import { ProductConsumption } from 'src/productConsumption/model/ProductConsumption.entity';
+import { ProductConsumption } from 'src/productConsumption/model/productConsumption.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()

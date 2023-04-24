@@ -4,7 +4,7 @@ import { Customer } from 'src/customer/model/customer.entity';
 import { Repository } from 'typeorm';
 import { CheckOut } from '../model/checkout.entity';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
-import { Consumption } from 'src/consumption/model/Consumption.entity';
+import { Consumption } from 'src/consumption/model/consumption.entity';
 
 @Controller('check-out')
 export class CheckOutController {
