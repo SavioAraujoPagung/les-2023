@@ -17,7 +17,7 @@ export class CheckInController {
     }
 
   @Post('/:rfid')
-  async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
+  async create(@Param('rfid') rfid: string): Promise<CheckIn> {
     const checkIn = new CheckIn()
     const now = new Date();
     const customer = await this.findCustomer(rfid)
@@ -29,7 +29,7 @@ export class CheckInController {
     checkIn.customer = customer
 
     if (await this.isOnline(rfid)) {
-      throw new BadRequestException("Cliente já esta online") ;
+      throw new BadRequestException("Cliente já possui um check-in") ;
     }
 
     try {
@@ -42,7 +42,7 @@ export class CheckInController {
   }
 
   @Get('/:rfid')
-  async find(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
+  async find(@Param('rfid') rfid: string): Promise<CheckIn> {
     return await this.getRridOnline(rfid)
   }
 
