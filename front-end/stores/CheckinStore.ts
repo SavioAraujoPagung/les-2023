@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import Swal from 'sweetalert2';
 import api from '~/services/api'
 import { Checkin, CustomerEdit} from '~~/models/Checkin';
 
@@ -6,7 +7,7 @@ export const useCheckinStore = defineStore('checkin', () => {
     const entity = reactive(new Checkin());
     const entities = ref(new Array<Checkin>());
     const path = entity.path;
-    const errors = ref("");
+    const errors = ref(false);
 
     const getAll = async () => {
         const response = await api.get(path);
@@ -22,22 +23,55 @@ export const useCheckinStore = defineStore('checkin', () => {
         const response = await api.delete(path + id);
     }
 
-    const doCheckin = async () => {
-        await api.post(path, entity);
-    }
-
-    const doCheckout = async () => {
-
-        await api.get(path + "rfid/" + entity.rfid).then((response) => {
-            return;
+    const doCheckin = async (rfid:string) => {
+        entity.rfid = "";
+        await api.post('/check-in/' + rfid).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: "Check-in realizado com sucesso",
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         }).catch((error) => {
-            errors.value = error.response.data.message;
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            errors.value = true;
         });
-
-        // await api.get(path + rfid);
     }
 
-    const clearErrors = () => errors.value = "";
+    const doCheckout = async (rfid:string) => {
+        entity.rfid = "";
+        await api.post('/check-out/' + rfid).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Check-out efetuado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            errors.value = true;
+        });
+    }
+
+    const clearErrors = () => errors.value = false;
 
     const resetEntity = () => Object.assign(entity,new Checkin());
 

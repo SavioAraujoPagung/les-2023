@@ -2,94 +2,131 @@ import { defineStore } from 'pinia';
 import Swal from 'sweetalert2';
 import api from '~/services/api'
 import Cart from '~~/models/Cart';
+import { Customer } from '~~/models/Customer';
 
 export const useCartStore = defineStore('cart', () => {
     const entity = reactive(new Cart());
-    const entities = ref(new Array<Cart>());
+    const entities = ref(new Array<Customer>());
     const path = entity.path;
     const errors = ref("");
     const loading = ref(true);
 
-    const getAll = async () => {
-        loading.value = true;
-        await api.get(path).then((response) => {
-            entities.value = response.data;
-        })
-        .catch((error) => {
+    const getCustomerCart = async (rfid:string) => {
+        if (entities.value.some(e => e.rfid === rfid)) {
             Swal.fire({
                 icon: 'error',
-                title: error.message,
+                title: "Cliente já inserido",
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 3000
             });
-        })
-        .finally(() => loading.value = false);
+            return false;
+        }
+
+        loading.value = true;
+
+        if(entities.value.length <= 0){
+
+            await api.get("/customer/" + rfid).then((response) => {
+                entity.customer = response.data;
+                entities.value.push(response.data);
+            }).catch((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.response.data.message,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            });
+
+        }
+        else{
+            await api.get("/customer/" + rfid).then((response) => {
+                entities.value.push(response.data);
+            }).catch((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.response.data.message,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            });
+        }
+
+        await api.get("/consumption/" + rfid).then((response) => {
+            entity.productCart.push(...response.data);
+        }).catch((error) => {
+            let index = entities.value.findIndex(e => e.rfid === rfid)
+            entities.value.splice(index, 1);
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        });
+        await api.get("/consumption/pagar/" + rfid).then((response) => {
+            entity.total += +response.data
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        });
     }
 
-    const getCustomerCart = async (rfid:string) => {
-        loading.value = true;
-        await api.get("/check-in/rfid/" + rfid).then((response) => {
-            entity.customer = response.data.customer;
-        })
-        .catch((error) => {
-            Swal.fire({
-                icon: 'error',
-                title: error.message,
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        })
-        .finally(() => loading.value = false);
-    }
+    const resetCustomers = () => entities.value = new Array<Customer>();
 
     const getById = async (id:any) => {
         const response = await api.get(path + id );
         Object.assign(entity,response.data);
     }
 
-    const destroy = async (id:any, elem:any = undefined) => {
-
-        Swal.fire({
-            title: 'Tem certeza?',
-            text: "Esta ação não pode ser revertida!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#00c57e',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sim, deletar o registro!'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                await api.delete(path + id).then(async (response) => {
-                    if(elem) await fadeOut(elem);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'registro deletado com sucesso!',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                }).catch((error) => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: error.message,
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                }).finally(async () => {
-                    await getAll();
-                });
-            }
+    const pay = async () => {
+        let savedEntities = new Array();
+        entities.value.forEach(customer => {
+            savedEntities.push({
+                customer:{
+                    rfid: customer.rfid
+                }
+            });
+        });
+        await api.post('/check-in/pagar/' + entity.customer?.rfid, savedEntities).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: "Pagamento efetuado com sucesso!",
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         });
     }
 
-    const resetEntity = () => Object.assign(entity,new Cart());
+    const resetEntity = () => {
+        Object.assign(entity,new Cart());
+        entities.value = new Array<Customer>();
+    }
 
     const getSubSet = (object:any, types:any) => {
         return types.reduce((obj:any, type:any) => {
@@ -117,14 +154,14 @@ export const useCartStore = defineStore('cart', () => {
         entity,
         entities,
         errors,
-        getAll,
         getById,
-        destroy,
         resetEntity,
         save,
         loading,
         update,
-        getCustomerCart
+        getCustomerCart,
+        resetCustomers,
+        pay
     };
   })
   

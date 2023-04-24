@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, NotFoundException, Logger, Put } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from '../model/customer.entity';
@@ -26,38 +26,35 @@ export class CustomerController {
   
   @Get()
   async findAll(): Promise<Customer[]> {
-    return this.repository.find();
+    return this.repository.find({where:{ active: true }});
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Customer> {
-    const user = await this.repository.findOne({where:{ id }});
+  @Get(':rfid')
+  async findOne(@Param('rfid') rfid: string): Promise<Customer> {
+    const user = await this.repository.findOne({where:{ rfid }});
     if(!user){
       throw new NotFoundException('Cliente não encontrado! Tente novamente!')
     }
     return user;
   }
 
-  @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() customer: Customer): Promise<Customer> {
-    const userFound = await this.repository.findOne({where:{ id }});
-    if(!userFound){
-      throw new NotFoundException('Cliente não encontrado! Tente novamente!')
+  @Put()
+  async delete(@Body() update: Customer): Promise<Customer> {
+    const customer = await this.repository.findOne({where:{ rfid: update.rfid }});
+    if(!customer){
+      throw new NotFoundException('Cliente não encontrado!')
     }
-    await this.repository.update({id}, customer)
-    return this.repository.findOne({where:{ id }})
+    return  await this.repository.save(update)
   }
 
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<string> {
-    const userFound = await this.repository.findOne({where:{ id }});
-    if(!userFound){
-      throw new NotFoundException('Cliente não encontrado! Tente novamente!')
+  @Put(':rfid')
+  async desativar(@Param('rfid') rfid: string): Promise<Customer> {
+    const customer = await this.repository.findOne({where:{ rfid: rfid }});
+    if(!customer){
+      throw new NotFoundException('Cliente não encontrado!')
     }
-    const userDeleted = await this.repository.delete({id})
 
-    if(userDeleted.affected > 0){
-      return `Cliente ${id} deletado com sucesso!`;
-    }
+    customer.active = !customer.active
+    return  await this.repository.save(customer)
   }
 }

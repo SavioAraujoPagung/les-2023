@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Cart } from './cart/model/cart.entity';
-import { CartModule } from './cart/modules/cart.module';
 import { CheckIn } from './checkin/model/checkin.entity';
 import { CheckInModule } from './checkin/modules/checkin.module';
 import { Customer } from './customer/model/customer.entity';
@@ -12,10 +10,14 @@ import { Solicitation } from './solicitation/model/solicitation.entity';
 import { SolicitationModule } from './solicitation/modules/solicitation.module';
 import { SolicitationStock } from './solicitationStock/model/solicitationStock.entity';
 import { SolicitationStockModule } from './solicitationStock/modules/solicitationStock.module';
-import { Stock } from './stock/model/stock.entity';
-import { StockModule } from './stock/modules/stock.module';
+import { Consumption } from './consumption/model/consumption.entity';
 import { User } from './users/model/user.entity';
 import { UserModule } from './users/modules/user.module';
+import { ConsumptionModule } from './consumption/modules/consumption.module';
+import { ProductConsumptionModule } from './productConsumption/modules/productConsumption.module';
+import { ProductConsumption } from './productConsumption/model/ProductConsumption.entity';
+import { CheckOut } from './checkout/model/checkout.entity';
+import { CheckOutModule } from './checkout/modules/checkout.module';
 
 
 @Module({
@@ -23,11 +25,12 @@ import { UserModule } from './users/modules/user.module';
     UserModule, 
     CustomerModule, 
     ProductModule, 
-    CheckInModule, 
-    StockModule, 
+    CheckInModule,
+    CheckOutModule, 
     SolicitationModule,
     SolicitationStockModule,
-    CartModule,
+    ConsumptionModule,
+    ProductConsumptionModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -35,8 +38,9 @@ import { UserModule } from './users/modules/user.module';
       username: 'postgres',
       password: 'les2023',
       database: 'les2023',
-      entities: [User, Customer, Product, CheckIn, Stock, Solicitation, SolicitationStock, Cart],
+      entities: [User, Customer, Product, CheckIn, Solicitation, SolicitationStock, ProductConsumption, Consumption, CheckOut],
       synchronize: true,
+      autoLoadEntities: true,
     }),  
   ],
   // controllers: [AppController, UserController],

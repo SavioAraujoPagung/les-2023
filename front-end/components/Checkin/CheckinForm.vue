@@ -9,7 +9,7 @@
             <modal-body>
                 
                 <div class="form-floating mb-3">
-                    <input type="text" name="rfid" id="rfid" ref="rfid" class="form-control" v-model="entity.rfid" placeholder="rfid" required>
+                    <input type="text" name="rfid" id="rfid" ref="rfid" class="form-control" v-model="entity.rfid" placeholder="rfid" autofocus required>
                     <label for="rfid" class="form-label">RFID</label>
                 </div>
                 
@@ -31,10 +31,6 @@ import { storeToRefs } from "pinia";
 export default defineComponent({
     emits:['saved', 'close'],
     props:{
-        customer_id: {
-            type: Number,
-            default:"0"
-        },
         isCheckin:{
             type:Boolean,
             required:true
@@ -52,24 +48,12 @@ export default defineComponent({
 
         const formSave = async () => {
             if(props.isCheckin){
-                entity.value.customer_id = props.customer_id.toString();
-                await doCheckin();
-                emit('saved');
+                await doCheckin(rfid.value ? (<HTMLInputElement> rfid.value).value : '' );
+                if(!errors.value) emit('saved');
             }
             else{
-                await doCheckout();
-                if(errors.value.length > 0){
-                    $swal.fire({
-                        icon: 'error',
-                        title: errors.value,
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 4000
-                    });
-                    clearErrors();
-                }
-                else emit('saved');
+                await doCheckout(rfid.value ? (<HTMLInputElement> rfid.value).value : '' );
+                if(!errors.value) emit('saved');
 
             }
         }

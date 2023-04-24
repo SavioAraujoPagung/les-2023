@@ -9,6 +9,7 @@ export const useCustomerStore = defineStore('Customer', () => {
     const path = entity.path;
     const errors = ref("");
     const loading = ref(true);
+    const isEdit = ref(false);
 
     const getAll = async () => {
         loading.value = true;
@@ -21,12 +22,12 @@ export const useCustomerStore = defineStore('Customer', () => {
         .finally(() => loading.value = false);
     }
 
-    const getById = async (id:any) => {
-        const response = await api.get(path + id );
+    const getById = async (rfid:any) => {
+        const response = await api.get(path + rfid );
         Object.assign(entity,response.data);
     }
 
-    const destroy = async (id:any, elem:any = undefined) => {
+    const destroy = async (rfid:any, elem:any = undefined) => {
         Swal.fire({
             title: 'Tem certeza?',
             text: "Esta ação não pode ser revertida!",
@@ -37,7 +38,7 @@ export const useCustomerStore = defineStore('Customer', () => {
             confirmButtonText: 'Sim, deletar o registro!'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await api.delete(path + id).then(async (response) => {
+                await api.put(path + rfid).then(async (response) => {
                     if(elem) await fadeOut(elem);
                     Swal.fire({
                         icon: 'success',
@@ -76,17 +77,61 @@ export const useCustomerStore = defineStore('Customer', () => {
 
     const save = async (data:any) => {
         await api.post(path, data).then((response) => {
-            return response.data;
+            Swal.fire({
+                icon: 'success',
+                title: 'Cliente cadastrado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         }).catch((error) => {
-            errors.value = error.message;
+            Swal.fire({
+                icon: 'error',
+                title: error.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         });
     }
 
-    const update = async (data:any, id:any) => {
+    const update = async (data:any, rfid:any) => {
         let object = getSubSet(data, Object.getOwnPropertyNames(new CustomerEdit()));
-        await api.put(path + id, object);
+        await api.put(path + rfid, object).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Cliente editado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        });
     }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, loading, update};
+    return {
+        entity,
+        entities,
+        errors,
+        getAll,
+        getById,
+        destroy,
+        resetEntity,
+        save,
+        loading,
+        update,
+        isEdit
+    };
   })
   

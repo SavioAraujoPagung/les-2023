@@ -1,16 +1,37 @@
 import { Customer } from "./Customer";
 import Default from "./Default";
 
-export type ItemCart = {
+export type productConsumption = {
+    id: number;
     name: string;
-    finalPrice: number
+    qtd: number;
+    price: number;
+}
+
+export class productCart {
+    id:number | null;
+    price:string;
+    productConsumption:productConsumption | null;
+    productId: number;
+    qtd: number;
+
+    constructor(){
+        this.id = null;
+        this.price = "0";
+        this.productConsumption = null;
+        this.productId = 0;
+        this.qtd = 0;
+    }
+
 }
 
 export default class Cart extends Default{
 
-    itensCart: ItemCart[];
+    productCart: Array<productCart>;
     
     isPaid: boolean;
+
+    total:number;
 
     customerId: number | null;
 
@@ -18,9 +39,10 @@ export default class Cart extends Default{
 
     constructor() {
         super("/cart/");
-        this.itensCart = [];
+        this.productCart = new Array<productCart>();
         this.isPaid = false;
         this.customerId = null;
+        this.total = 0.0;
         this.customer = null;
     }
 
