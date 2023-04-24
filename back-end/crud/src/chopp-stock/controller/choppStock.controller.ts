@@ -1,10 +1,9 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'src/product/model/product.entity';
 import { Repository } from 'typeorm';
 import { ChoppStock } from '../model/choppStock.entity';
 
-@Controller('ChoppStock')
+@Controller('choop')
 export class ChoppStockController {
   private logger: Logger;
   constructor(
@@ -25,8 +24,8 @@ export class ChoppStockController {
     }
   }
 
-  @Get('/frid')
-  async findOne(@Param('frid') rfid: string): Promise<ChoppStock> {
+  @Get('/rfid')
+  async findOne(@Param('rfid') rfid: string): Promise<ChoppStock> {
     return this.repository.findOne({where: {rfid: rfid}});
   }
   
