@@ -44,7 +44,7 @@ export class ConsumptionController {
   async valueConsumption(@Param('rfid', ParseIntPipe) rfid: string): Promise<string> {
     try {
       console.log(rfid)
-      const checkin = await this.getRridOnline(rfid)
+      const checkin = await this.getRridOnlineCPF(rfid)
       console.log(checkin)
       const consumptions = await this.repository.find({where: { checkin: { id: checkin.id } },})
       console.log(consumptions)
@@ -113,6 +113,23 @@ export class ConsumptionController {
       relations: ['customer'],
       where: [
         { customer: { rfid: filter } }, 
+      ],
+    });
+    
+    for (let i = 0; i < checkIn.length; i++) {
+      if (!checkIn[i].pago) {
+        return checkIn[i];
+      }
+    };
+
+    throw new NotFoundException("Não há checkin para este RFID!");
+  }
+
+  async getRridOnlineCPF(filter: string): Promise<CheckIn> {
+    const checkIn = await this.checkin.find({
+      relations: ['customer'],
+      where: [
+        { customer: { cpf: filter } }, 
       ],
     });
     
