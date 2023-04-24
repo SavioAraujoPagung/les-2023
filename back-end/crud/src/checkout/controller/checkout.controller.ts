@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Param, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customer/model/customer.entity';
 import { Repository } from 'typeorm';
 import { CheckOut } from '../model/checkout.entity';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
+import { Consumption } from 'src/consumption/model/Consumption.entity';
 
 @Controller('check-out')
 export class CheckOutController {
@@ -15,6 +16,8 @@ export class CheckOutController {
     private readonly checkIn: Repository<CheckIn>,
     @InjectRepository(Customer)
     private readonly customer: Repository<Customer>,
+    @InjectRepository(Consumption)
+    private readonly consumptions: Repository<Consumption>,
 
     ) {
       this.logger = new Logger('CheckInControllerRepository');
@@ -70,7 +73,7 @@ export class CheckOutController {
       order: { id: 'DESC' }
     });
 
-    const consumptions = await this.repository.find({where: { checkIns[0]: { id: checkIns[0].id } },})
+    const consumptions = await this.consumptions.find({where: { checkin: { id: checkIns[0].id } },})
     let value = 0
 
     for (let i = 0; i < consumptions.length; i++) {
