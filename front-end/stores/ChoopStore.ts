@@ -42,7 +42,7 @@ export const useChoopStore = defineStore('choop', () => {
     }
 
     const getByRFID = async () => {
-        const response = await api.get(productPath + "barcode/" + entity.rfid );
+        const response = await api.get(productPath + "rfid/" + entity.rfid );
         Object.assign(entity,{
             name: response.data.name,
             cost: response.data.cost

@@ -60,7 +60,7 @@
     
     import { useChoopStore } from "~/stores/ChoopStore";
     import { storeToRefs } from "pinia";
-    import { SavedStockChoop } from "~/models/Choop";
+    import { Choop, SavedStockChoop } from "~/models/Choop";
 
     const props = defineProps({
         isIncrement:{
@@ -77,7 +77,7 @@
     const { $swal } = useNuxtApp();
     const rfid = ref(null);
     const numberRfid = ref(null);
-    const newItens = ref(new Array<SavedStockChoop>());
+    const newItens = ref(new Array<Choop>());
 
     const changeQtd = () => {
         if(!entity.value.rfid.length){
@@ -106,6 +106,7 @@
                 newItens.value.push({
                     rfid: response.data.rfid,
                     name: response.data.name,
+                    cost: response.data.cost,
                     qtd: props.isIncrement ? 1 : -1
                 });
             }).catch((error) => {

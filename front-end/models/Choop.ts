@@ -46,7 +46,7 @@ class StockChoop extends Default{
     qtd: number;
 
     constructor() {
-        super("/choop/");
+        super("/choop/stock");
         this.name = "";
         this.rfid = "";
         this.qtd = 0;

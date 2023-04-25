@@ -17,7 +17,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id">
-                        <td>{{ product.barcode }}</td>
+                        <td>{{ product.rfid }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.qtd }}</td>
                     </tr>

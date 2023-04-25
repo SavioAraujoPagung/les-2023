@@ -23,15 +23,29 @@ export class ChoppStockController {
       throw new Error('Erro ao cadastrar o estoque do chopp');
     }
   }
+  
+  @Post("stock")
+  async createAll(@Body() user: ChoppStock[]): Promise<ChoppStock[]> {
+    try {
+      return this.repository.save(user);
+    } catch (error) {
+      this.logger.error(`Não foi possivel cadastrar os chopps. ${error}`);
+      throw new Error('Erro ao cadastrar a Solicitação de comida');
+    }
+  }
 
   @Get('/rfid/:rfid')
   async findOneByRFID(@Param('rfid') rfid: string): Promise<ChoppStock> {
-    return this.repository.findOne({where: {rfid: rfid}});
+    const chopp = await this.repository.findOne({where: {rfid: rfid}});
+    if(!chopp) throw new NotFoundException('Chopp não encontrado! Tente novamente!');
+    return chopp;
   }
   
   @Get('/:id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<ChoppStock> {
-    return this.repository.findOne({where: {id}});
+    const chopp = await this.repository.findOne({where: {id}});
+    if(!chopp) throw new NotFoundException('Chopp não encontrado! Tente novamente!');
+    return chopp;
   }
   
   @Get()
@@ -53,12 +67,13 @@ export class ChoppStockController {
   }
 
   @Put(':id')
-  async update(@Body() update: ChoppStock): Promise<ChoppStock> {
-    const chopp = await this.repository.findOne({where:{ id: update.id }});
-    if(!chopp){
-      throw new NotFoundException('Chopp não encontrado!')
+  async update(@Param('id', ParseIntPipe) id: number, @Body() chopp: ChoppStock): Promise<ChoppStock> {
+    const choppFound = await this.repository.findOne({where:{ id }});
+    if(!choppFound){
+      throw new NotFoundException('Produto não encontrado! Tente novamente!')
     }
-    return await this.repository.save(update)
+    await this.repository.update({id}, chopp)
+    return this.repository.findOne({where:{ id }})
   }
 
 }
