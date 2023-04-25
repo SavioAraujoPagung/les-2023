@@ -4,12 +4,14 @@ class Choop extends Default{
     name: string;
     rfid: string;
     cost: number;
+    qtd: number;
 
     constructor() {
         super("/choop/");
         this.name = "";
         this.rfid = "";
         this.cost = 0.0;
+        this.qtd = 0;
     }
 
 }

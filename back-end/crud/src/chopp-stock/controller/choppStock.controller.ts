@@ -24,9 +24,14 @@ export class ChoppStockController {
     }
   }
 
-  @Get('/rfid')
-  async findOne(@Param('rfid') rfid: string): Promise<ChoppStock> {
+  @Get('/rfid/:rfid')
+  async findOneByRFID(@Param('rfid') rfid: string): Promise<ChoppStock> {
     return this.repository.findOne({where: {rfid: rfid}});
+  }
+  
+  @Get('/:id')
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<ChoppStock> {
+    return this.repository.findOne({where: {id}});
   }
   
   @Get()
@@ -45,6 +50,15 @@ export class ChoppStockController {
     if(choppStockDeleted.affected > 0){
       return `Estoque de chopp ${id} deletado com sucesso!`;
     }
+  }
+
+  @Put(':id')
+  async update(@Body() update: ChoppStock): Promise<ChoppStock> {
+    const chopp = await this.repository.findOne({where:{ id: update.id }});
+    if(!chopp){
+      throw new NotFoundException('Chopp não encontrado!')
+    }
+    return await this.repository.save(update)
   }
 
 }
