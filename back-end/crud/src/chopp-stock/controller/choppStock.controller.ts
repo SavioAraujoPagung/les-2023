@@ -25,9 +25,17 @@ export class ChoppStockController {
   }
   
   @Post("stock")
-  async createAll(@Body() user: ChoppStock[]): Promise<ChoppStock[]> {
+  async createAll(@Body() chopps: ChoppStock[]): Promise<ChoppStock[]> {
     try {
-      return this.repository.save(user);
+      let qtd = chopps.length
+      for(let i = 0; i < qtd; i++) {
+        let chopp = await this.repository.findOne({where: {id: chopps[i].id}})
+        chopp.qtd += chopps[i].qtd
+
+        await this.repository.save(chopp)
+      }
+
+      return chopps
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar os chopps. ${error}`);
       throw new Error('Erro ao cadastrar a Solicitação de comida');
