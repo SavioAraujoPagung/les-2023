@@ -27,7 +27,7 @@ export const useChoopStore = defineStore('choop', () => {
 
     const getAllStock = async () => {
         loading.value = true;
-        await api.get(stockPath).then((response) => {
+        await api.get(productPath).then((response) => {
             stock.value = response.data;
         })
         .catch((error) => {
