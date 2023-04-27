@@ -34,7 +34,7 @@
                         <thead>
                             <th class="col-sm-4">RFID</th>
                             <th class="col-sm-4">Nome</th>
-                            <th class="col-sm-4">Qtd de Barris(100L)</th>
+                            <th class="col-sm-4">Qtd(L)</th>
                         </thead>
                         <tbody>
                             <tr v-for="(choop, i) in newItens" :key="i" :id="'newChoop'+choop.rfid">
@@ -96,8 +96,8 @@
         
         
         if(index >= 0) {
-            if(props.isIncrement) newItens.value[index].qtd++;
-            else newItens.value[index].qtd--;
+            if(props.isIncrement) newItens.value[index].qtd += 100;
+            else newItens.value[index].qtd -= 100;
             entity.value.rfid = "";
         }
         else{
@@ -107,7 +107,7 @@
                     rfid: response.data.rfid,
                     name: response.data.name,
                     cost: response.data.cost,
-                    qtd: props.isIncrement ? 1 : -1
+                    qtd: props.isIncrement ? 100 : -100
                 });
             }).catch((error) => {
                 $swal.fire({
