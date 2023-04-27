@@ -17,6 +17,10 @@ export class ChoppStockController {
   @Post()
   async create(@Body() chopp: ChoppStock): Promise<ChoppStock> {
     try {
+      const choppFound = await this.repository.findOne({where: {rfid: chopp.rfid}});
+      if(choppFound) {
+        throw new Error('Chopp já cadastrado com esse RFID');
+      }
       return this.repository.save(chopp);
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar o estoque do chopp. ${error}`);
@@ -31,14 +35,14 @@ export class ChoppStockController {
       for(let i = 0; i < qtd; i++) {
         let chopp = await this.repository.findOne({where: {id: chopps[i].id}})
         chopp.qtd += chopps[i].qtd
-
+        if(chopp.qtd < 0) chopp.qtd = 0
         await this.repository.save(chopp)
       }
 
       return chopps
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar os chopps. ${error}`);
-      throw new Error('Erro ao cadastrar a Solicitação de comida');
+      throw new Error('Erro ao cadastrar os chopps');
     }
   }
 
