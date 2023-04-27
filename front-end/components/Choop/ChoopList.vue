@@ -12,7 +12,7 @@
                 <DefaultTableThead>
                     <th>Nome</th>
                     <th>Preço</th>
-                    <th>C&oacute;digo de Barras</th>
+                    <th>RFID</th>
                 </DefaultTableThead>
                 <tbody>
                     <DefaultTableTrow v-for="(product, i) in entities" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
