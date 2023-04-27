@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Consumption } from '../model/Consumption.entity';
-import { ProductConsumption } from 'src/productConsumption/model/ProductConsumption.entity';
+import { Consumption } from '../model/consumption.entity';
+import { ProductConsumption } from 'src/productConsumption/model/productConsumption.entity';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
 @Controller('consumption')
 export class ConsumptionController {
@@ -41,14 +41,10 @@ export class ConsumptionController {
   } 
 
   @Get('/pagar/:rfid')
-  async valueConsumption(@Param('rfid', ParseIntPipe) rfid: string): Promise<string> {
+  async valueConsumption(@Param('rfid') rfid: string): Promise<string> {
     try {
-      console.log(rfid)
-      const checkin = await this.getRridOnlineCPF(rfid)
-      console.log(checkin)
+      const checkin = await this.getRridOnline(rfid)
       const consumptions = await this.repository.find({where: { checkin: { id: checkin.id } },})
-      console.log(consumptions)
-
       let value = 0
 
       for (let i = 0; i < consumptions.length; i++) {
@@ -63,7 +59,7 @@ export class ConsumptionController {
   } 
 
   @Get(':rfid')
-  async consumptionByRFID(@Param('rfid', ParseIntPipe) rfid: string): Promise<Consumption[]> {
+  async consumptionByRFID(@Param('rfid') rfid: string): Promise<Consumption[]> {
     try {
       const checkin = await this.getRridOnline(rfid)
       const consumptions = await this.repository.find({

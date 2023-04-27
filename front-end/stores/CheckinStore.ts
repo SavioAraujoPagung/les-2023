@@ -24,10 +24,11 @@ export const useCheckinStore = defineStore('checkin', () => {
     }
 
     const doCheckin = async (rfid:string) => {
+        entity.rfid = "";
         await api.post('/check-in/' + rfid).then((response) => {
             Swal.fire({
                 icon: 'success',
-                title: response.data.message,
+                title: "Check-in realizado com sucesso",
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
@@ -44,10 +45,10 @@ export const useCheckinStore = defineStore('checkin', () => {
             });
             errors.value = true;
         });
-        // await api.post(path + rfid);
     }
 
     const doCheckout = async (rfid:string) => {
+        entity.rfid = "";
         await api.post('/check-out/' + rfid).then((response) => {
             Swal.fire({
                 icon: 'success',
@@ -68,8 +69,6 @@ export const useCheckinStore = defineStore('checkin', () => {
             });
             errors.value = true;
         });
-
-        // await api.get(path + rfid);
     }
 
     const clearErrors = () => errors.value = false;

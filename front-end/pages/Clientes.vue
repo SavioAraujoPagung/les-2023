@@ -1,44 +1,47 @@
 <template>
-    <header class="d-flex align-items-center justify-content-between mb-5">
-        <h1 class="text-primary fw-bold">Clientes</h1>
-        <div class="d-flex align-items-center justify-content-between gap-3">
-            <div class="d-flex align-items-center gap-2">
-                <a href="javascript:;" aria-label="Realizar checkout" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
-                <a href="javascript:;" aria-label="Realizar checkin" class="btn btn-dark text-white" @click="doCheckin"><i class="bi bi-border-all"></i>Realizar Check-In</a>
+    <div>
+        <Head><Title>{{ title }}</Title></Head>
+        <header class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary fw-bold">Clientes</h1>
+            <div class="d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <a href="javascript:;" aria-label="Realizar checkout" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
+                    <a href="javascript:;" aria-label="Realizar checkin" class="btn btn-dark text-white" @click="doCheckin"><i class="bi bi-border-all"></i>Realizar Check-In</a>
+                </div>
+                <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
             </div>
-            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
-        </div>
-    </header>
-
-        <div v-if="!loading">
-            <DefaultTable v-if="entities.length">
-                <DefaultTableThead>
-                    <th class="col-m-3">RFID</th>
-                    <th class="col-m-3">Nome</th>
-                    <th class="col-sm-3">CPF</th>
-                    <th class="col-sm-3">Email</th>
-                </DefaultTableThead>
-                <tbody>
-                    <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.rfid"
-                    @delete="deleteElement(customer.rfid)"
-                    @edit="showFormEdit(customer.rfid)">
-                        <td>{{ customer.rfid }}</td>
-                        <td>{{ customer.name }}</td>
-                        <td>{{ customer.cpf }}</td>
-                        <td>{{ customer.email }}</td>
-                    </CheckinTRow>
-                </tbody>
-            </DefaultTable>
-            <div v-else>
-                <h5 class="text-dak">Nenhum registro encontrado</h5>
+        </header>
+        
+            <div v-if="!loading">
+                <DefaultTable v-if="entities.length">
+                    <DefaultTableThead>
+                        <th class="col-m-3">RFID</th>
+                        <th class="col-m-3">Nome</th>
+                        <th class="col-sm-3">CPF</th>
+                        <th class="col-sm-3">Email</th>
+                    </DefaultTableThead>
+                    <tbody>
+                        <CheckinTRow v-for="(customer, i) in entities" :key="i" :id="'customer'+customer.rfid"
+                        @delete="deleteElement(customer.rfid)"
+                        @edit="showFormEdit(customer.rfid)">
+                            <td>{{ customer.rfid }}</td>
+                            <td>{{ customer.name }}</td>
+                            <td>{{ customer.cpf }}</td>
+                            <td>{{ customer.email }}</td>
+                        </CheckinTRow>
+                    </tbody>
+                </DefaultTable>
+                <div v-else>
+                    <h5 class="text-dak">Nenhum registro encontrado</h5>
+                </div>
             </div>
-        </div>
-        <div class="d-flex align-items-center justify-content-center p-5" v-else>
-            <LoadersCubeLoader />
-        </div>
-
-        <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
-        <component :is="openCheck ? modalCheck : 'div'" :isCheckin="isCheckin"  @close="cancelCheckin" @saved="saveCheckin" :customer_id="customer_id" />
+            <div class="d-flex align-items-center justify-content-center p-5" v-else>
+                <LoadersCubeLoader />
+            </div>
+        
+            <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
+            <component :is="openCheck ? modalCheck : 'div'" :isCheckin="isCheckin"  @close="cancelCheckin" @saved="saveCheckin" />
+    </div>
     
 </template>
 
@@ -47,7 +50,6 @@ import { storeToRefs } from 'pinia';
 import { useCustomerStore } from '~~/stores/CustomerStore';
 
 definePageMeta({
-    title: 'Clientes - LES Group',
     middleware: 'auth'
 });
 
@@ -55,12 +57,12 @@ export default defineComponent({
 
     setup() {
         
+        const title = ref("Clientes - LES GROUP");
+
         const { $swal } = useNuxtApp()
         const openCheck = ref(false);
 
         const isCheckin = ref(false);
-
-        const customer_id = ref(0);
 
         const modalForm = shallowRef(resolveComponent('CustomersCustomerForm'));
         const modalCheck = shallowRef(resolveComponent('CheckinForm'));
@@ -76,7 +78,6 @@ export default defineComponent({
         }
 
         const doCheckin = (id:any) => {
-            customer_id.value = id;
             isCheckin.value = true;
             openCheck.value = true;
         }
@@ -124,7 +125,7 @@ export default defineComponent({
         onMounted(getAll);
 
         return { entities, modalForm, isOpen, cancelChange, refreshList, deleteElement, showFormEdit, showForm,
-            openCheck, doCheckin, modalCheck, cancelCheckin, customer_id, saveCheckin, doCheckout, isCheckin, loading };
+            openCheck, doCheckin, modalCheck, cancelCheckin, saveCheckin, doCheckout, isCheckin, loading, title };
     },
 })
 

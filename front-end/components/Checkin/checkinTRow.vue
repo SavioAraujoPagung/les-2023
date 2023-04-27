@@ -15,12 +15,6 @@
                     </i>
                     Editar
                 </DropdownItem>
-                <DropdownItem @click="emit('checkin')">
-                    <i class="icon icon-16">
-                        <broadcast/>
-                    </i>
-                    CheckIn
-                </DropdownItem>
             </DropdownActionDropdown>
         </td>
     </tr>

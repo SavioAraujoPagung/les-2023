@@ -30,7 +30,7 @@ export class CustomerController {
   }
 
   @Get(':rfid')
-  async findOne(@Param('rfid', ParseIntPipe) rfid: string): Promise<Customer> {
+  async findOne(@Param('rfid') rfid: string): Promise<Customer> {
     const user = await this.repository.findOne({where:{ rfid }});
     if(!user){
       throw new NotFoundException('Cliente não encontrado! Tente novamente!')
@@ -48,7 +48,7 @@ export class CustomerController {
   }
 
   @Put(':rfid')
-  async desativar(@Param('rfid', ParseIntPipe) rfid: string): Promise<Customer> {
+  async desativar(@Param('rfid') rfid: string): Promise<Customer> {
     const customer = await this.repository.findOne({where:{ rfid: rfid }});
     if(!customer){
       throw new NotFoundException('Cliente não encontrado!')

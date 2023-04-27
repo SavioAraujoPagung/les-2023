@@ -1,32 +1,35 @@
 <template>
-    <header class="d-flex align-items-center justify-content-between mb-5">
-        <h1 class="text-primary fw-bold">Usu&aacute;rios</h1>
-        <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
-    </header>
-    
-    <div v-if="entities.length">
-        <DefaultTable v-if="!loading">
-            <DefaultTableThead>
-                <th>Nome</th>
-                <th>Fun&ccedil;&atilde;o</th>
-            </DefaultTableThead>
-            <tbody>
-                <DefaultTableTrow v-for="(user, i) in entities" :key="i" :id="'user'+user.id" @delete="deleteElement(user.id)" @edit="showFormEdit(user.id)">
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.office }}</td>
-                </DefaultTableTrow>
-            </tbody>
-        </DefaultTable>
-        <div v-else>
-            <h5 class="text-dak">Nenhum registro encontrado</h5>
+    <div>
+        <Head><Title>{{ title }}</Title></Head>
+        <header class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary fw-bold">Usu&aacute;rios</h1>
+            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
+        </header>
+        
+        <div v-if="!loading">
+            <DefaultTable v-if="entities.length">
+                <DefaultTableThead>
+                    <th>Nome</th>
+                    <th>Fun&ccedil;&atilde;o</th>
+                </DefaultTableThead>
+                <tbody>
+                    <DefaultTableTrow v-for="(user, i) in entities" :key="i" :id="'user'+user.id" @delete="deleteElement(user.id)" @edit="showFormEdit(user.id)">
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.office }}</td>
+                    </DefaultTableTrow>
+                </tbody>
+            </DefaultTable>
+            <div v-else>
+                <h5 class="text-dak">Nenhum registro encontrado</h5>
+            </div>
         </div>
+        
+        <div class="d-flex align-items-center justify-content-center p-5" v-else>
+            <LoadersCubeLoader />
+        </div>
+        
+        <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
     </div>
-
-    <div class="d-flex align-items-center justify-content-center p-5" v-else>
-        <LoadersCubeLoader />
-    </div>
-
-    <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="refreshList" />
 
 </template>
 
@@ -43,6 +46,8 @@ export default defineComponent({
     
     setup() {
         
+        const title = ref('Usuários - LES GROUP');
+
         const { $swal } = useNuxtApp()
 
         const modalForm = shallowRef(resolveComponent('UsersUserForm'));
@@ -84,7 +89,7 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, isOpen, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm };
+        return { entities, Cargos, modalForm, isOpen, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm, title };
 
     },
 })

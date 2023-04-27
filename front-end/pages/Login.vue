@@ -1,5 +1,6 @@
 <template>
     <main class="d-flex align-items-center justify-content-center bg-gradient-primary">
+        <Head><Title>{{ title }}</Title></Head>
         <div class="d-flex align-items-center justify-content-center h-100 w-100">
 
             <form class="bg-gradient-primary h-100 col-sm-6 rounded-4 p-5 d-flex align-items-center flex-column justify-content-center">
@@ -24,11 +25,16 @@
 <script lang="ts">
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/stores/AuthStore";
+
 definePageMeta({
     layout: false
 });
+
 export default defineComponent({
     setup() {
+
+        const title = ref("Login - LES GROUP");
+
         const { $swal } = useNuxtApp()
         const { doLogin } = useAuthStore();
         const { user, errors } = storeToRefs(useAuthStore());
@@ -61,7 +67,7 @@ export default defineComponent({
 
         }
 
-        return { user, doLogin, submitLogin };
+        return { user, doLogin, submitLogin, title };
     },
 })
 </script>

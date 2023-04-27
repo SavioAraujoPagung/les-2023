@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Param, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customer/model/customer.entity';
 import { Repository } from 'typeorm';
 import { CheckOut } from '../model/checkout.entity';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
+import { Consumption } from 'src/consumption/model/consumption.entity';
 
 @Controller('check-out')
 export class CheckOutController {
@@ -15,13 +16,15 @@ export class CheckOutController {
     private readonly checkIn: Repository<CheckIn>,
     @InjectRepository(Customer)
     private readonly customer: Repository<Customer>,
+    @InjectRepository(Consumption)
+    private readonly consumptions: Repository<Consumption>,
 
     ) {
       this.logger = new Logger('CheckInControllerRepository');
     }
 
   @Post('/:rfid')
-  async create(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckOut> {
+  async create(@Param('rfid') rfid: string): Promise<CheckOut> {
     const now = new Date();
     const checkOut = new CheckOut()
 
@@ -41,7 +44,7 @@ export class CheckOutController {
   }
 
   @Get('/:rfid')
-  async find(@Param('rfid', ParseIntPipe) rfid: string): Promise<CheckIn> {
+  async find(@Param('rfid') rfid: string): Promise<CheckIn> {
     return await this.getRridOnline(rfid)
   }
 
@@ -55,7 +58,7 @@ export class CheckOutController {
     });
 
     if (checkOut != null) {
-      throw new BadRequestException("Cliente não esta online");
+      throw new BadRequestException("Este cliente não realizou um check-in");
     }
 
     return true
@@ -69,7 +72,14 @@ export class CheckOutController {
       ],
       order: { id: 'DESC' }
     });
-    
+
+    const consumptions = await this.consumptions.find({where: { checkin: { id: checkIns[0].id } },})
+    let value = 0
+
+    for (let i = 0; i < consumptions.length; i++) {
+      value += consumptions[i].price;
+    }
+
     if (checkIns.length == 0) {
       throw new BadRequestException("Não há Checkin para este RFID");
     }

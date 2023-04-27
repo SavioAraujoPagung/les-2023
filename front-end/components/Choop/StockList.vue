@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <Head><Title>{{ title }}</Title></Head>
+    <div class="p-5">
         <header class="d-flex align-items-center justify-content-between mb-5">
             <h1 class="text-primary fw-bold">Estoque</h1>
             <div class="d-flex align-items-center gap-2">
@@ -18,7 +17,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id">
-                        <td>{{ product.barcode }}</td>
+                        <td>{{ product.rfid }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.qtd }}</td>
                     </tr>
@@ -37,57 +36,43 @@
 
 </template>
 
-<script lang="ts">
-import { storeToRefs } from 'pinia';
-import { Cargos } from '~~/models/Usuario';
-import { useProductStore } from '~/stores/ProductStore';
+<script setup lang="ts">
 
-definePageMeta({
-    middleware: 'auth'
-});
-
-export default defineComponent({
-    
-    setup() {
+    import { useChoopStore } from '~~/stores/ChoopStore';
+    import { storeToRefs } from 'pinia';
         
-        const title = ref("Estoque - LES GROUP");
+    const open = ref(false);
 
-        const open = ref(false);
+    const isIncrement = ref(true);
 
-        const isIncrement = ref(true);
+    const modalForm = shallowRef(resolveComponent('ChoopStockForm'));
 
-        const modalForm = shallowRef(resolveComponent('ProductsStockForm'));
+    const { $swal } = useNuxtApp()
 
-        const { $swal } = useNuxtApp()
+    const { destroy, getAllStock, getById } = useChoopStore();
+    const { stock, loading } = storeToRefs(useChoopStore());
 
-        const { destroy, getAllStock, getById } = useProductStore();
-        const { stock, loading } = storeToRefs(useProductStore());
+    const cancelChange = () => open.value = false;
 
-        const cancelChange = () => open.value = false;
+    const refreshList = async () => {
+        open.value = false;
+        $swal.fire({
+            icon: 'success',
+            title: 'Choops cadastrado com sucesso!',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        await getAllStock();
+    }
 
-        const refreshList = async () => {
-            open.value = false;
-            $swal.fire({
-                icon: 'success',
-                title: 'Produtos cadastrado com sucesso!',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            await getAllStock();
-        }
+    const showForm = (increment:boolean) => {
+        if(increment) isIncrement.value = true;
+        else isIncrement.value = false;
+        open.value = true;
+    }
 
-        const showForm = (increment:boolean) => {
-            if(increment) isIncrement.value = true;
-            else isIncrement.value = false;
-            open.value = true;
-        }
+    onMounted(getAllStock);
 
-        onMounted(getAllStock);
-
-        return { stock, Cargos, modalForm, open, cancelChange, refreshList, showForm, isIncrement, loading, title };
-
-    },
-})
 </script>

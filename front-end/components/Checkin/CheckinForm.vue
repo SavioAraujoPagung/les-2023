@@ -31,10 +31,6 @@ import { storeToRefs } from "pinia";
 export default defineComponent({
     emits:['saved', 'close'],
     props:{
-        customer_id: {
-            type: Number,
-            default:"0"
-        },
         isCheckin:{
             type:Boolean,
             required:true
