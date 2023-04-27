@@ -16,11 +16,11 @@ export class ChoppStockController {
 
   @Post()
   async create(@Body() chopp: ChoppStock): Promise<ChoppStock> {
-    try {
-      const choppFound = await this.repository.findOne({where: {rfid: chopp.rfid}});
+    const choppFound = await this.repository.findOne({where: {rfid: chopp.rfid}});
       if(choppFound) {
         throw new Error('Chopp já cadastrado com esse RFID');
       }
+    try { 
       return this.repository.save(chopp);
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar o estoque do chopp. ${error}`);

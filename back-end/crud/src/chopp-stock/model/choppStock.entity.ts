@@ -11,7 +11,7 @@ export class ChoppStock {
   @Column()
   rfid: string;
 
-  @Column()
+  @Column({default: 100000})
   qtd: number;
 
   @Column()
