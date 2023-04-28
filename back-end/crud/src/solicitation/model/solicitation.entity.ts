@@ -8,7 +8,7 @@ export class Solicitation {
   @Column()
   foodName: string;
 
-  @Column({default: 1})
+  @Column({default: 1, type: 'float'})
   qtd: number;
 
   @Column({default: true})

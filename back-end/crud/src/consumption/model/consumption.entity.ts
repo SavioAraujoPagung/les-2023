@@ -19,6 +19,6 @@ export class Consumption {
   @Column()
   qtd: number; 
 
-  @Column()
+  @Column({type: 'float'})
   price: number;
 }

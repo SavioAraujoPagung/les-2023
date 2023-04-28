@@ -1,19 +1,22 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
-  priceCost: string;
+  @Column({type: 'float'}) 
+  priceCost: number;
 
-  @Column()
-  saleCost: string;
+  @Column({type: 'float'}) 
+  saleCost: number;
 
   @Column()
   qtd: number;
+
+  @Column()
+  isChopp: boolean;
 }

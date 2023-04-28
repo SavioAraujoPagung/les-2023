@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../model/product.entity';
@@ -15,6 +15,10 @@ export class ProductController {
 
   @Post()
   async create(@Body() product: Product): Promise<Product> {
+    if (!product.isChopp) {
+      throw new BadRequestException('Somente chopps por favor');
+    }
+    
     try {
       return this.repository.save(product);
     } catch (error) {
@@ -24,9 +28,9 @@ export class ProductController {
    
   }
 
-  @Get('/barcode/:id')
+  @Get(':id')
   async findOneByBarcode(@Param('barcode') id: string): Promise<Product> {
-   
+    console.log("chopp")
     let product = await this.repository.findOneBy({id})
     
     if(!product){
@@ -36,18 +40,18 @@ export class ProductController {
     return product;
   }
   
-  @Get()
-  async findAll(): Promise<Product[]> {
-    return this.repository.find();
+  @Get('/chopps/all')
+  async findAllChopps(): Promise<Product[]> {
+    const prods = await this.repository.find({where: { isChopp: true }});
+    console.log(prods)
+    return prods
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Product> {
-    const product = await this.repository.findOne({where:{ id }});
-    if(!product){
-      throw new NotFoundException('Produto não encontrado! Tente novamente!')
-    }
-    return product;
+  @Get('/self-service/all')
+  async findAllSelfService(): Promise<Product> {
+    const prods = await this.repository.findOne({where: { isChopp: false }});
+    console.log(prods)
+    return prods
   }
 
   @Put(':id')
