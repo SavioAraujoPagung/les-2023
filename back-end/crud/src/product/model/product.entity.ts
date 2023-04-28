@@ -3,14 +3,17 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
 
   @Column()
-  barcode: string;
+  priceCost: string;
 
   @Column()
-  cost: string;
+  saleCost: string;
+
+  @Column()
+  qtd: number;
 }

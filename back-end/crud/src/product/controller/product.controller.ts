@@ -24,10 +24,10 @@ export class ProductController {
    
   }
 
-  @Get('/barcode/:barcode')
-  async findOneByBarcode(@Param('barcode') barcode: string): Promise<Product> {
+  @Get('/barcode/:id')
+  async findOneByBarcode(@Param('barcode') id: string): Promise<Product> {
    
-    let product = await this.repository.findOneBy({barcode})
+    let product = await this.repository.findOneBy({id})
     
     if(!product){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
@@ -42,7 +42,7 @@ export class ProductController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Product> {
+  async findOne(@Param('id') id: string): Promise<Product> {
     const product = await this.repository.findOne({where:{ id }});
     if(!product){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
@@ -51,7 +51,7 @@ export class ProductController {
   }
 
   @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() product: Product): Promise<Product> {
+  async update(@Param('id') id: string, @Body() product: Product): Promise<Product> {
     const productFound = await this.repository.findOne({where:{ id }});
     if(!productFound){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
@@ -61,7 +61,7 @@ export class ProductController {
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<string> {
+  async delete(@Param('id') id: string): Promise<string> {
     const productFound = await this.repository.findOne({where:{ id }});
     if(!productFound){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')

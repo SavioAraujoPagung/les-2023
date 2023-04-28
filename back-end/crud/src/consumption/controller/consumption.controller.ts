@@ -2,8 +2,8 @@ import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFound
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Consumption } from '../model/consumption.entity';
-import { ProductConsumption } from 'src/productConsumption/model/productConsumption.entity';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
+import { Product } from 'src/product/model/product.entity';
 @Controller('consumption')
 export class ConsumptionController {
   private logger: Logger;
@@ -11,8 +11,8 @@ export class ConsumptionController {
     @InjectRepository(Consumption)
     private readonly repository: Repository<Consumption>,
 
-    @InjectRepository(ProductConsumption)
-    private readonly product: Repository<ProductConsumption>,
+    @InjectRepository(Product)
+    private readonly product: Repository<Product>,
 
     @InjectRepository(CheckIn)
     private readonly checkin: Repository<CheckIn>,
@@ -24,11 +24,10 @@ export class ConsumptionController {
   @Post()
   async create(@Body() consumption: Consumption): Promise<Consumption> {
     try {
-      const prod = await this.product.findOne({where:{ id: consumption.productConsumption.id }})
+      const prod = await this.product.findOne({where:{ id: consumption.product.id }})
       prod.qtd -= consumption.qtd
 
-      consumption.productConsumption = prod
-      consumption.productId = prod.id
+      consumption.product = prod
 
       await this.product.save(prod)
 
@@ -69,8 +68,8 @@ export class ConsumptionController {
       })
 
       for (let i = 0; i < consumptions.length; i++) {
-        console.log(consumptions[i].productConsumption)
-        consumptions[i].productConsumption = await this.product.findOne({where: {id: consumptions[i].productId }})
+        console.log(consumptions[i].product)
+        consumptions[i].product = await this.product.findOne({where: {id: consumptions[i].productId }})
       };
 
       return consumptions
