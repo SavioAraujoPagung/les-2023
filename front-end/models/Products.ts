@@ -62,3 +62,15 @@ export class ProductStock {
     }
 
 }
+
+export class ProductForPrint{
+    idProduct: string | null;
+    product: Product;
+    qtd: number;
+
+    constructor() {
+        this.idProduct = null;
+        this.product = new Product();
+        this.qtd = 0
+    }
+}

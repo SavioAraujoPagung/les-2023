@@ -22,7 +22,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(product, i) in filteredEntities" :key="i" :id="'newProduct'+i">
-                                    <td>{{ product.product.barcode }}</td>
+                                    <td>{{ product.product.id }}</td>
                                     <td>{{ product.product.name }}</td>
                                     <td>
                                         <button class="fw-bold text-white btn btn-primary btn-sm" type="button" @click="addItens($event, product)">+</button>
@@ -42,7 +42,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(product, i) in selectedItens" :key="i" :id="'newProduct'+i">
-                                    <td>{{ product.product.barcode }}</td>
+                                    <td>{{ product.product.id }}</td>
                                     <td>{{ product.product.name }}</td>
                                     <td>{{ product.qtd }}</td>
                                     <td>
@@ -70,7 +70,7 @@
                 <template v-for="(selectedProduct, i) in selectedItens" :key="i">
                     <div class="col mt-3" v-for="(newBarcode, k) in selectedProduct.qtd" :key="k">
                         <small style="font-size: .5rem;" class="fw-bold text-center d-block text-uppercase">{{ selectedProduct.product.name }}</small>
-                        <ProductsBarcode :barcode="selectedProduct.product.barcode" />
+                        <ProductBarcode :barcode="selectedProduct.product.id ? selectedProduct.product.id : ''" />
                     </div>
                 </template>
             </div>
@@ -81,7 +81,7 @@
 <script lang="ts">
 
 import { storeToRefs } from "pinia";
-import { ProductForPrint } from "~~/models/Products";
+import { ProductForPrint, ProductType } from "~~/models/Products";
 import { useProductStore } from "~~/stores/ProductStore";
 
 export default defineComponent({
@@ -111,8 +111,8 @@ export default defineComponent({
 
             filteredEntities.value = newEntities.value.filter(obj => {
                 if(searchBar.value &&
-                ((obj.product.barcode.includes((<HTMLInputElement>searchBar.value).value))
-                || (obj.product.name.includes((<HTMLInputElement>searchBar.value).value)))) return true;
+                ((obj.product.id?.toLowerCase().includes((<HTMLInputElement>searchBar.value).value))
+                || (obj.product.name.toLowerCase().includes((<HTMLInputElement>searchBar.value).value)))) return true;
                 return false;
             });
             
@@ -154,7 +154,7 @@ export default defineComponent({
         }
 
         onMounted(async () => {
-            await getAll();
+            await getAll(ProductType.another);
             entities.value.forEach(el => {
                 let kitchenItem = new ProductForPrint();
                 kitchenItem.idProduct = el.id;
