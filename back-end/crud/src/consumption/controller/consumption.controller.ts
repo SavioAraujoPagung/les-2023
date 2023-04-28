@@ -23,26 +23,49 @@ export class ConsumptionController {
 
   @Post()
   async create(@Body() consumption: Consumption): Promise<Consumption> {
+    var prod :Product
     try {
-      const prod = await this.product.findOne({where:{ id: consumption.product.id }})
-      prod.qtd -= consumption.qtd
-
-      consumption.product = prod
-
-      await this.product.save(prod)
-
-      return this.repository.save(consumption);
+      prod = await this.product.findOne({where:{ id: consumption.product.id }})
+      if (!prod) {
+        throw new BadRequestException('Produto não encontrado!');  
+      }
     } catch (error) {
-      this.logger.error(`Não foi possivel cadastrar um cliente. ${error}`);
-      throw new BadRequestException('Cliente não encontrado!');
+      throw new BadRequestException('Produto não encontrado!');
     }
-   
+
+    var checkIn :CheckIn
+    try {
+      checkIn = await this.checkin.findOne({where: {id: consumption.checkin.id}})
+      consumption.checkin = checkIn
+    } catch (error) {
+      throw new BadRequestException('Checkin não encontrado!');
+    }
+
+    if (prod.type == 1) {
+      const qtd = prod.qtd - consumption.qtd
+      if (qtd < 0) {
+        consumption.qtd = prod.qtd
+        prod.qtd = 0
+        consumption.product = prod
+      } else {
+        prod.qtd = qtd
+        consumption.product = prod
+      }
+      consumption.price = prod.saleCost  
+    }
+    if (prod.type == 2) {
+      consumption.product = prod
+      consumption.price = prod.saleCost * consumption.qtd
+    }
+
+    await this.product.save(prod)
+    return this.repository.save(consumption);
   } 
 
   @Get('/pagar/:rfid')
   async valueConsumption(@Param('rfid') rfid: string): Promise<string> {
     try {
-      const checkin = await this.getRridOnline(rfid)
+      const checkin = await this.getRfidOnline(rfid)
       const consumptions = await this.repository.find({where: { checkin: { id: checkin.id } },})
       let value = 0
 
@@ -60,7 +83,7 @@ export class ConsumptionController {
   @Get(':rfid')
   async consumptionByRFID(@Param('rfid') rfid: string): Promise<Consumption[]> {
     try {
-      const checkin = await this.getRridOnline(rfid)
+      const checkin = await this.getRfidOnline(rfid)
       const consumptions = await this.repository.find({
         where: { 
           checkin: { id: checkin.id }
@@ -103,7 +126,7 @@ export class ConsumptionController {
     }
   }
 
-  async getRridOnline(filter: string): Promise<CheckIn> {
+  async getRfidOnline(filter: string): Promise<CheckIn> {
     const checkIn = await this.checkin.find({
       relations: ['customer'],
       where: [
