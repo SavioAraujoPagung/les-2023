@@ -1,5 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
+export enum ProductType {
+  chopp = 1,
+  selfService = 2,
+  another = 3
+}
+
 @Entity()
 export class Product {
   @PrimaryColumn()
@@ -17,6 +23,6 @@ export class Product {
   @Column()
   qtd: number;
 
-  @Column()
-  isChopp: boolean;
+  @Column({enum: ProductType})
+  type: ProductType;
 }

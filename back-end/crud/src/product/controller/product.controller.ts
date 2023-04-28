@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, Logger, BadRequestException, ParseIntPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../model/product.entity';
@@ -15,22 +15,17 @@ export class ProductController {
 
   @Post()
   async create(@Body() product: Product): Promise<Product> {
-    if (!product.isChopp) {
-      throw new BadRequestException('Somente chopps por favor');
-    }
-    
     try {
       return this.repository.save(product);
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar um produto. ${error}`);
-      throw new Error('Erro ao cadastrar um produto');
+      throw new BadRequestException('Erro ao cadastrar um produto');
     }
    
   }
 
   @Get(':id')
-  async findOneByBarcode(@Param('barcode') id: string): Promise<Product> {
-    console.log("chopp")
+  async findOneByID(@Param('id') id: string): Promise<Product> {
     let product = await this.repository.findOneBy({id})
     
     if(!product){
@@ -40,18 +35,9 @@ export class ProductController {
     return product;
   }
   
-  @Get('/chopps/all')
-  async findAllChopps(): Promise<Product[]> {
-    const prods = await this.repository.find({where: { isChopp: true }});
-    console.log(prods)
-    return prods
-  }
-
-  @Get('/self-service/all')
-  async findAllSelfService(): Promise<Product> {
-    const prods = await this.repository.findOne({where: { isChopp: false }});
-    console.log(prods)
-    return prods
+  @Get('/type/:type')
+  async findByType(@Param('type', ParseIntPipe) type: number): Promise<Product[]> {
+    return this.repository.find({where: { type }});
   }
 
   @Put(':id')
@@ -60,6 +46,9 @@ export class ProductController {
     if(!productFound){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
     }
+
+    product.qtd = productFound.qtd
+
     await this.repository.update({id}, product)
     return this.repository.findOne({where:{ id }})
   }
@@ -76,4 +65,6 @@ export class ProductController {
       return `Produto ${id} deletado com sucesso!`;
     }
   }
+
+  
 }
