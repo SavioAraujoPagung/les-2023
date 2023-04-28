@@ -10,7 +10,7 @@
                     <div v-if="entities.length">
                         <div v-for="(choop, i) in entities" :key="i">
                             <input type="radio" class="btn-check" name="choop" :id="'choop'+choop.id" autocomplete="off" :value="choop.rfid" checked>
-                            <label class="btn btn-outline-secondary" for="option1">Checked</label>
+                            <label class="btn btn-outline-secondary" for="option1">{{ choop.name }}</label>
                         </div>
                     </div>
                     

@@ -41,8 +41,9 @@ export const useChoopStore = defineStore('choop', () => {
         Object.assign(entity,response.data);
     }
 
-    const getByRFID = async () => {
-        const response = await api.get(productPath + "rfid/" + entity.rfid );
+    const getByRFID = async (rfid:number = 0) => {
+        let newRfid = rfid ? rfid : entity.rfid;
+        const response = await api.get(productPath + "rfid/" + newRfid );
         Object.assign(entity,{
             name: response.data.name,
             cost: response.data.cost
@@ -139,11 +140,28 @@ export const useChoopStore = defineStore('choop', () => {
     }
 
     const save = async (data:any) => {
+        let success = true;
         await api.post(productPath, data).then((response) => {
-            return response.data;
+            Swal.fire({
+                icon: 'success',
+                title: 'Choop cadastrado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         }).catch((error) => {
-            errors.value = error.message;
+            Swal.fire({
+                icon: 'error',
+                title: "O RFID inserido já existe no sistema!",
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            success = true;
         });
+        return success;
     }
 
     const update = async (data:any, id:any) => {

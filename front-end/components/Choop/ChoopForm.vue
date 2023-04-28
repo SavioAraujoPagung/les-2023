@@ -48,7 +48,9 @@
     const numberBarCode = ref("");
 
     const formSave = async () => {
-        if(entity.value.id == null) await save(entity.value);
+        if(entity.value.id == null){
+            if(!await save(entity.value)) return false;
+        }
         else await update(entity.value, entity.value.id);
         emit('saved');
     }
