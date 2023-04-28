@@ -20,7 +20,7 @@ export class Product {
   @Column({type: 'float'}) 
   saleCost: number;
 
-  @Column()
+  @Column({type: 'float'})
   qtd: number;
 
   @Column({enum: ProductType})
