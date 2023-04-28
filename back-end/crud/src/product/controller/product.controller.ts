@@ -24,6 +24,30 @@ export class ProductController {
    
   }
 
+  @Post('/stock')
+  async stock(@Body() products: Product[]): Promise<Product[]> {
+    try {
+      const tam = products.length
+      var att: Product[]
+      att = []
+
+      for(let i = 0; i < tam; i++) {
+        const prod = await this.repository.findOne({where: {id: products[i].id}})
+        prod.qtd += products[i].qtd
+        
+        if (prod.qtd < 0) {
+          prod.qtd = 0
+        }
+        att.push(prod)
+      }
+
+      return this.repository.save(att)
+    } catch (error) {
+      this.logger.error(`Não foi possivel cadastrar um produto. ${error}`);
+      throw new BadRequestException('Erro ao cadastrar um produto');
+    }
+  }
+
   @Get(':id')
   async findOneByID(@Param('id') id: string): Promise<Product> {
     let product = await this.repository.findOneBy({id})
@@ -66,5 +90,4 @@ export class ProductController {
     }
   }
 
-  
 }
