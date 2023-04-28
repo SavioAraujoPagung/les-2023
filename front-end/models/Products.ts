@@ -1,66 +1,64 @@
-import Default from "./Default";
+export enum ProductType {
+    chopp = 1,
+    selfService = 2,
+    another = 3
+  }
+  
+export class Product {
+    
+    id: string | null;
 
-class Product extends Default{
     name: string;
-    barcode: string;
-    cost: number;
+    
+    path: string;
 
-    constructor() {
-        super("/products/");
-        this.name = "";
-        this.barcode = "";
-        this.cost = 0.0;
-    }
+    priceCost: number;
 
-}
+    saleCost: number;
 
-class ProductEdit{
-    name: string;
-    barcode: string;
-    cost: string;
-
-    constructor() {
-        this.name = "";
-        this.barcode = "";
-        this.cost = "";
-    }
-}
-
-class ProductForPrint{
-    idProduct: number | null;
-    product: Product;
     qtd: number;
 
-    constructor() {
-        this.idProduct = 0;
-        this.product = new Product();
-        this.qtd = 0
+    type: ProductType;
+
+    constructor(){
+        this.id = null;
+        this.name = "";
+        this.path = "/products/";
+        this.priceCost = 0.0;
+        this.saleCost = 0.0;
+        this.qtd = 0.0;
+        this.type = 1;
     }
+
 }
 
-class StockProduct extends Default{
-    barcode: string;
+export class ProductEdit {
+
     name: string;
+    
+    priceCost: number;
+
+    saleCost: number;
+
+    type: ProductType;
+
+    constructor(){
+        this.name = "";
+        this.priceCost = 0.0;
+        this.saleCost = 0.0;
+        this.type = 1;
+    }
+
+}
+
+export class ProductStock {
+
+    id: string | null;
     qtd: number;
 
-    constructor() {
-        super("/stock/");
-        this.name = "";
-        this.barcode = "";
+    constructor(){
+        this.id = null;
         this.qtd = 0;
     }
 
 }
-class SavedStockProduct{
-    barcode: string;
-    name: string;
-    qtd: number;
-
-    constructor() {
-        this.name = "";
-        this.barcode = "";
-        this.qtd = 0;
-    }
-}
-
-export {Product, ProductEdit, StockProduct, SavedStockProduct, ProductForPrint}

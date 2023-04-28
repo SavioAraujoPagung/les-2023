@@ -12,13 +12,13 @@
                 <DefaultTableThead>
                     <th>Nome</th>
                     <th>Preço</th>
-                    <th>C&oacute;digo de Barras</th>
+                    <th>RFID</th>
                 </DefaultTableThead>
                 <tbody>
                     <DefaultTableTrow v-for="(product, i) in entities" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
                         <td>{{ product.name }}</td>
-                        <td>{{ product.cost }}</td>
-                        <td>{{ product.rfid }}</td>
+                        <td>{{ product.priceCost }}</td>
+                        <td>{{ product.id }}</td>
                     </DefaultTableTrow>
                 </tbody>
             </DefaultTable>
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
     import { storeToRefs } from 'pinia';
-    import { useChoopStore } from '~~/stores/ChoopStore';
+    import { useProductStore } from '~/stores/ProductStore';
 
     const open = ref(false);
 
@@ -45,15 +45,17 @@
 
     const { $swal } = useNuxtApp()
 
-    const { destroy, getAll, getById, resetEntity } = useChoopStore();
-    const { entities, loading } = storeToRefs(useChoopStore());
+    const { destroy, getAll, getById, resetEntity } = useProductStore();
+    const { entities, loading, isEdit } = storeToRefs(useProductStore());
 
     const cancelChange = () => {
+        isEdit.value = false;
         resetEntity();
         open.value = false;
     }
 
     const refreshList = async () => {
+        isEdit.value = false;
         open.value = false;
         $swal.fire({
             icon: 'success',
@@ -64,12 +66,13 @@
             timer: 1500
         });
         resetEntity();
-        await getAll();
+        await getAll(1);
     }
 
     const deleteElement = async (id:any) => destroy(id, document.getElementById("product" + id));
 
     const showFormEdit = async (id:any) => {
+        isEdit.value = true;
         await getById(id);
         showForm();
     }
@@ -78,6 +81,6 @@
         open.value = true;
     }
 
-    onMounted(getAll);
+    onMounted(() => getAll(1));
 
 </script>

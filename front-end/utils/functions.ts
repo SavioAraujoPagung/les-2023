@@ -68,3 +68,23 @@ export const printDoc = (id:string) => {
     }, 50);
     
 }
+
+export const maskMoney = (input:any) => {
+    
+    let value = input.value;
+
+    value = value.replace(/\D/g, '');
+
+    value = value.replace(/^0+/, '');
+
+    value = value.padStart(3, '0');
+
+    const real = value.substring(0, value.length - 2);
+    const cents = value.substring(value.length - 2);
+
+    value = `${real.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')},${cents}`;
+
+    input.value = value;
+
+}
+  

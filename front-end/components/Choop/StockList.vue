@@ -3,21 +3,21 @@
         <header class="d-flex align-items-center justify-content-between mb-5">
             <h1 class="text-primary fw-bold">Estoque</h1>
             <div class="d-flex align-items-center gap-2">
-                <a href="javascript:;" class="btn btn-danger text-white" @click="showForm(false)"><i class="bi bi-border-all"></i>Remover produtos</a>
-                <a href="javascript:;" class="btn btn-primary text-white" @click="showForm(true)"><i class="bi bi-border-all"></i>Adicionar produtos</a>
+                <a href="javascript:;" class="btn btn-danger text-white" @click="showForm(false)"><i class="bi bi-border-all"></i>Remover Choops</a>
+                <a href="javascript:;" class="btn btn-primary text-white" @click="showForm(true)"><i class="bi bi-border-all"></i>Adicionar Choops</a>
             </div>
         </header>
         
         <div v-if="!loading">
-            <DefaultTable v-if="stock.length">
+            <DefaultTable v-if="entities.length">
                 <thead>
                     <th>C&oacute;digo de Barras</th>
                     <th>Nome</th>
                     <th>Quantidade</th>
                 </thead>
                 <tbody>
-                    <tr v-for="(product, i) in stock" :key="i" :id="'product'+product.id">
-                        <td>{{ product.rfid }}</td>
+                    <tr v-for="(product, i) in entities" :key="i" :id="'product'+product.id">
+                        <td>{{ product.id }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.qtd }}</td>
                     </tr>
@@ -38,8 +38,8 @@
 
 <script setup lang="ts">
 
-    import { useChoopStore } from '~~/stores/ChoopStore';
     import { storeToRefs } from 'pinia';
+import { useProductStore } from '~~/stores/ProductStore';
         
     const open = ref(false);
 
@@ -49,8 +49,8 @@
 
     const { $swal } = useNuxtApp()
 
-    const { destroy, getAllStock, getById } = useChoopStore();
-    const { stock, loading } = storeToRefs(useChoopStore());
+    const { destroy, getAll, getById } = useProductStore();
+    const { entities, loading } = storeToRefs(useProductStore());
 
     const cancelChange = () => open.value = false;
 
@@ -64,7 +64,7 @@
             showConfirmButton: false,
             timer: 3000
         });
-        await getAllStock();
+        await getAll(1);
     }
 
     const showForm = (increment:boolean) => {
@@ -73,6 +73,6 @@
         open.value = true;
     }
 
-    onMounted(getAllStock);
+    onMounted(() => getAll(1));
 
 </script>
