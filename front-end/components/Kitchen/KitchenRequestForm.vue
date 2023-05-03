@@ -165,11 +165,10 @@ export default defineComponent({
         }
 
         onMounted(async () => {
-            await getAll();
+            await getAll(3);
             entities.value.forEach(el => {
                 let kitchenItem = new KitchenRequest();
-                // kitchenItem.idProduct = el.id;
-                kitchenItem.barcode = el.barcode;
+                kitchenItem.barcode = el.id;
                 kitchenItem.foodName = el.name;
                 newEntities.value.push(kitchenItem);
             })
