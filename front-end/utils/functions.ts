@@ -87,4 +87,11 @@ export const maskMoney = (input:any) => {
     input.value = value;
 
 }
-  
+
+export const parseMoney = (numero:any) => {
+    numero = numero.toString();
+    numero = numero.replace(/^0+/, ""); // remove os zeros à esquerda
+    numero = numero.replace(/^(.*),(.{2})$/, "$1.$2"); // substitui a vírgula por ponto
+    numero = numero.replace(/,/g, ".");
+    return numero;
+}
