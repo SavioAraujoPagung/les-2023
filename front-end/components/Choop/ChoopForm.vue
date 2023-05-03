@@ -89,10 +89,11 @@
 
         inputs.forEach((input) => {
             input.addEventListener('keyup', () => {
-                maskMoney(input);
+                if(input.id === 'cost') entity.value.priceCost = maskMoney(input);
+                else entity.value.saleCost = maskMoney(input);
             });
         });
-
+        
         document.onkeydown = (event) => {
             if (event.ctrlKey && event.key == 'j') event.preventDefault();
         }

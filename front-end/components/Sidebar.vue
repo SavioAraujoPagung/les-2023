@@ -36,7 +36,7 @@
             </li>
 
             <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/produtos">
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/produto">
                 <i class="icon icon-16">
                   <IconsBag/>
                 </i>

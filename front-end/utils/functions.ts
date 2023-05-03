@@ -85,13 +85,15 @@ export const maskMoney = (input:any) => {
     value = `${real.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')},${cents}`;
 
     input.value = value;
+    
+    return value;
 
 }
 
 export const parseMoney = (numero:any) => {
     numero = numero.toString();
-    numero = numero.replace(/^0+/, ""); // remove os zeros à esquerda
-    numero = numero.replace(/^(.*),(.{2})$/, "$1.$2"); // substitui a vírgula por ponto
-    numero = numero.replace(/,/g, ".");
+    numero = Number(numero.replace(/\./g, '').replace(',', '.'));
     return numero;
 }
+
+export const unparseMoney = (numero:any) => numero.toLocaleString('pt-BR');

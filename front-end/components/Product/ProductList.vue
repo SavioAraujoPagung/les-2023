@@ -18,7 +18,7 @@
                 <tbody>
                     <DefaultTableTrow v-for="(product, i) in entities" :key="i" :id="'product'+product.id" @delete="deleteElement(product.id)" @edit="showFormEdit(product.id)">
                         <td>{{ product.name }}</td>
-                        <td>{{ product.priceCost }}</td>
+                        <td>R$ {{ unparseMoney(product.priceCost) }}</td>
                         <td>{{ product.id }}</td>
                     </DefaultTableTrow>
                 </tbody>

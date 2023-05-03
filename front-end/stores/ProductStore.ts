@@ -139,9 +139,10 @@ export const useProductStore = defineStore('choop', () => {
     }
 
     const save = async (data:any) => {
-        data.priceCost = +data.priceCost.toString().replace(',', '.');
-        console.log("🚀 ~ file: ProductStore.ts:143 ~ save ~ data.priceCost:", data.priceCost)
-        data.saleCost = +data.saleCost.toString().replace(',', '.');
+
+        data.priceCost = parseMoney(data.priceCost);
+        data.saleCost = parseMoney(data.saleCost);
+
         await api.post(productPath, data).then((response) => {
             Swal.fire({
                 icon: 'success',
@@ -170,8 +171,8 @@ export const useProductStore = defineStore('choop', () => {
         
         let object = getSubSet(data, Object.getOwnPropertyNames(new ProductEdit()));
         
-        object.priceCost = Number(parseMoney(object.priceCost));
-        object.saleCost = Number(parseMoney(object.saleCost));
+        object.priceCost = parseMoney(object.priceCost);
+        object.saleCost = parseMoney(object.saleCost);
 
         await api.put(productPath + id, object).then((response) => {
             Swal.fire({

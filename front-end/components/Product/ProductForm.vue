@@ -21,7 +21,7 @@
                         <label for="cost" class="form-label">Valor de compra</label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1">R$</span>
-                            <input type="text" name="cost" id="cost" class="form-control money" v-model="entity.priceCost" placeholder="Valor de compra" required>
+                            <input type="text" name="cost" id="cost" class="form-control money" v-model="(entity.priceCost)" placeholder="Valor de compra" required>
                         </div>
                     </div>
                     
@@ -70,6 +70,9 @@ import { ProductType } from "~~/models/Products";
     const { errors, entity, isEdit } = storeToRefs(useProductStore());
 
     const id = ref(entity.value.id);
+
+    entity.value.priceCost = unparseMoney(entity.value.priceCost);
+    entity.value.saleCost = unparseMoney(entity.value.saleCost);
 
     entity.value.type = ProductType.another;
 
@@ -130,7 +133,8 @@ import { ProductType } from "~~/models/Products";
 
         inputs.forEach((input) => {
             input.addEventListener('keyup', () => {
-                maskMoney(input);
+                if(input.id === 'cost') entity.value.priceCost = maskMoney(input);
+                else entity.value.saleCost = maskMoney(input);
             });
         });
 
