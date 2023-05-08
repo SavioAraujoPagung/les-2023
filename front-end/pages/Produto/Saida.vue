@@ -8,8 +8,8 @@
 
             <div class="d-flex flex-column align-items-center mb-5">
                 <div class="form-floating col-sm-6">
-                    <input type="text" class="form-control" id="peso" name="peso" placeholder="peso">
-                    <label for="peso">Peso</label>
+                    <input type="text" class="form-control money" id="peso" name="peso" placeholder="peso" v-model="peso">
+                    <label for="peso">Peso(Kg)</label>
                 </div>
             </div>
 
@@ -35,6 +35,8 @@
     import { storeToRefs } from 'pinia';
     import { useProductStore } from '~~/stores/ProductStore';
     
+    const peso = ref(0.0);
+
     useHead({
         title: 'Saída dos choops - LES GROUP'
     });
@@ -42,7 +44,6 @@
     const { $swal } = useNuxtApp();
 
     const { destroy, getAll, getById, resetEntity, makeConsumption } = useProductStore();
-    const { entities, loading } = storeToRefs(useProductStore());
 
     const formSave = (e:any) => {
         if((<HTMLInputElement> document.getElementById('peso'))?.value === '' ){
@@ -69,14 +70,23 @@
             return false;
         }
 
+        console.log("🚀 ~ file: Saida.vue:80 ~ formSave ~ peso.value:", parseMoney(peso.value))
         makeConsumption(
             (<HTMLInputElement> document.getElementById('rfid'))?.value,
             '1',
-            +(<HTMLInputElement> document.getElementById('peso'))?.value
+            parseMoney(peso.value)
         );
         e.target.reset();
     }
 
-    onMounted(() => getAll(1));
+    onMounted(() => {
+
+        const inputs = document.querySelectorAll('.money');
+
+        inputs.forEach((input) => {
+            input.addEventListener('keyup', () =>  peso.value = maskMoney(input) );
+        });
+        getAll(1);
+    });
 
 </script>

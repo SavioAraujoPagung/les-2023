@@ -8,7 +8,7 @@
             <modal-body>
                 <div class="form-floating">
                     <input type="text" class="money form-control" name="valor" id="valor" placeholder="valor" v-model="entity.saleCost">
-                    <label for="valor" class="form-label">Peso</label>
+                    <label for="valor" class="form-label">Valor</label>
                 </div>
                 <div class="text-center mt-5">
                     <button class="btn btn-primary text-white">Salvar</button>
@@ -40,6 +40,19 @@
         emit('close');
     }
 
-    onMounted(() => getById(1));
+    onMounted(() => {
+        
+        getById(1);
+
+        const inputs = document.querySelectorAll('.money');
+
+        inputs.forEach((input) => {
+            input.addEventListener('keyup', () => {
+                if(input.id === 'cost') entity.value.priceCost = maskMoney(input);
+                else entity.value.saleCost = maskMoney(input);
+            });
+        });
+
+    });
 
 </script>
