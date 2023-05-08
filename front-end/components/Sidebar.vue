@@ -79,6 +79,15 @@
                 Caixa
               </NuxtLink>
             </li>
+            
+            <li class="nav-item">
+              <a @click="toggleModal" class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" href="javascript:;">
+                <i class="icon icon-16">
+                  <IconsDollar/>
+                </i>
+                Valor do self-service
+              </a>
+            </li>
 
             <li class="nav-item">
               <a href="javascript:;" @click="logout" class="nav-link d-flex align-items-center gap-2 text-white">
@@ -86,25 +95,34 @@
                 Sair
               </a>
             </li>
-
-
           </ul>
         </div>
       </div>
     </div>
   </nav>
+  <component :is="openSelfService ? modalForm : 'div'" @close="toggleModal" @saved="toggleModal" />
 </template>
 
 <script setup>
 
+  const openSelfService = ref(false);
   const closeBtn = ref(null);
   const isOpen = ref(false);
+
+  const modalForm = shallowRef(resolveComponent('SelfServiceChangeSelfServiceValue'));
+
   const toggle = () => closeBtn.value.click();
+
+  const toggleModal = () => {
+    toggle();
+    openSelfService.value = !openSelfService.value;
+  }
 
   const logout = () => {
     navigateTo('login');
     localStorage.removeItem("isLogged");
   }
+
 
 </script>
 

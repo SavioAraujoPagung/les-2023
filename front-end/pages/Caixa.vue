@@ -68,18 +68,20 @@
             <div>
                 <DefaultTable class="mt-5">
                     <thead>
-                        <tr><th colspan="3" class="h4 fw-bold text-center text-uppercase text-primary">Produtos consumidos</th></tr>
+                        <tr><th colspan="4" class="h4 fw-bold text-center text-uppercase text-primary">Produtos consumidos</th></tr>
                         <tr>
-                            <th class="col-sm-6">Nome</th>
-                            <th class="col-sm-3 text-center">Quantidade</th>
+                            <th class="col-sm-3">Nome</th>
+                            <th class="col-sm-2 text-center">Quantidade</th>
                             <th class="col-sm-3 text-center">Valor Unidade(R$)</th>
+                            <th class="col-sm-4 text-center">Valor Total(R$)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(product, i) in entity.productCart" :key="i">
-                            <td>{{ product.productConsumption?.name }}</td>
-                            <td class="text-center">{{ product.qtd }}</td>
-                            <td class="text-center">{{ product.price }}</td>
+                        <tr v-for="(consumption, i) in entity.productCart" :key="i">
+                            <td>{{ consumption.product.name }}</td>
+                            <td class="text-center">{{ consumption.qtd }}</td>
+                            <td class="text-center">{{ consumption.product.saleCost }}</td>
+                            <td class="text-center">{{ consumption.price }}</td>
                         </tr>
                     </tbody>
                 </DefaultTable>

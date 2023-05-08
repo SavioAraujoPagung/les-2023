@@ -1,28 +1,20 @@
 <template>
     <form v-on:submit.prevent="formSave($event)">
-        <h1 class="fw-bold text-primary text-center mb-5">Retire sua cerveja agora com apenas 3 passos!</h1>
+        <div class="text-center mb-5">
+            <h1 class="fw-bold text-primary text-center">Self-service</h1>
+            <small>Preencha os campos abaixo para completar o consumo no self-service. Lembre-se de pesar o prato!</small>
+        </div>
         <div class="row">
-            <div class="mb-5">
-                <small class="text-center d-block mb-3">Selecione a cerveja que você deseja consumir*</small>
-                <div class="form-group d-flex align-items-center flex-wrap justify-content-center gap-3">
 
-                    
-                    <div v-if="entities.length">
-                        <div v-for="(choop, i) in entities" :key="i">
-                            <input type="radio" class="btn-check" name="choop" :id="'choop'+choop.id" autocomplete="off" :value="choop.rfid" checked>
-                            <label class="btn btn-outline-secondary" for="option1">Checked</label>
-                        </div>
-                    </div>
-                    
-                    <div v-else class="alert alert-warning p-3">
-                        Ops, Parece que ainda não há nenhum choop cadastrado. Tente novamente mais tarde...
-                    </div>
-                    
+            <div class="d-flex flex-column align-items-center mb-5">
+                <div class="form-floating col-sm-6">
+                    <input type="text" class="form-control" id="peso" name="peso" placeholder="peso">
+                    <label for="peso">Peso</label>
                 </div>
             </div>
-            
+
             <div class="d-flex flex-column align-items-center mb-5">
-                <small class="d-block text-center mb-3">Insira seu rfid*</small>
+                <small class="d-block text-center mb-3">Insira seu RFID*</small>
                 <div class="form-floating col-sm-6">
                     <input type="text" class="form-control" id="rfid" name="rfid" placeholder="rfid">
                     <label for="rfid">RFID</label>
@@ -41,7 +33,7 @@
 <script setup lang="ts">
     
     import { storeToRefs } from 'pinia';
-    import { useChoopStore } from '~~/stores/ChoopStore';
+    import { useProductStore } from '~~/stores/ProductStore';
     
     useHead({
         title: 'Saída dos choops - LES GROUP'
@@ -49,14 +41,14 @@
 
     const { $swal } = useNuxtApp();
 
-    const { destroy, getAll, getById, resetEntity, makeConsumption } = useChoopStore();
-    const { entities, loading } = storeToRefs(useChoopStore());
+    const { destroy, getAll, getById, resetEntity, makeConsumption } = useProductStore();
+    const { entities, loading } = storeToRefs(useProductStore());
 
     const formSave = (e:any) => {
-        if(!document.querySelector('input[name = choop]:checked')){
+        if((<HTMLInputElement> document.getElementById('peso'))?.value === '' ){
             $swal.fire({
                     icon: 'error',
-                    title: 'Nenhum choop selecionado, portanto, não podemos concluir seu pedido.',
+                    title: 'Nenhum peso registrado, portanto, não podemos concluir seu pedido.',
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
@@ -77,13 +69,14 @@
             return false;
         }
 
-        makeConsumption({
-            productRfid: (<HTMLInputElement> document.querySelector('input[name = choop]:checked'))?.value,
-            customerRfid: (<HTMLInputElement> document.getElementById('rfid'))?.value
-        });
+        makeConsumption(
+            (<HTMLInputElement> document.getElementById('rfid'))?.value,
+            '1234',
+            +(<HTMLInputElement> document.getElementById('peso'))?.value
+        );
         e.target.reset();
     }
 
-    onMounted(getAll);
+    onMounted(() => getAll(1));
 
 </script>

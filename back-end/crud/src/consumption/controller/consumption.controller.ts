@@ -51,7 +51,7 @@ export class ConsumptionController {
         prod.qtd = qtd
         consumption.product = prod
       }
-      consumption.price = prod.saleCost  
+      consumption.price = prod.saleCost * consumption.qtd
     }
     if (prod.type == 2) {
       consumption.product = prod
