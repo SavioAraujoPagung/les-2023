@@ -21,7 +21,6 @@
 <script lang="ts" setup>
 
     import { storeToRefs } from "pinia";
-import { Product } from "~~/models/Products";
     import { useProductStore } from "~~/stores/ProductStore";
 
     const { update, resetEntity, getById } = useProductStore();
@@ -30,7 +29,7 @@ import { Product } from "~~/models/Products";
     const emit = defineEmits(['saved', 'close']);
     
     const formSave = async () => {
-        if(!(await update(entity, entity.id)).value){
+        if(!(await update(entity.value, entity.value.id)).value){
             return false;
         }
         emit('saved');

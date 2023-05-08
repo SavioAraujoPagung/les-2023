@@ -71,7 +71,7 @@
 
         makeConsumption(
             (<HTMLInputElement> document.getElementById('rfid'))?.value,
-            '1234',
+            '1',
             +(<HTMLInputElement> document.getElementById('peso'))?.value
         );
         e.target.reset();
