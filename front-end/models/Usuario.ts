@@ -1,5 +1,16 @@
 import Default from "./Default";
 
+export enum UserType {
+    Administrador = 1,
+    Caixa = 5,
+    Cliente = 6,
+    Cozinheiro = 7,
+    FiscalSaida = 2,
+    FiscalEntrada = 3,
+    FiscalSelfService = 8,
+    Repositor = 4,
+    Usuarios = 9
+}
 class Usuario extends Default{
     name: string;
     email: string;
