@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../model/user.entity';
+import { User, UserType } from '../model/user.entity';
 
 @Controller('users')
 export class UserController {
@@ -15,11 +15,15 @@ export class UserController {
 
   @Post()
   async create(@Body() user: User): Promise<User> {
-    try {
+    if (!UserType[user.office]) {
+      throw new BadRequestException('Cargo inválido!');
+    }
+
+    try { 
       return this.repository.save(user);
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar um usuário. ${error}`);
-      throw new Error('Erro ao cadastrar um usuário');
+      throw new BadRequestException('Impossível cadastrar esse usuário');
     }
    
   }
