@@ -70,7 +70,6 @@
             return false;
         }
 
-        console.log("🚀 ~ file: Saida.vue:80 ~ formSave ~ peso.value:", parseMoney(peso.value))
         makeConsumption(
             (<HTMLInputElement> document.getElementById('rfid'))?.value,
             '1',
