@@ -80,20 +80,41 @@
                         <tr v-for="(consumption, i) in entity.productCart" :key="i">
                             <td>{{ consumption.product.name }}</td>
                             <td class="text-center">{{ consumption.qtd }}</td>
-                            <td class="text-center">{{ consumption.product.saleCost }}</td>
-                            <td class="text-center">{{ consumption.price }}</td>
+                            <td class="text-center">{{ Number(consumption.product.saleCost).toFixed(2) }}</td>
+                            <td class="text-center">{{ Number(consumption.price).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </DefaultTable>
             </div>
             <div class="d-flex align-items-center justify-content-end mb-5">
-                <h2 class="text-primary fw-bold">Valor total a ser pago: R$ {{ entity.total }} </h2>
+                <h2 class="text-primary fw-bold">Valor total a ser pago: R$ {{ Number(entity.total).toFixed(2) }} </h2>
             </div>
         
             <div class="d-flex align-items-center justify-content-between">
                 <button class="btn btn-danger fw-bold" @click="cancelChange">Cancelar</button>
                 <button class="btn btn-primary fw-bold" @click="payCart">Pagar</button>
             </div>
+
+            <div class="d-none" id="consumptionDesc">
+                <h2 class="display-4 fw-bold my-5 text-center">LES GROUP</h2>
+                <div class="mb-5 border border-bottom py-3 ps-1">
+                    <p class="small lh-1 m-0"><strong>Nome: </strong>{{ entity.customer?.name }}</p>
+                    <p class="small lh-1 m-0"><strong>RFID:</strong> {{ entity.customer?.rfid }}</p>
+                    <p class="small lh-1 m-0"><strong>CPF:</strong> {{ entity.customer?.cpf }}</p>
+                </div>
+                <h1 class="fw-bold display-5 text-center">CUPOM FISCAL</h1>
+                <div class="border w-100 py-1 mb-5 text-center small">Item - Qtd X VL_UNIT(R$) - VL_ITEM(R$)</div>
+                <div class="pb-1 mb-3 border-bottom">
+                    <div v-for="(consumption, i) in entity.productCart" class="d-flex align-items-center justify-content-between" :key="i">
+                        <p>{{ consumption.product.name }}</p>
+                        <p>{{ consumption.qtd }} X {{ Number(consumption.product.saleCost).toFixed(2) }}</p>
+                        <p>{{ Number(consumption.price).toFixed(2) }}</p>
+                    </div>
+                </div>
+                <h2 class="h1 fw-bold text-center">Total(R$): {{ Number(entity.total).toFixed(2) }}</h2>
+                <div class="border mt-5 fw-bold text-center py-1">{{ (new Date()).toLocaleDateString() + '-' + (new Date()).toLocaleTimeString() }}</div>
+            </div>
+
         </div>
     </div>
 
@@ -151,9 +172,11 @@ export default defineComponent({
         }
 
         const payCart = async () => {
-            await pay();
-            showCart.value = false;
-            resetCustomers();
+            if(await pay()){
+                printDoc('consumptionDesc');
+                showCart.value = false;
+                resetCustomers();
+            }
         }
 
         const getCustomerInformation = async () => {

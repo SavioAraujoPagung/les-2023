@@ -65,7 +65,7 @@ export const printDoc = (id:string) => {
         WinPrint?.focus();
         WinPrint?.print();
         WinPrint?.close();
-    }, 50);
+    }, 500);
     
 }
 
