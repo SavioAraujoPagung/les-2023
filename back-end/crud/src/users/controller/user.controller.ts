@@ -66,13 +66,13 @@ export class UserController {
   }
 
   @Post('/login')
-  async login(@Body() login: {email: string, password: string}): Promise<boolean> {
+  async login(@Body() login: {email: string, password: string}): Promise<User> {
     const email = login.email;
     const password = login.password;
     const user = await this.repository.findOne({where:{ email, password }});
     if(!user){
       throw new NotFoundException('Usuário não encontrado! Tente novamente!')
     }
-    return true;
+    return user;
   }
 }
