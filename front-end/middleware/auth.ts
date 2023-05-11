@@ -1,6 +1,8 @@
 import Swal from "sweetalert2";
+import { acceptedPages } from "~~/models/Usuario";
 
-const isAuthenticated = () => localStorage.getItem("isLogged");
+const isAuthenticated = () => localStorage.getItem("session") !== null ;
+const getOffice = () => (localStorage.getItem("session") !== null ? localStorage.getItem("session") : 9);
 export default defineNuxtRouteMiddleware((to, from) => {
     if (process.client && !isAuthenticated()){
         Swal.fire({
@@ -13,8 +15,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
         });
         return navigateTo('/login')
     }
+    else if(process.client && !acceptedPages[getOffice()](to.name)){
+        return navigateTo('');
+    }
     else if(to.name === "logout"){
-        localStorage.removeItem("isLogged");
+        localStorage.removeItem("session");
         return { name: "login" }
     }
   })

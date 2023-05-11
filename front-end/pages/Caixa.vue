@@ -123,7 +123,6 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
-import { Cargos } from '~~/models/Usuario';
 import { useCartStore } from '~~/stores/CartStore';
 definePageMeta({
     middleware: 'auth'
@@ -191,7 +190,6 @@ export default defineComponent({
 
         return {
             entities,
-            Cargos,
             showCart,
             loading,
             cancelChange,

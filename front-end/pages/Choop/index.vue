@@ -14,6 +14,10 @@
 
 <script setup lang="ts">
 
+    definePageMeta({
+        middleware: 'auth'
+    });
+
     const openChoops = ref(true);
 
     useHead({

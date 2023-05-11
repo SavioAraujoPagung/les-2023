@@ -11,6 +11,44 @@ export enum UserType {
     Repositor = 4,
     Usuarios = 9
 }
+
+export const acceptedPages = {
+    1: () => true,
+    2: (page:string) => {
+        var page = page.toLowerCase();
+        if(page === 'clientes') return true;
+        return false;
+    },
+    3: (page:string) => {
+        var page = page.toLowerCase();
+        if(page === 'clientes') return true;
+        return false;
+    },
+    4: (page:string) => {
+        var page = page.toLowerCase();
+        if(page === 'produto') return true;
+        return false;
+    },
+    5: (page:string) => {
+        var page = page.toLowerCase();
+        if(page === 'caixa') return true;
+        return false;
+    },
+    6: () => {
+        return false;
+    },
+    7: (page:string) => {
+        var page = page.toLowerCase();
+        if(['selfservice', 'solicitacaocozinha'].includes(page)) return true;
+        return false;
+    },
+    8: (page:string) => {
+        var page = page.toLowerCase();
+        if('selfservice' === page) return true;
+        return false;
+    },
+    9: () => false
+}
 class Usuario extends Default{
     name: string;
     email: string;

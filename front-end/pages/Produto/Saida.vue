@@ -41,6 +41,10 @@
         title: 'Saída dos choops - LES GROUP'
     });
 
+    definePageMeta({
+        middleware: 'auth'
+    });
+
     const { $swal } = useNuxtApp();
 
     const { destroy, getAll, getById, resetEntity, makeConsumption } = useProductStore();

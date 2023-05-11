@@ -46,7 +46,6 @@
 
 <script lang="ts">
 import { useProductStore } from "~~/stores/ProductStore";
-import { Cargos } from "~~/models/Usuario";
 import { storeToRefs } from "pinia";
 import JsBarcode from "jsbarcode";
 
@@ -114,7 +113,6 @@ export default defineComponent({
             closeModal,
             generateBarCode,
             numberBarCode,
-            Cargos
         }   
     },
 })

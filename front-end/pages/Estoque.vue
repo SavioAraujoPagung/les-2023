@@ -39,7 +39,6 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
-import { Cargos } from '~~/models/Usuario';
 import { useProductStore } from '~/stores/ProductStore';
 
 definePageMeta({
@@ -86,7 +85,7 @@ export default defineComponent({
 
         onMounted(getAllStock);
 
-        return { stock, Cargos, modalForm, open, cancelChange, refreshList, showForm, isIncrement, loading, title };
+        return { stock, modalForm, open, cancelChange, refreshList, showForm, isIncrement, loading, title };
 
     },
 })
