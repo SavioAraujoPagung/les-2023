@@ -33,7 +33,11 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="text" name="office" id="office" class="form-control" v-model="entity.office">
+                    <select class="form-select" name="cargo" id="cargo" v-model="entity.office">
+                        <template v-for="(office, i) in UserType" :key="i">
+                            <option  v-if="UserType.hasOwnProperty(office) && isNaN(office)" :value="UserType[office]">{{ office }}</option>
+                        </template>
+                    </select>
                     <label for="office" class="form-label">Cargo</label>
                 </div>
 
@@ -49,7 +53,7 @@
 
 <script lang="ts">
 import { useUserStore } from "~~/stores/UserStore";
-import { Cargos } from "~~/models/Usuario";
+import { UserType } from "~~/models/Usuario";
 import { storeToRefs } from "pinia";
 
 
@@ -73,17 +77,13 @@ export default defineComponent({
             emit('close');
         }
 
-        // watch(()=>props.editedId, (newVal) => {
-        //     if(newVal != 0) getById(newVal);
-        // });
-
         return {
             entity,
             errors,
             formSave,
             isOpen,
             closeModal,
-            Cargos
+            UserType
         }   
     },
 })
