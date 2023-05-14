@@ -16,6 +16,8 @@ import { UserModule } from './users/modules/user.module';
 import { ConsumptionModule } from './consumption/modules/consumption.module';
 import { CheckOut } from './checkout/model/checkout.entity';
 import { CheckOutModule } from './checkout/modules/checkout.module';
+import { ReportModule } from './report/modules/report.module';
+import { Report } from './report/model/report.entity';
 
 
 @Module({
@@ -28,6 +30,7 @@ import { CheckOutModule } from './checkout/modules/checkout.module';
     SolicitationModule,
     SolicitationStockModule,
     ConsumptionModule,
+    ReportModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -35,12 +38,11 @@ import { CheckOutModule } from './checkout/modules/checkout.module';
       username: 'postgres',
       password: 'les2023',
       database: 'les2023',
-      entities: [User, Customer, Product, CheckIn, Solicitation, SolicitationStock, Consumption, CheckOut],
+      entities: [User, Customer, Product, CheckIn, Solicitation, SolicitationStock, Consumption, CheckOut, Report],
       synchronize: true,
       autoLoadEntities: true,
     }),  
   ],
-  // controllers: [AppController, UserController],
-  // providers: [AppService, UserService, UserRepository],
+  providers: [],
 })
 export class AppModule {}

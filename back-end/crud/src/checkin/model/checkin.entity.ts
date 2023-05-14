@@ -11,7 +11,7 @@ export class CheckIn {
   pago: boolean;
 
   @Column()
-  time: string;
+  time: Date;
 
   @ManyToOne(()=> Customer, ({checkins}) => checkins)
   customer: Customer;

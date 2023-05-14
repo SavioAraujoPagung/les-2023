@@ -36,9 +36,16 @@ export class ConsumptionController {
     var checkIn :CheckIn
     try {
       checkIn = await this.checkin.findOne({where: {id: consumption.checkin.id}})
+      if (!checkIn) {
+        throw new BadRequestException('Checkin não encontrado!');
+      }
       consumption.checkin = checkIn
     } catch (error) {
       throw new BadRequestException('Checkin não encontrado!');
+    }
+    
+    if (checkIn.pago) {
+      throw new BadRequestException('CheckIn já finalizado!');
     }
 
     if (prod.type == 1) {
