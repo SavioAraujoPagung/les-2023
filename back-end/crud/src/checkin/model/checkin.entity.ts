@@ -16,5 +16,6 @@ export class CheckIn {
   @ManyToOne(()=> Customer, ({checkins}) => checkins)
   customer: Customer;
 
+  @OneToMany(() => Consumption, ({ checkin }) => checkin)
   consumptions: Consumption[]
 }

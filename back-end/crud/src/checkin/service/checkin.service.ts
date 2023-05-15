@@ -103,6 +103,7 @@ export class CheckInService {
     async findByTime(start: Date, end: Date): Promise<CheckIn[]> {
       var checkIns: CheckIn[]
       checkIns = await this.repository.find({
+        relations: ['customer', ],
         where: { 
           time: MoreThan(start) && LessThan(end),
         }
@@ -112,7 +113,7 @@ export class CheckInService {
       for (let i = 0; i < tam; i++) {
         checkIns[i].consumptions = await this.consumptionService.findByCheckIn(checkIns[i].id)
       }
-
+      
       return checkIns;
     }
 }
