@@ -23,26 +23,15 @@ export class ReportController {
     }
 
   @Get()
-  async findByTime(@Query() query: any): Promise<CheckIn[]> {
-    let parts = query.start.split('/');
-    var start: Date
-    var end : Date
-    start = new Date(parts[0], parts[1] - 1, parts[2]); 
-    if (parts.length > 4) {
-      console.log("entrou")
-      start = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]); 
-    }
-
-    parts = query.end.split('/');
-    end = new Date(parts[0], parts[1] - 1, parts[2]); 
-    if (parts.length > 4) {
-      console.log("entrou")
-      end = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]); 
-    }    
-    console.log(start);
-    console.log(end);
-
-    return this.service.findByTime(start, end)
+  async findByTime(@Query('start') start: string, @Query('end') end: string): Promise<CheckIn[]> {
+    
+    return this.service.sendNotification(new Date(start), new Date(end))
+  }
+  
+  @Get('data')
+  async findByTimeConsulta(@Query('start') start: string, @Query('end') end: string): Promise<CheckIn[]> {
+    
+    return this.service.findByTime(new Date(start), new Date(end))
   }
 
 }
