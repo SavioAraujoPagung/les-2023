@@ -1,8 +1,10 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from 'typeorm';
+import { LessThan, MoreThan, Repository } from 'typeorm';
 import { CheckIn } from "../model/checkin.entity";
 import { Customer } from "src/customer/model/customer.entity";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { check } from "prettier";
+import { ConsumptionService } from "src/consumption/service/consumption.service";
 
 @Injectable()
 export class CheckInService {
@@ -10,7 +12,8 @@ export class CheckInService {
         @InjectRepository(CheckIn)
         private readonly repository: Repository <CheckIn>,
         @InjectRepository(Customer)
-        private readonly repositoryCustomer: Repository<Customer>
+        private readonly repositoryCustomer: Repository<Customer>,
+        private readonly consumptionService: ConsumptionService
         ) {}
 
     async create(rfid: string): Promise<CheckIn> {
@@ -95,6 +98,21 @@ export class CheckInService {
         };
     
         return payment
+    }
+
+    async findByTime(start: Date, end: Date): Promise<CheckIn[]> {
+      var checkIns: CheckIn[]
+      checkIns = await this.repository.find({
+        where: { 
+          time: MoreThan(start) && LessThan(end),
+        }
+      });
+
+      let tam = checkIns.length
+      for (let i = 0; i < tam; i++) {
+        checkIns[i].consumptions = await this.consumptionService.findByCheckIn(checkIns[i].id)
       }
 
+      return checkIns;
+    }
 }

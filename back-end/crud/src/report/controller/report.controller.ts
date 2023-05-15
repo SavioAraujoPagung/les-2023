@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Logger, BadRequestException } from '@nestjs/common';
+import { Controller, Query, Get } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
 import { Repository } from 'typeorm';
+import { ReportService } from '../service/report.service';
 
 /*
 - Relatório que descreva o saldo de cada produto do estoque da cozinha e do chopp; 
@@ -16,23 +17,32 @@ Nao entendi. ???
 
 @Controller('report')
 export class ReportController {
-  private logger: Logger;
   constructor(
-    @InjectRepository(CheckIn)
-    private readonly repository: Repository<CheckIn>
+    private readonly service: ReportService
     ) {
-      this.logger = new Logger('ReportControllerRepository');
     }
 
-  @Post()
-  async create(@Body() c: CheckIn): Promise<CheckIn> {
-    try {
-      
-      return 
-    } catch (error) {
-      this.logger.error(`Não foi possivel cadastrar um produto. ${error}`);
-      throw new BadRequestException('Erro ao cadastrar um produto');
+  @Get()
+  async findByTime(@Query() query: any): Promise<CheckIn[]> {
+    let parts = query.start.split('/');
+    var start: Date
+    var end : Date
+    start = new Date(parts[0], parts[1] - 1, parts[2]); 
+    if (parts.length > 4) {
+      console.log("entrou")
+      start = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]); 
     }
+
+    parts = query.end.split('/');
+    end = new Date(parts[0], parts[1] - 1, parts[2]); 
+    if (parts.length > 4) {
+      console.log("entrou")
+      end = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]); 
+    }    
+    console.log(start);
+    console.log(end);
+
+    return this.service.findByTime(start, end)
   }
 
 }

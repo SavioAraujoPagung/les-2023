@@ -8,11 +8,7 @@ import { CheckInService } from '../service/checkin.service';
 @Controller('check-in')
 export class CheckInController {
   constructor(
-    @InjectRepository(CheckIn)
-    private readonly repository: Repository<CheckIn>,
-    @InjectRepository(Customer)
-    private readonly repositoryCustomer: Repository<Customer>,
-    private readonly checkinService: CheckInService
+      private readonly checkinService: CheckInService
     ) {
     }
 
