@@ -37,6 +37,21 @@ export const fadeOut = (el:any) => {
     });
 }
 
+export const fadeIn = (element:any) => {
+    element.style.opacity = 0;
+    element.style.display = 'flex';
+
+    let opacity = 0;
+    const interval = setInterval(function () {
+        opacity += 0.1;
+        element.style.opacity = opacity;
+
+        if (opacity >= 1) {
+        clearInterval(interval);
+        }
+    }, 50);
+}
+
 export const printDoc = (id:string) => {
 // Get HTML to print from element
     const prtHtml = document.getElementById(id)?.innerHTML;

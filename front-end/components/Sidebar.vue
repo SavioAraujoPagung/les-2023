@@ -99,6 +99,15 @@
             </li>
             
             <li class="nav-item">
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/relatorio">
+                <i class="icon icon-16">
+                  <icons-file-graph/>
+                </i>
+                Relatórios
+              </NuxtLink>
+            </li>
+            
+            <li class="nav-item">
               <a @click="toggleModal" class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" href="javascript:;">
                 <i class="icon icon-16">
                   <IconsDollar/>
