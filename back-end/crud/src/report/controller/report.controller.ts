@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
 import { Repository } from 'typeorm';
 import { ReportService } from '../service/report.service';
+import { Report } from '../model/report.entity';
 
 /*
 - Relatório que descreva o saldo de cada produto do estoque da cozinha e do chopp; 
@@ -32,6 +33,19 @@ export class ReportController {
   async findByTimeConsulta(@Query('start') start: string, @Query('end') end: string): Promise<CheckIn[]> {
     
     return this.service.findByTime(new Date(start), new Date(end))
+  }
+
+  @Get('user')
+  async findByTimeCustomerUserID(
+    @Query('start') start: string, 
+    @Query('end') end: string, 
+    @Query('userid') userId: number, 
+    @Query('email') email: true): Promise<Report[]> 
+  {
+    if (email) {
+      return this.service.findByTimeCustomerUserIDEmail(new Date(start), new Date(end), userId)
+    }
+    return this.service.findByTimeCustomerUserID(new Date(start), new Date(end))
   }
 
 }

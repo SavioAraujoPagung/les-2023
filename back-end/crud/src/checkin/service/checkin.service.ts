@@ -103,7 +103,7 @@ export class CheckInService {
     async findByTime(start: Date, end: Date): Promise<CheckIn[]> {
       var checkIns: CheckIn[]
       checkIns = await this.repository.find({
-        relations: ['customer', ],
+        relations: ['customer'],
         where: { 
           time: MoreThan(start) && LessThan(end),
         }
