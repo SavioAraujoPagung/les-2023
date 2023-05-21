@@ -21,4 +21,7 @@ export class Consumption {
 
   @Column({type: 'float'})
   price: number;
+  
+  @Column()
+  created: Date
 }

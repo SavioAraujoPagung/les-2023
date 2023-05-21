@@ -65,6 +65,8 @@ export class ConsumptionController {
       consumption.price = prod.saleCost * consumption.qtd
     }
 
+    consumption.created = new Date();
+
     await this.product.save(prod)
     return this.repository.save(consumption);
   } 
