@@ -39,10 +39,7 @@ export class solicitationStockController {
         solicitations.push(new SolicitationStock(s[i].barcode, s[i].qtd, product.name))
       }
 
-      console.log(solicitations)
       return this.repository.save(solicitations);
-
-
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar a Solicitação de comida. ${error}`);
       throw error;

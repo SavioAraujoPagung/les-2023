@@ -42,8 +42,8 @@
                     <DefaultTable v-if="newItens.length">
                         <thead>
                             <th class="col-sm-4">RFID</th>
-                            <th class="col-sm-6">Nome</th>
-                            <th class="col-sm-2">Qtd</th>
+                            <th class="col-sm-4">Nome</th>
+                            <th class="col-sm-4">Qtd(L)</th>
                         </thead>
                         <tbody>
                             <tr v-for="(choop, i) in newItens" :key="i" :id="'newChoop'+choop.id">

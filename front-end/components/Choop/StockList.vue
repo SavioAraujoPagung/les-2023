@@ -13,7 +13,7 @@
                 <thead>
                     <th>C&oacute;digo de Barras</th>
                     <th>Nome</th>
-                    <th>Quantidade</th>
+                    <th>Qtd(L)</th>
                 </thead>
                 <tbody>
                     <tr v-for="(product, i) in entities" :key="i" :id="'product'+product.id">

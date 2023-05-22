@@ -57,14 +57,6 @@
     const refreshList = async () => {
         isEdit.value = false;
         open.value = false;
-        $swal.fire({
-            icon: 'success',
-            title: 'Produto cadastrado com sucesso!',
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500
-        });
         resetEntity();
         await getAll(1);
     }
