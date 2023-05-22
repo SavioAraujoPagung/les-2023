@@ -1,5 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from 'typeorm';
+import { LessThan, MoreThan, Repository } from 'typeorm';
 
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Consumption } from "../model/consumption.entity";
@@ -23,5 +23,18 @@ export class ConsumptionService {
         }
 
         return consumptions
+    }
+
+    //Relatório dos chopes mais consumidos em um determinado período
+    async findChoppByTime(start: Date, end: Date): Promise<Consumption[]> {
+        return this.repository.find(
+            {
+                relations: ['product'],
+                where: { 
+                    created: MoreThan(start) && LessThan(end),
+                },
+                order: { id: 'DESC' }
+            }
+        )
     }
 }

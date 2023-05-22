@@ -4,14 +4,22 @@ import * as nodemailer from 'nodemailer'
 
 import { CheckIn } from "src/checkin/model/checkin.entity";
 import { CheckInService } from "src/checkin/service/checkin.service";
-import { Report } from "../model/report.entity";
+import { Report, ReportChopp, ResponseReportChopp } from "../model/report.entity";
 import { Repository } from "typeorm";
 import { User } from "src/users/model/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Consumption } from "src/consumption/model/consumption.entity";
+import { ConsumptionService } from "src/consumption/service/consumption.service";
+import { ProductService } from "src/product/service/product.service";
+import { Product } from "src/product/model/product.entity";
 @Injectable()
 export class ReportService {
     @Inject(CheckInService)
     private readonly checkinSerice: CheckInService
+    @Inject(ConsumptionService)
+    private readonly consumptionSerice: ConsumptionService
+    @Inject(ProductService)
+    private readonly productService: ProductService
     constructor(
         @InjectRepository(User)
         private readonly userRepo: Repository<User>
@@ -71,6 +79,44 @@ export class ReportService {
             console.log(error)
             throw new BadRequestException('Erro ao buscar dados de relatório');
         }
+    }
+
+    async reportByChopp(start: Date, end: Date): Promise<ResponseReportChopp[]> {
+        try {
+            const reports = new Map<string, ReportChopp>()
+            let response: ResponseReportChopp[]
+            response = []
+           
+            let consumptions = await this.consumptionSerice.findChoppByTime(start, end)
+            let chopps = await this.productService.getChopps()
+
+            let tamChopp = chopps.length
+            var i: number
+            for(i=0; i<tamChopp; i++) {
+                let r =  new ReportChopp(chopps[i])
+                reports.set(chopps[i].name, r)
+            }
+
+            let tamCons = consumptions.length
+            var value: ReportChopp
+            for(i=0; i<tamCons; i++) {
+                let key = consumptions[i].product.name.toString();
+                value = reports.get(key);
+                value.consumptions.push(consumptions[i])
+            }
+
+            for(i=0; i<tamChopp; i++) {
+                response.push(new ResponseReportChopp(chopps[i].name, reports.get(chopps[i].name)))
+            }
+
+
+            
+            return response
+        } catch (error) {
+            console.log("🚀 ~ file: report.service.ts:86 ~ ReportService ~ reportByChopp ~ error:", error)
+            throw new BadRequestException('Erro ao buscar dados de relatório');
+        }
+            
     }
 
     async sendNotification(start: Date, end: Date): Promise<CheckIn[]> {
