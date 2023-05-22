@@ -130,8 +130,21 @@ export class ReportService {
 
     async reportByExpenses(start: Date, end: Date): Promise<ReportExpenses> {
         try {
-            
-            return 
+            var response: ReportExpenses
+            response = new ReportExpenses(0, 0)
+            let solicitations = await this.productService.getSolicitations(start, end)
+
+            for (let i=0; i < solicitations.length; i++) {
+                response.expense += solicitations[i].totalPrice
+            }
+
+            let checkins = await this.checkinSerice.findByTime(start, end)
+
+            for (let i=0; i < checkins.length; i++) {
+                response.revenue += checkins[i].totalPayment
+            }
+
+            return response
         } catch (error) {
             throw new BadRequestException('Erro ao enviar relatório');
         }

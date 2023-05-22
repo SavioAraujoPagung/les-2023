@@ -45,14 +45,13 @@ export class ReportController {
     return this.service.reportByChopp(new Date(start), new Date(end), sort)
   }
 
-  @Get('chopp')
+  @Get('expenses')
   async findByExpenses(
     @Query('start') start: string, 
     @Query('end') end: string): Promise<ReportExpenses> 
   {
     return this.service.reportByExpenses(new Date(start), new Date(end))
   }
-
 
   @Get('user')
   async findByTimeCustomerUserID(

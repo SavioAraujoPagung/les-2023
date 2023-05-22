@@ -32,6 +32,11 @@ export class ResponseReportChopp {
 }
 
 export class ReportExpenses {
-  receita: number
-  dispesa: number
+  revenue: number //receita
+  expense: number //dispesa
+
+  constructor(revenue: number, expense: number) {
+    this.revenue = revenue
+    this.expense = expense
+  }
 }
