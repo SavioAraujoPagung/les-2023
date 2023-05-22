@@ -16,6 +16,16 @@ export class ProductService {
         return this.repository.find({where: {type: 1}})
     }
 
+    async getGenericyOnline(type: number): Promise<Product[]> {
+        return this.repository.find({
+                where: {
+                    type: type,
+                    qtd: MoreThan(0)
+                }
+            }
+        )
+    }
+
     async getSolicitations(start: Date, end: Date): Promise<NewProduct[]> {
         return this.repositoryNP.find(
             {

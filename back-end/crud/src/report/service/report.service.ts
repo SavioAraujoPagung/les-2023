@@ -249,5 +249,13 @@ export class ReportService {
         report.push(new ReportProduct("products", await this.productService.getProducts()))
         return report
     }
+    
+    async getProductsOnline(): Promise<ReportProduct[]> {
+        var report: ReportProduct[]
+        report = []
+        report.push(new ReportProduct("chopps", await this.productService.getGenericyOnline(1)))
+        report.push(new ReportProduct("products", await this.productService.getGenericyOnline(3)))
+        return report
+    }
 }
     
