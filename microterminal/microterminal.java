@@ -39,7 +39,9 @@ public class MicroterminalService {
                     var tecla = in.read() - 48;
                     processKey(tecla, dos);
                     if(!searchProduct) {
-                        dos.writeUTF("          CPF: " + barCode);
+                        dos.writeBytes("\u001b[2J");
+                        dos.writeBytes("\u001b[H");
+                        dos.writeBytes("CPF: " + barCode);
                     }
 
                     System.out.println(barCode);
@@ -105,11 +107,15 @@ public class MicroterminalService {
             in.close();
             con.disconnect();
             dos.flush();
-            dos.writeUTF("          R$"+content.toString());
+            dos.writeBytes("\u001b[2J");
+            dos.writeBytes("\u001b[H");
+            dos.writeBytes("R$"+content.toString());
         }
         catch (Exception e) {
             dos.flush();
-            dos.writeUTF("          Erro ao buscar      cliente!");
+            dos.writeBytes("\u001b[2J");
+            dos.writeBytes("\u001b[H");
+            dos.writeBytes("Cliente nao         encontrado com esse CPF.                Tente novamente!");
         }
     }
 
