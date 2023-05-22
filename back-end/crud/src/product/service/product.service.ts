@@ -25,4 +25,8 @@ export class ProductService {
             }
         )
     }
+
+    async getProducts(): Promise<Product[]> {
+        return this.repository.find({where: {type: 3}})
+    }
 }

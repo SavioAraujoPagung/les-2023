@@ -4,7 +4,7 @@ import * as nodemailer from 'nodemailer'
 
 import { CheckIn } from "src/checkin/model/checkin.entity";
 import { CheckInService } from "src/checkin/service/checkin.service";
-import { Report, ReportChopp, ReportExpenses, ResponseReportChopp } from "../model/report.entity";
+import { Report, ReportChopp, ReportExpenses, ReportProduct, ResponseReportChopp } from "../model/report.entity";
 import { Repository } from "typeorm";
 import { User } from "src/users/model/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -240,6 +240,14 @@ export class ReportService {
                 text: message
             }
         )
+    }
+
+    async getProducts(): Promise<ReportProduct[]> {
+        var report: ReportProduct[]
+        report = []
+        report.push(new ReportProduct("chopps", await this.productService.getChopps()))
+        report.push(new ReportProduct("products", await this.productService.getProducts()))
+        return report
     }
 }
     

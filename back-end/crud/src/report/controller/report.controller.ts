@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
 import { Repository } from 'typeorm';
 import { ReportService } from '../service/report.service';
-import { Report, ReportChopp, ReportExpenses, ResponseReportChopp } from '../model/report.entity';
+import { Report, ReportChopp, ReportExpenses, ReportProduct, ResponseReportChopp } from '../model/report.entity';
 import { Consumption } from 'src/consumption/model/consumption.entity';
+import { Product } from 'src/product/model/product.entity';
 
 /*
 - Relatório que descreva o saldo de cada produto do estoque da cozinha e do chopp; 
@@ -64,6 +65,13 @@ export class ReportController {
       return this.service.findByTimeCustomerUserIDEmail(new Date(start), new Date(end), userId)
     }
     return this.service.findByTimeCustomerUserID(new Date(start), new Date(end))
+  }
+
+  //Relatório que descreva o saldo de cada produto do estoque da cozinha e do chope.
+  @Get('products')
+  async findByproducts(): Promise<ReportProduct[]> 
+  {
+    return this.service.getProducts()
   }
 
 }

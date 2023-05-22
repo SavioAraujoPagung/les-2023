@@ -40,3 +40,13 @@ export class ReportExpenses {
     this.expense = expense
   }
 }
+
+export class ReportProduct {
+  type: string 
+  products: Product[] 
+
+  constructor(type: string, products: Product[]) {
+    this.type = type
+    this.products = products
+  }
+}
