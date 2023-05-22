@@ -81,7 +81,11 @@ export class ReportService {
         }
     }
 
-    async reportByChopp(start: Date, end: Date): Promise<ResponseReportChopp[]> {
+    async reportByChopp(start: Date, end: Date, sort: string): Promise<ResponseReportChopp[]> {
+        if (sort != "price" && sort != "liter") {
+            throw new BadRequestException('Ordenação não mapeado!');
+        }
+
         try {
             const reports = new Map<string, ReportChopp>()
             let response: ResponseReportChopp[]
@@ -99,11 +103,22 @@ export class ReportService {
 
             let tamCons = consumptions.length
             for(i=0; i<tamCons; i++) {
-                reports.get(consumptions[i].product.name.toString()).consumptions.push(consumptions[i]);
+                let r = reports.get(consumptions[i].product.name.toString())
+                r.totalLiter += consumptions[i].qtd
+                r.totalPrice += consumptions[i].price
+                r.consumptions.push(consumptions[i]);
             }
 
             for(i=0; i<tamChopp; i++) {
                 response.push(new ResponseReportChopp(chopps[i].name, reports.get(chopps[i].name)))
+            }
+
+            if (sort == "price") {
+                response.sort((a, b) => b.report.totalPrice - a.report.totalPrice);        
+            }
+            
+            if (sort == "liter") {
+                response.sort((a, b) => b.report.totalLiter - a.report.totalLiter);        
             }
 
             return response

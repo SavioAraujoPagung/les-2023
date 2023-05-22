@@ -27,8 +27,6 @@ export class ConsumptionService {
 
     //Relatório dos chopes mais consumidos em um determinado período
     async findChoppByTime(start: Date, end: Date): Promise<Consumption[]> {
-        console.log("🚀 ~ file: consumption.service.ts:30 ~ ConsumptionService ~ findChoppByTime ~ end:", end)
-        console.log("🚀 ~ file: consumption.service.ts:30 ~ ConsumptionService ~ findChoppByTime ~ start:", start)
         return this.repository.find(
             {
                 relations: ['product'],

@@ -39,9 +39,10 @@ export class ReportController {
   @Get('chopp')
   async findByChopp(
     @Query('start') start: string, 
-    @Query('end') end: string): Promise<ResponseReportChopp[]> 
+    @Query('end') end: string,
+    @Query('sort') sort: string): Promise<ResponseReportChopp[]> 
   {
-    let response = await this.service.reportByChopp(new Date(start), new Date(end))    
+    let response = await this.service.reportByChopp(new Date(start), new Date(end), sort)    
     return response
   }
 
