@@ -41,9 +41,7 @@ export class ReportController {
     @Query('start') start: string, 
     @Query('end') end: string): Promise<ResponseReportChopp[]> 
   {
-    let response = await this.service.reportByChopp(new Date(start), new Date(end))
-    console.log("🚀 ~ file: report.controller.ts:45 ~ ReportController ~ response:", response)
-    
+    let response = await this.service.reportByChopp(new Date(start), new Date(end))    
     return response
   }
 

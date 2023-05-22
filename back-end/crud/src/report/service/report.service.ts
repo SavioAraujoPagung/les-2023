@@ -98,22 +98,16 @@ export class ReportService {
             }
 
             let tamCons = consumptions.length
-            var value: ReportChopp
             for(i=0; i<tamCons; i++) {
-                let key = consumptions[i].product.name.toString();
-                value = reports.get(key);
-                value.consumptions.push(consumptions[i])
+                reports.get(consumptions[i].product.name.toString()).consumptions.push(consumptions[i]);
             }
 
             for(i=0; i<tamChopp; i++) {
                 response.push(new ResponseReportChopp(chopps[i].name, reports.get(chopps[i].name)))
             }
 
-
-            
             return response
         } catch (error) {
-            console.log("🚀 ~ file: report.service.ts:86 ~ ReportService ~ reportByChopp ~ error:", error)
             throw new BadRequestException('Erro ao buscar dados de relatório');
         }
             
