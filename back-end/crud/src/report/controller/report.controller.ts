@@ -67,7 +67,7 @@ export class ReportController {
     return this.service.findByTimeCustomerUserID(new Date(start), new Date(end))
   }
 
-  //Relatório que descreva o saldo de cada produto do estoque da cozinha e do chope.
+  //Relatório que descreva o saldo de cada produto do estoque da cozinha e do chope
   @Get('products')
   async findByproducts(): Promise<ReportProduct[]> 
   {
