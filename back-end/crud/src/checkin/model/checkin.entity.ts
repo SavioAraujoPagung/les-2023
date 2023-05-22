@@ -18,4 +18,7 @@ export class CheckIn {
 
   @OneToMany(() => Consumption, ({ checkin }) => checkin)
   consumptions: Consumption[]
+
+  @Column({nullable: true, type: 'float'})
+  totalPayment: number;
 }

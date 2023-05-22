@@ -26,6 +26,7 @@ export class CheckInService {
 
         checkIn.time = now;
         checkIn.customer = customer
+        checkIn.totalPayment = 0
 
         if (await this.isOnline(rfid)) {
             throw new BadRequestException("Cliente já possui um check-in") ;

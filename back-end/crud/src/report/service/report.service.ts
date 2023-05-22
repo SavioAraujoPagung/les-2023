@@ -4,7 +4,7 @@ import * as nodemailer from 'nodemailer'
 
 import { CheckIn } from "src/checkin/model/checkin.entity";
 import { CheckInService } from "src/checkin/service/checkin.service";
-import { Report, ReportChopp, ResponseReportChopp } from "../model/report.entity";
+import { Report, ReportChopp, ReportExpenses, ResponseReportChopp } from "../model/report.entity";
 import { Repository } from "typeorm";
 import { User } from "src/users/model/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -126,6 +126,15 @@ export class ReportService {
             throw new BadRequestException('Erro ao buscar dados de relatório');
         }
             
+    }
+
+    async reportByExpenses(start: Date, end: Date): Promise<ReportExpenses> {
+        try {
+            
+            return 
+        } catch (error) {
+            throw new BadRequestException('Erro ao enviar relatório');
+        }
     }
 
     async sendNotification(start: Date, end: Date): Promise<CheckIn[]> {

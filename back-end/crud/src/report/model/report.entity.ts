@@ -30,3 +30,8 @@ export class ResponseReportChopp {
     this.report = report
   }
 }
+
+export class ReportExpenses {
+  receita: number
+  dispesa: number
+}

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
 import { Repository } from 'typeorm';
 import { ReportService } from '../service/report.service';
-import { Report, ReportChopp, ResponseReportChopp } from '../model/report.entity';
+import { Report, ReportChopp, ReportExpenses, ResponseReportChopp } from '../model/report.entity';
 import { Consumption } from 'src/consumption/model/consumption.entity';
 
 /*
@@ -42,9 +42,17 @@ export class ReportController {
     @Query('end') end: string,
     @Query('sort') sort: string): Promise<ResponseReportChopp[]> 
   {
-    let response = await this.service.reportByChopp(new Date(start), new Date(end), sort)    
-    return response
+    return this.service.reportByChopp(new Date(start), new Date(end), sort)
   }
+
+  @Get('chopp')
+  async findByExpenses(
+    @Query('start') start: string, 
+    @Query('end') end: string): Promise<ReportExpenses> 
+  {
+    return this.service.reportByExpenses(new Date(start), new Date(end))
+  }
+
 
   @Get('user')
   async findByTimeCustomerUserID(

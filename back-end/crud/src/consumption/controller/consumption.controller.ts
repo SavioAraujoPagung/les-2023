@@ -66,7 +66,9 @@ export class ConsumptionController {
     }
 
     consumption.created = new Date();
+    checkIn.totalPayment += consumption.price
 
+    await this.checkin.save(checkIn)
     await this.product.save(prod)
     return this.repository.save(consumption);
   } 
