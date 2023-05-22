@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn, ManyToOne, OneToMany } from 'typeorm';
 
 export enum ProductType {
   chopp = 1,
@@ -25,4 +25,28 @@ export class Product {
 
   @Column({enum: ProductType})
   type: ProductType;
+
+  @OneToMany(() => NewProduct, ({ product }) => product)
+  inbounds: NewProduct[];
+}
+
+@Entity()
+export class NewProduct {
+  @PrimaryGeneratedColumn()
+  id: string;
+
+  @ManyToOne(()=> Product, ({inbounds}) => inbounds)
+  product: Product
+
+  @Column({type: 'float'})
+  totalPrice: number
+
+  @Column()
+  created: Date
+
+  constructor(product: Product, totalPrice: number){
+    this.product = product
+    this.totalPrice = totalPrice
+    this.created = new Date()
+  }
 }

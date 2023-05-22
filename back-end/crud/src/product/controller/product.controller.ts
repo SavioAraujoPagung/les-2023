@@ -1,14 +1,16 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, Logger, BadRequestException, ParseIntPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from '../model/product.entity';
+import { NewProduct, Product } from '../model/product.entity';
 
 @Controller('products')
 export class ProductController {
   private logger: Logger;
   constructor(
     @InjectRepository(Product)
-    private readonly repository: Repository<Product>
+    private readonly repository: Repository<Product>,
+    @InjectRepository(NewProduct)
+    private readonly repositoryNew: Repository<NewProduct>
     ) {
       this.logger = new Logger('ProductControllerRepository');
     }
@@ -31,6 +33,9 @@ export class ProductController {
       var att: Product[]
       att = []
 
+      var solicitations: NewProduct[]
+      solicitations = []
+
       for(let i = 0; i < tam; i++) {
         const prod = await this.repository.findOne({where: {id: products[i].id}})
         prod.qtd += products[i].qtd
@@ -38,9 +43,12 @@ export class ProductController {
         if (prod.qtd < 0) {
           prod.qtd = 0
         }
+
+        solicitations.push(new NewProduct(prod,  prod.priceCost))
         att.push(prod)
       }
 
+      await this.repositoryNew.save(solicitations)
       return this.repository.save(att)
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar um produto. ${error}`);

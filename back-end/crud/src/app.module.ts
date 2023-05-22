@@ -4,7 +4,7 @@ import { CheckIn } from './checkin/model/checkin.entity';
 import { CheckInModule } from './checkin/modules/checkin.module';
 import { Customer } from './customer/model/customer.entity';
 import { CustomerModule } from './customer/modules/customer.module';
-import { Product } from './product/model/product.entity';
+import { NewProduct, Product } from './product/model/product.entity';
 import { ProductModule } from './product/modules/product.module';
 import { Solicitation } from './solicitation/model/solicitation.entity';
 import { SolicitationModule } from './solicitation/modules/solicitation.module';
@@ -38,7 +38,7 @@ import { Report } from './report/model/report.entity';
       username: 'postgres',
       password: 'les2023',
       database: 'les2023',
-      entities: [User, Customer, Product, CheckIn, Solicitation, SolicitationStock, Consumption, CheckOut, Report],
+      entities: [User, Customer, Product, NewProduct, CheckIn, Solicitation, SolicitationStock, Consumption, CheckOut, Report],
       synchronize: true,
       autoLoadEntities: true,
     }),  
