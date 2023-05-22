@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Consumption } from '../model/consumption.entity';
 import { CheckIn } from 'src/checkin/model/checkin.entity';
 import { Product } from 'src/product/model/product.entity';
+import { ConsumptionService } from '../service/consumption.service';
 @Controller('consumption')
 export class ConsumptionController {
   private logger: Logger;
@@ -16,6 +17,8 @@ export class ConsumptionController {
 
     @InjectRepository(CheckIn)
     private readonly checkin: Repository<CheckIn>,
+
+    private readonly service: ConsumptionService,
 
     ) {
       this.logger = new Logger('CustomerControllerRepository');
@@ -87,6 +90,22 @@ export class ConsumptionController {
       return value.toString()
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar um cliente. ${error}`);
+      throw new BadRequestException('Impossível consultar valor consumido!');
+    }
+  } 
+
+  @Get('/microterminal/:cpf')
+  async valueConsumptionMicroterminal(@Param('cpf') cpf: string): Promise<string> {
+    try {
+      const checkin = await this.service.getCPFOnline(cpf)
+      const consumptions = await this.repository.find({where: { checkin: { id: checkin.id } },})
+      let value = 0
+
+      for (let i = 0; i < consumptions.length; i++) {
+        value += consumptions[i].price;
+      }
+      return value.toFixed(2).toString()
+    } catch (error) {
       throw new BadRequestException('Impossível consultar valor consumido!');
     }
   } 
