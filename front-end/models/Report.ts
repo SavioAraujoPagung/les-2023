@@ -2,6 +2,7 @@ import { Choop } from "./Choop";
 import { Consumption } from "./Consumption";
 import { Customer } from "./Customer";
 import Default from "./Default";
+import { Product } from "./Products";
 
 export class ReportForCostumer extends Default{
     pago: boolean;
@@ -63,5 +64,15 @@ export class ExpenseProfitReport extends Default{
         super("/report/expenses");
         this.revenue = 0;
         this.expense = 0;
+    }
+}
+export class ProductsBalanceReport extends Default{
+    type: string;
+    products: Array<Product>;
+
+    constructor(){
+        super("/report/expenses");
+        this.type = "";
+        this.products = new Array<Product>();
     }
 }
