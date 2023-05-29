@@ -10,14 +10,14 @@
                     
                     <div class="col-sm-6">
                         <div class="form-floating">
-                            <input type="datetime-local" class="form-control" v-model="reportStart" name="reportStart" id="reportStart" placeholder="seu dado aqui" required>
+                            <input type="date" class="form-control" v-model="reportStart" name="reportStart" id="reportStart" placeholder="seu dado aqui" required>
                             <label for="">Início</label>
                         </div>
                     </div>
                     
                     <div class="col-sm-6">
                         <div class="form-floating">
-                            <input type="datetime-local" class="form-control" name="reportFim" v-model="reportEnd" id="reportFim" placeholder="seu dado aqui" required>
+                            <input type="date" class="form-control" name="reportFim" v-model="reportEnd" id="reportFim" placeholder="seu dado aqui" required>
                             <label for="">Fim</label>
                         </div>
                     </div>
@@ -39,19 +39,24 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th colspan="3" class="text-center h5 fw-bold bg-light">Ganhos e gastos no período de {{ formatDate(new Date(reportStart)) }} - {{ formatDate(new Date(reportEnd)) }}</th>
+                                    <th colspan="3" class="text-center h5 fw-bold bg-light">
+                                        <p>Ganhos e gastos no período de {{ formatDate(new Date(reportStart)) }} - {{ formatDate(new Date(reportEnd)) }}</p>
+                                        <p>Saldo anterior a data {{ formatDate(new Date(reportStart)) }}: R${{ unparseMoney(Number((dataExpense.revenue).toFixed(2))) }}</p>
+                                    </th>
                                 </tr>
                                 <tr>
+                                    <th>Data</th>
                                     <th>Ganhos(R$)</th>
                                     <th>Gastos(R$)</th>
                                     <th>Saldo(R$)</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>{{ unparseMoney(Number(dataExpense.revenue).toFixed(2)) }}</td>
-                                    <td>{{ unparseMoney(Number(dataExpense.expense).toFixed(2)) }}</td>
-                                    <td>{{ (dataExpense.revenue - dataExpense.expense).toFixed(2) }}</td>
+                                <tr v-for="(dataValue, i) in dataExpense.reportExpenses" :key="i" :id="'dataExpense'+i">
+                                    <td>{{ formatDate(new Date(dataValue.day)) }}</td>
+                                    <td>{{ unparseMoney(Number((dataValue.revenue).toFixed(2))) }}</td>
+                                    <td>{{ unparseMoney(Number(dataValue.expense).toFixed(2)) }}</td>
+                                    <td>{{ (dataValue.revenue - dataValue.expense).toFixed(2) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -81,7 +86,9 @@
     const reportEnd = ref('');
 
     const formSave = async () => {
-        getReportForExpense(reportStart.value, reportEnd.value);
+        getReportForExpense((reportStart.value + 'T00:00'), (reportEnd.value + 'T23:59'));
+    console.log("🚀 ~ file: ExpensesReport.vue:83 ~ dataExpense:", dataExpense.value)
+
         fadeIn(document.getElementById('modalReportForExpense'));
     }
 

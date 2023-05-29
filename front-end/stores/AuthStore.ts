@@ -21,7 +21,6 @@ export const useAuthStore = defineStore('auth', () => {
     const doLogin = async (data:any) => {
 
         await api.post(path, getSubSet(data, new UsuarioAuth())).then((response) => {
-            console.log("🚀 ~ file: AuthStore.ts:24 ~ awaitapi.post ~ response:", response)
             localStorage.setItem('session', response.data.office);
         }).catch((error) => {
             errors.value = error.response.data.message;

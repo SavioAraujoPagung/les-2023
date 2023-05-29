@@ -1,3 +1,4 @@
+import { Checkin } from "./Checkin";
 import { Choop } from "./Choop";
 import { Consumption } from "./Consumption";
 import { Customer } from "./Customer";
@@ -56,14 +57,31 @@ export class ChoppReport extends Default{
     }
 }
 
-export class ExpenseProfitReport extends Default{
-    revenue: number;
+export class ReportExpense{
+    checkins: Array<Checkin>;
+    day: Date;
     expense: number;
+    products: Array<Product>
+    revenue: number;
+
+    constructor(){
+        this.checkins = new Array<Checkin>();
+        this.day = new Date();
+        this.expense = 0;
+        this.products = new Array<Product>();
+        this.revenue = 0;
+    }
+
+}
+
+export class ExpenseProfitReport extends Default{
+    reportExpenses: Array<ReportExpense>;
+    revenue: number;
 
     constructor(){
         super("/report/expenses");
+        this.reportExpenses = new Array<ReportExpense>();
         this.revenue = 0;
-        this.expense = 0;
     }
 }
 export class ProductsBalanceReport extends Default{
