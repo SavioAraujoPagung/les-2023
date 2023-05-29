@@ -36,6 +36,16 @@ export class ProductService {
         )
     }
 
+    async getSolicitationsAllUntil(until: Date): Promise<NewProduct[]> {
+        return this.repositoryNP.find(
+            {
+                where: {
+                    created: LessThan(until)
+                }
+            }
+        )
+    }
+
     async getProducts(): Promise<Product[]> {
         return this.repository.find({where: {type: 3}})
     }

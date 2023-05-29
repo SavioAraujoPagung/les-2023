@@ -4,14 +4,14 @@ import * as nodemailer from 'nodemailer'
 
 import { CheckIn } from "src/checkin/model/checkin.entity";
 import { CheckInService } from "src/checkin/service/checkin.service";
-import { Report, ReportChopp, ReportExpenses, ReportProduct, ResponseReportChopp } from "../model/report.entity";
+import { Report, ReportChopp, ReportExpense, ReportExpenses, ReportProduct, ResponseReportChopp } from "../model/report.entity";
 import { Repository } from "typeorm";
 import { User } from "src/users/model/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Consumption } from "src/consumption/model/consumption.entity";
 import { ConsumptionService } from "src/consumption/service/consumption.service";
 import { ProductService } from "src/product/service/product.service";
-import { Product } from "src/product/model/product.entity";
+import { NewProduct, Product } from "src/product/model/product.entity";
 @Injectable()
 export class ReportService {
     @Inject(CheckInService)
@@ -23,9 +23,9 @@ export class ReportService {
     constructor(
         @InjectRepository(User)
         private readonly userRepo: Repository<User>
-    ){}
+    ) { }
 
-   
+
     async findByTime(start: Date, end: Date): Promise<CheckIn[]> {
         try {
             var checkins: CheckIn[]
@@ -38,10 +38,10 @@ export class ReportService {
 
     async findByTimeCustomerUserIDEmail(start: Date, end: Date, id: number): Promise<Report[]> {
         try {
-            let user = await this.userRepo.findOne({where: {id}})
+            let user = await this.userRepo.findOne({ where: { id } })
             let reports = await this.findByTimeCustomerUserID(start, end)
             let m = await this.formatMessageUser(reports)
-            
+
             await this.sendMasagemGeneric(user.email, m)
             return reports
         } catch (error) {
@@ -55,18 +55,18 @@ export class ReportService {
             reports = []
             var checkins: CheckIn[]
             checkins = await this.checkinSerice.findByTime(start, end)
-            
+
             let tam = checkins.length
-            for (let i=0; i<tam; i++) {
+            for (let i = 0; i < tam; i++) {
                 let report = new Report()
                 let totalValue = 0
 
                 let tamC = checkins[i].consumptions.length
-                for (let j=0; j<tamC; j++) {
+                for (let j = 0; j < tamC; j++) {
                     totalValue += checkins[i].consumptions[j].price
                 }
-                
-                report.customer = checkins[i].customer.name 
+
+                report.customer = checkins[i].customer.name
                 report.date = checkins[i].time
                 report.totalValue = Number(totalValue.toFixed(2))
 
@@ -90,65 +90,107 @@ export class ReportService {
             const reports = new Map<string, ReportChopp>()
             let response: ResponseReportChopp[]
             response = []
-           
+
             let consumptions = await this.consumptionSerice.findChoppByTime(start, end)
             let chopps = await this.productService.getChopps()
 
             let tamChopp = chopps.length
             var i: number
-            for(i=0; i<tamChopp; i++) {
-                let r =  new ReportChopp(chopps[i])
+            for (i = 0; i < tamChopp; i++) {
+                let r = new ReportChopp(chopps[i])
                 reports.set(chopps[i].name, r)
             }
 
             let tamCons = consumptions.length
-            for(i=0; i<tamCons; i++) {
+            for (i = 0; i < tamCons; i++) {
                 let r = reports.get(consumptions[i].product.name.toString())
                 r.totalLiter += consumptions[i].qtd
                 r.totalPrice += consumptions[i].price
                 r.consumptions.push(consumptions[i]);
             }
 
-            for(i=0; i<tamChopp; i++) {
+            for (i = 0; i < tamChopp; i++) {
                 response.push(new ResponseReportChopp(chopps[i].name, reports.get(chopps[i].name)))
             }
 
             if (sort == "price") {
-                response.sort((a, b) => b.report.totalPrice - a.report.totalPrice);        
+                response.sort((a, b) => b.report.totalPrice - a.report.totalPrice);
             }
-            
+
             if (sort == "liter") {
-                response.sort((a, b) => b.report.totalLiter - a.report.totalLiter);        
+                response.sort((a, b) => b.report.totalLiter - a.report.totalLiter);
             }
 
             return response
         } catch (error) {
             throw new BadRequestException('Erro ao buscar dados de relatório');
         }
-            
+
     }
 
     async reportByExpenses(start: Date, end: Date): Promise<ReportExpenses> {
         try {
             var response: ReportExpenses
-            response = new ReportExpenses(0, 0)
-            let solicitations = await this.productService.getSolicitations(start, end)
-
-            for (let i=0; i < solicitations.length; i++) {
-                response.expense += solicitations[i].totalPrice
+            // ganhos até o momento
+            let solicitationsUntil = await this.productService.getSolicitationsAllUntil(start)
+            let expenseUntil = 0 //gastos
+            for (let i = 0; i < solicitationsUntil.length; i++) {
+                expenseUntil += solicitationsUntil[i].totalPrice
             }
 
-            let checkins = await this.checkinSerice.findByTime(start, end)
-
-            for (let i=0; i < checkins.length; i++) {
-                response.revenue += checkins[i].totalPayment
+            let checkinsUntil = await this.checkinSerice.findByTimeUntil(start)
+            let revenueUntil = 0 //ganhos
+            for (let i = 0; i < checkinsUntil.length; i++) {
+                revenueUntil += checkinsUntil[i].totalPayment
             }
 
-            return response
-        } catch (error) {
+            const solicitations = await this.productService.getSolicitations(start, end)
+            const checkins = await this.checkinSerice.findByTime(start, end)
+
+            // relatório por cada dia
+            var timeDiff = Math.abs(start.getTime() - end.getTime());
+            var amountDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            var reports: ReportExpense[]
+            reports = []
+            for (let i = 0; i < amountDays; i++) {
+                let day = new Date()
+                day.setTime(start.getTime())
+                day.setDate(day.getDate() + i)
+                
+                var s: NewProduct[]
+                s = []
+                var c: CheckIn[]
+                c = []
+
+                let expense = 0 //gastos
+                for (let k = 0; k < solicitations.length; k++) {
+                    if ((solicitations[k].created.getDay() == day.getDay()) && 
+                        (solicitations[k].created.getMonth() == day.getMonth()) &&
+                        (solicitations[k].created.getFullYear() == day.getFullYear())) {
+                        expense += solicitations[k].totalPrice
+                        s.push(solicitations[k])
+                    }
+                }
+
+                let revenue = 0 //ganhos
+                for (let j = 0; j < checkins.length; j++) {
+                    if ((checkins[j].time.getDate() == day.getDate()) &&
+                        (checkins[j].time.getMonth() == day.getMonth()) &&
+                        (checkins[j].time.getFullYear() == day.getFullYear())) {
+                        revenue += checkins[j].totalPayment
+                        c.push(checkins[j])
+                    }
+                }
+
+                reports.push(new ReportExpense(day, revenue, expense, c, s))
+            }
+
+            return new ReportExpenses(revenueUntil - expenseUntil, reports)
+        } catch (error) {            
             throw new BadRequestException('Erro ao enviar relatório');
         }
     }
+
 
     async sendNotification(start: Date, end: Date): Promise<CheckIn[]> {
         try {
@@ -174,7 +216,7 @@ export class ReportService {
 
             let tamConsumptions = checkIns[i].consumptions.length
             for (let j = 0; j < tamConsumptions; j++) {
-                message += checkIns[i].consumptions[j].product.name + ' - ' + checkIns[i].consumptions[j].qtd +  ' - R$' + checkIns[i].consumptions[j].price.toFixed(2) + '\n'
+                message += checkIns[i].consumptions[j].product.name + ' - ' + checkIns[i].consumptions[j].qtd + ' - R$' + checkIns[i].consumptions[j].price.toFixed(2) + '\n'
             }
             this.sendMasagem(checkIns[i].customer.email, message, './' + checkIns[i].id + '.txt')//TUDO MUDAR ISSO PARA PDF     
         }
@@ -194,51 +236,51 @@ export class ReportService {
 
     async sendMasagem(from: string, message: string, fileNames: string) {
         const transport = nodemailer.createTransport({
-                 host: 'smtp.gmail.com',
-                 service: 'gmail',
-                 secure: true,
-                 auth: {
-                     user: "lesmuitobom@gmail.com",
-                 pass: "pknehltashqzwxsz"
-                 }
-             }
+            host: 'smtp.gmail.com',
+            service: 'gmail',
+            secure: true,
+            auth: {
+                user: "lesmuitobom@gmail.com",
+                pass: "pknehltashqzwxsz"
+            }
+        }
         );
 
         fs.writeFile(fileNames, message, (err) => { //TODO: ADD ESSE ARQUIVO AO ENEXO DO EMAIL
             if (err) throw err;
             console.log('Arquivo criado e conteúdo salvo!');
         });
-        
+
         transport.sendMail({
-                from: 'lesmuitobom@gmail.com',
-                to: from,
-                subject: 'Relatório',
-                text: message,
-                attachments:[ {   // utf-8 string as an attachment
-                    path: fileNames
-                },]
-            }
+            from: 'lesmuitobom@gmail.com',
+            to: from,
+            subject: 'Relatório',
+            text: message,
+            attachments: [{   // utf-8 string as an attachment
+                path: fileNames
+            },]
+        }
         )
     }
 
     async sendMasagemGeneric(from: string, message: string) {
         const transport = nodemailer.createTransport({
-                 host: 'smtp.gmail.com',
-                 service: 'gmail',
-                 secure: true,
-                 auth: {
-                     user: "lesmuitobom@gmail.com",
-                 pass: "pknehltashqzwxsz"
-                 }
-             }
-        );
-        
-        transport.sendMail({
-                from: 'lesmuitobom@gmail.com',
-                to: from,
-                subject: 'Relatório',
-                text: message
+            host: 'smtp.gmail.com',
+            service: 'gmail',
+            secure: true,
+            auth: {
+                user: "lesmuitobom@gmail.com",
+                pass: "pknehltashqzwxsz"
             }
+        }
+        );
+
+        transport.sendMail({
+            from: 'lesmuitobom@gmail.com',
+            to: from,
+            subject: 'Relatório',
+            text: message
+        }
         )
     }
 
@@ -249,7 +291,7 @@ export class ReportService {
         report.push(new ReportProduct("products", await this.productService.getProducts()))
         return report
     }
-    
+
     async getProductsOnline(): Promise<ReportProduct[]> {
         var report: ReportProduct[]
         report = []
@@ -258,4 +300,3 @@ export class ReportService {
         return report
     }
 }
-    
