@@ -11,10 +11,14 @@ export class CheckIn {
   pago: boolean;
 
   @Column()
-  time: string;
+  time: Date;
 
   @ManyToOne(()=> Customer, ({checkins}) => checkins)
   customer: Customer;
 
+  @OneToMany(() => Consumption, ({ checkin }) => checkin)
   consumptions: Consumption[]
+
+  @Column({nullable: true, type: 'float'})
+  totalPayment: number;
 }

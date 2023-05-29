@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, NotFoundException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, Logger, BadRequestException, ParseIntPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from '../model/product.entity';
+import { NewProduct, Product } from '../model/product.entity';
 
 @Controller('products')
 export class ProductController {
   private logger: Logger;
   constructor(
     @InjectRepository(Product)
-    private readonly repository: Repository<Product>
+    private readonly repository: Repository<Product>,
+    @InjectRepository(NewProduct)
+    private readonly repositoryNew: Repository<NewProduct>
     ) {
       this.logger = new Logger('ProductControllerRepository');
     }
@@ -19,15 +21,44 @@ export class ProductController {
       return this.repository.save(product);
     } catch (error) {
       this.logger.error(`Não foi possivel cadastrar um produto. ${error}`);
-      throw new Error('Erro ao cadastrar um produto');
+      throw new BadRequestException('Erro ao cadastrar um produto');
     }
    
   }
 
-  @Get('/barcode/:barcode')
-  async findOneByBarcode(@Param('barcode') barcode: string): Promise<Product> {
-   
-    let product = await this.repository.findOneBy({barcode})
+  @Post('/stock')
+  async stock(@Body() products: Product[]): Promise<Product[]> {
+    try {
+      const tam = products.length
+      var att: Product[]
+      att = []
+
+      var solicitations: NewProduct[]
+      solicitations = []
+
+      for(let i = 0; i < tam; i++) {
+        const prod = await this.repository.findOne({where: {id: products[i].id}})
+        prod.qtd += products[i].qtd
+        
+        if (prod.qtd < 0) {
+          prod.qtd = 0
+        }
+
+        solicitations.push(new NewProduct(prod,  prod.priceCost))
+        att.push(prod)
+      }
+
+      await this.repositoryNew.save(solicitations)
+      return this.repository.save(att)
+    } catch (error) {
+      this.logger.error(`Não foi possivel cadastrar um produto. ${error}`);
+      throw new BadRequestException('Erro ao cadastrar um produto');
+    }
+  }
+
+  @Get(':id')
+  async findOneByID(@Param('id') id: string): Promise<Product> {
+    let product = await this.repository.findOneBy({id})
     
     if(!product){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
@@ -36,32 +67,26 @@ export class ProductController {
     return product;
   }
   
-  @Get()
-  async findAll(): Promise<Product[]> {
-    return this.repository.find();
-  }
-
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Product> {
-    const product = await this.repository.findOne({where:{ id }});
-    if(!product){
-      throw new NotFoundException('Produto não encontrado! Tente novamente!')
-    }
-    return product;
+  @Get('/type/:type')
+  async findByType(@Param('type', ParseIntPipe) type: number): Promise<Product[]> {
+    return this.repository.find({where: { type }});
   }
 
   @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() product: Product): Promise<Product> {
+  async update(@Param('id') id: string, @Body() product: Product): Promise<Product> {
     const productFound = await this.repository.findOne({where:{ id }});
     if(!productFound){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
     }
+
+    product.qtd = productFound.qtd
+
     await this.repository.update({id}, product)
     return this.repository.findOne({where:{ id }})
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<string> {
+  async delete(@Param('id') id: string): Promise<string> {
     const productFound = await this.repository.findOne({where:{ id }});
     if(!productFound){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
@@ -72,4 +97,5 @@ export class ProductController {
       return `Produto ${id} deletado com sucesso!`;
     }
   }
+
 }

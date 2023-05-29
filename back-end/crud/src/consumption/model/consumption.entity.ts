@@ -1,5 +1,5 @@
 import { CheckIn } from 'src/checkin/model/checkin.entity';
-import { ProductConsumption } from 'src/productConsumption/model/productConsumption.entity';
+import { Product } from 'src/product/model/product.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
@@ -10,15 +10,18 @@ export class Consumption {
   @ManyToOne(()=> CheckIn, ({consumptions}) => consumptions)
   checkin: CheckIn;
 
-  @ManyToOne(()=> ProductConsumption)
-  productConsumption: ProductConsumption;
+  @ManyToOne(()=> Product)
+  product: Product;
 
   @Column()
-  productId: number; 
+  productId: string; 
 
-  @Column()
+  @Column({type: 'float'})
   qtd: number; 
 
-  @Column()
+  @Column({type: 'float'})
   price: number;
+  
+  @Column()
+  created: Date
 }

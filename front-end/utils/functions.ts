@@ -37,6 +37,21 @@ export const fadeOut = (el:any) => {
     });
 }
 
+export const fadeIn = (element:any) => {
+    element.style.opacity = 0;
+    element.style.display = 'flex';
+
+    let opacity = 0;
+    const interval = setInterval(function () {
+        opacity += 0.1;
+        element.style.opacity = opacity;
+
+        if (opacity >= 1) {
+        clearInterval(interval);
+        }
+    }, 50);
+}
+
 export const printDoc = (id:string) => {
 // Get HTML to print from element
     const prtHtml = document.getElementById(id)?.innerHTML;
@@ -65,6 +80,35 @@ export const printDoc = (id:string) => {
         WinPrint?.focus();
         WinPrint?.print();
         WinPrint?.close();
-    }, 50);
+    }, 500);
     
 }
+
+export const maskMoney = (input:any) => {
+    
+    let value = input.value;
+
+    value = value.replace(/\D/g, '');
+
+    value = value.replace(/^0+/, '');
+
+    value = value.padStart(3, '0');
+
+    const real = value.substring(0, value.length - 2);
+    const cents = value.substring(value.length - 2);
+
+    value = `${real.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')},${cents}`;
+
+    input.value = value;
+    
+    return value;
+
+}
+
+export const parseMoney = (numero:any) => {
+    numero = numero.toString();
+    numero = Number(numero.replace(/\./g, '').replace(',', '.'));
+    return numero;
+}
+
+export const unparseMoney = (numero:any) => numero.toLocaleString('pt-BR');

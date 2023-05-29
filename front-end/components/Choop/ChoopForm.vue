@@ -8,19 +8,37 @@
             </modal-header>
             <modal-body>
                 
-                <div class="form-floating mb-3">
-                    <input type="text" name="nome" id="nome" class="form-control" v-model="entity.name" placeholder="nome" required>
-                    <label for="nome" class="form-label">Nome</label>
-                </div>
+                <div class="row">
+                    
+                    <div class="col-sm-6  mb-3">
+                        <div class="form-floating">
+                            <input type="text" name="nome" id="nome" class="form-control" v-model="entity.name" placeholder="nome" required>
+                            <label for="nome" class="form-label">Nome</label>
+                        </div>
+                    </div>
 
-                <div class="form-floating mb-3">
-                    <input type="text" name="cost" id="cost" class="form-control" v-model="entity.cost" placeholder="cost" required>
-                    <label for="cost" class="form-label">Valor</label>
-                </div>
-                
-                <div class="form-floating mb-3">
-                    <input type="text" name="rfid" id="rfid" class="form-control" v-model="entity.rfid" placeholder="rfid" required>
-                    <label for="rfid" class="form-label">RFID</label>
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-floating">
+                            <input type="text" name="ident" id="ident" class="form-control" v-model="id" placeholder="ident" :disabled="entity.id !== null" required>
+                            <label for="ident" class="form-label">RFID</label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 mb-3">
+                        <label for="cost" class="form-label">Valor de compra</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" name="cost" id="cost" class="form-control money" v-model="entity.priceCost" placeholder="Valor de compra" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 mb-3">
+                        <label for="sale" class="form-label">Valor de venda</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" name="sale" id="sale" class="form-control money" v-model="entity.saleCost" placeholder="Valor de venda" required>
+                        </div>
+                    </div>
                 </div>
 
             </modal-body>
@@ -34,24 +52,30 @@
 </template>
 
 <script setup lang="ts">
-    
-    import { useChoopStore } from "~/stores/ChoopStore";
     import { storeToRefs } from "pinia";
+    import { useProductStore } from "~~/stores/ProductStore";
 
     const emit = defineEmits(['saved', 'close']);
 
-    const { save, update, resetEntity } = useChoopStore();
-    const { errors, entity } = storeToRefs(useChoopStore());
+    const { save, update, resetEntity } = useProductStore();
+    const { errors, entity, isEdit } = storeToRefs(useProductStore());
 
-    const { $swal } = useNuxtApp();
-    const barcode = ref(null);
-    const numberBarCode = ref("");
+    const id = ref(entity.value.id);
 
     const formSave = async () => {
-        if(entity.value.id == null){
-            if(!await save(entity.value)) return false;
+        
+        if(entity.value.id === null){
+            entity.value.id = id;
+            if(!(await save(entity.value)).value){
+                return false;
+            }
         }
-        else await update(entity.value, entity.value.id);
+        else {
+            entity.value.id = id;
+            if(!(await update(entity.value, entity.value.id)).value){
+                return false;
+            }
+        };
         emit('saved');
     }
 
@@ -61,6 +85,15 @@
     }
 
     onMounted(() => {
+        const inputs = document.querySelectorAll('.money');
+
+        inputs.forEach((input) => {
+            input.addEventListener('keyup', () => {
+                if(input.id === 'cost') entity.value.priceCost = maskMoney(input);
+                else entity.value.saleCost = maskMoney(input);
+            });
+        });
+        
         document.onkeydown = (event) => {
             if (event.ctrlKey && event.key == 'j') event.preventDefault();
         }

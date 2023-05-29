@@ -35,7 +35,7 @@ export class solicitationStockController {
       barcode = ""
 
       for (let i = 0; i < s.length; i++) {
-        let product = await this.findOneByBarcode(s[i].barcode)
+        let product = await this.findOneByID(s[i].barcode)
         solicitations.push(new SolicitationStock(s[i].barcode, s[i].qtd, product.name))
       }
 
@@ -46,8 +46,8 @@ export class solicitationStockController {
     }
   }
 
-  async findOneByBarcode(barcode: string): Promise<Product> {
-    let product = await this.prodRepo.findOneBy({barcode})
+  async findOneByID(id: string): Promise<Product> {
+    let product = await this.prodRepo.findOneBy({id})
     if(!product){
       throw new NotFoundException('Produto não encontrado! Tente novamente!')
     }

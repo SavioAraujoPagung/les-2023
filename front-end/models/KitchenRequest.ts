@@ -3,8 +3,8 @@ import { Product } from "./Products";
 
 export default class KitchenRequest extends Default{
     // idProduct: number | null;
-    foodName: String;
-    barcode: String;
+    foodName: string;
+    barcode: string;
     status: boolean;
     product: Product;
     qtd: number;

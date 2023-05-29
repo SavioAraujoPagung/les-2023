@@ -62,7 +62,6 @@
 
 <script lang="ts">
 import { useSelfServiceStore } from "~~/stores/SelfServiceStore";
-import { Cargos } from "~~/models/Usuario";
 import { storeToRefs } from "pinia";
 import SelfService from "~~/models/SelfService";
 
@@ -127,7 +126,6 @@ export default defineComponent({
             entity,
             errors,
             closeModal,
-            Cargos,
             newItens,
             addItens,
             increment,

@@ -42,7 +42,6 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
-import { Cargos } from '~~/models/Usuario';
 import { useSelfServiceStore } from '~/stores/SelfServiceStore';
 
 definePageMeta({
@@ -91,7 +90,7 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, open, cancelChange, refreshList, deleteElement, showForm, loading, title };
+        return { entities, modalForm, open, cancelChange, refreshList, deleteElement, showForm, loading, title };
 
     },
 })

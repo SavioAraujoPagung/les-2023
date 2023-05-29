@@ -88,3 +88,13 @@ body{
 .object-fit-contain{ object-fit: contain }
 
 html body.swal2-height-auto{ height: 100% !important }
+
+@media print{
+    *{
+        font-size: 12px;
+        // font-family: 'Times New Roman', Times, serif;
+    }
+    #btnControlPrintAndSend{
+        display: none !important;
+    }
+}

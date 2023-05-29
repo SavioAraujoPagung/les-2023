@@ -1,66 +1,76 @@
-import Default from "./Default";
+export enum ProductType {
+    chopp = 1,
+    selfService = 2,
+    another = 3
+  }
+  
+export class Product {
+    
+    id: string | null;
 
-class Product extends Default{
     name: string;
-    barcode: string;
-    cost: number;
+    
+    path: string;
 
-    constructor() {
-        super("/products/");
+    priceCost: number;
+
+    saleCost: number;
+
+    qtd: number;
+
+    type: ProductType;
+
+    constructor(){
+        this.id = null;
         this.name = "";
-        this.barcode = "";
-        this.cost = 0.0;
+        this.path = "/products/";
+        this.priceCost = 0.0;
+        this.saleCost = 0.0;
+        this.qtd = 0.0;
+        this.type = 1;
     }
 
 }
 
-class ProductEdit{
-    name: string;
-    barcode: string;
-    cost: string;
+export class ProductEdit {
 
-    constructor() {
+    name: string;
+    
+    priceCost: number;
+
+    saleCost: number;
+
+    type: ProductType;
+
+    constructor(){
         this.name = "";
-        this.barcode = "";
-        this.cost = "";
+        this.priceCost = 0.0;
+        this.saleCost = 0.0;
+        this.type = 1;
     }
+
 }
 
-class ProductForPrint{
-    idProduct: number | null;
+export class ProductStock {
+
+    id: string | null;
+    qtd: number;
+
+    constructor(){
+        this.id = null;
+        this.qtd = 0;
+    }
+
+}
+
+export class ProductForPrint{
+    idProduct: string | null;
     product: Product;
     qtd: number;
 
     constructor() {
-        this.idProduct = 0;
+        this.idProduct = null;
         this.product = new Product();
         this.qtd = 0
     }
 }
-
-class StockProduct extends Default{
-    barcode: string;
-    name: string;
-    qtd: number;
-
-    constructor() {
-        super("/stock/");
-        this.name = "";
-        this.barcode = "";
-        this.qtd = 0;
-    }
-
-}
-class SavedStockProduct{
-    barcode: string;
-    name: string;
-    qtd: number;
-
-    constructor() {
-        this.name = "";
-        this.barcode = "";
-        this.qtd = 0;
-    }
-}
-
-export {Product, ProductEdit, StockProduct, SavedStockProduct, ProductForPrint}

@@ -7,15 +7,20 @@
                 <div class="form-group d-flex align-items-center flex-wrap justify-content-center gap-3">
 
                     
-                    <div v-if="entities.length">
-                        <div v-for="(choop, i) in entities" :key="i">
-                            <input type="radio" class="btn-check" name="choop" :id="'choop'+choop.id" autocomplete="off" :value="choop.rfid" checked>
-                            <label class="btn btn-outline-secondary" for="option1">{{ choop.name }}</label>
+                    <div v-if="!loading">
+                        <div v-if="entities.length" class="d-flex align-items-center flex-wrap gap-3">
+                            <div v-for="(choop, i) in entities" :key="i">
+                                <input type="radio" class="btn-check" name="choop" :id="'choop-'+choop.id" autocomplete="off" :value="choop.id" checked placeholder="choop">
+                                <label class="btn btn-outline-secondary" :for="'choop-'+choop.id">{{choop.name}}</label>
+                            </div>
+                        </div>
+                        
+                        <div v-else class="alert alert-warning p-3">
+                            Ops, Parece que ainda não há nenhum choop cadastrado. Tente novamente mais tarde...
                         </div>
                     </div>
-                    
-                    <div v-else class="alert alert-warning p-3">
-                        Ops, Parece que ainda não há nenhum choop cadastrado. Tente novamente mais tarde...
+                    <div class="d-flex align-items-center justify-content-center p-5" v-else>
+                        <LoadersCubeLoader />
                     </div>
                     
                 </div>
@@ -41,16 +46,20 @@
 <script setup lang="ts">
     
     import { storeToRefs } from 'pinia';
-    import { useChoopStore } from '~~/stores/ChoopStore';
+    import { useProductStore } from '~~/stores/ProductStore';
     
     useHead({
         title: 'Saída dos choops - LES GROUP'
     });
 
+    definePageMeta({
+        middleware: 'auth'
+    });
+
     const { $swal } = useNuxtApp();
 
-    const { destroy, getAll, getById, resetEntity, makeConsumption } = useChoopStore();
-    const { entities, loading } = storeToRefs(useChoopStore());
+    const { destroy, getAll, getById, resetEntity, makeConsumption } = useProductStore();
+    const { entities, loading } = storeToRefs(useProductStore());
 
     const formSave = (e:any) => {
         if(!document.querySelector('input[name = choop]:checked')){
@@ -77,13 +86,12 @@
             return false;
         }
 
-        makeConsumption({
-            productRfid: (<HTMLInputElement> document.querySelector('input[name = choop]:checked'))?.value,
-            customerRfid: (<HTMLInputElement> document.getElementById('rfid'))?.value
-        });
+        makeConsumption((<HTMLInputElement> document.getElementById('rfid'))?.value, (<HTMLInputElement> document.querySelector('input[name = choop]:checked'))?.value,
+        0.5
+        );
         e.target.reset();
     }
 
-    onMounted(getAll);
+    onMounted(() => getAll(1));
 
 </script>

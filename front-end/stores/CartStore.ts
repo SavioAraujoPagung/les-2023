@@ -94,7 +94,11 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     const pay = async () => {
+
+        let success = true;
+
         let savedEntities = new Array();
+
         entities.value.forEach(customer => {
             savedEntities.push({
                 customer:{
@@ -102,7 +106,9 @@ export const useCartStore = defineStore('cart', () => {
                 }
             });
         });
+
         await api.post('/check-in/pagar/' + entity.customer?.rfid, savedEntities).then((response) => {
+            
             Swal.fire({
                 icon: 'success',
                 title: "Pagamento efetuado com sucesso!",
@@ -111,6 +117,8 @@ export const useCartStore = defineStore('cart', () => {
                 showConfirmButton: false,
                 timer: 3000
             });
+
+
         }).catch((error) => {
             Swal.fire({
                 icon: 'error',
@@ -120,7 +128,11 @@ export const useCartStore = defineStore('cart', () => {
                 showConfirmButton: false,
                 timer: 3000
             });
+            success = false;
         });
+
+        return success;
+
     }
 
     const resetEntity = () => {

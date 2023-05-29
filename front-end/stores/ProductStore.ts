@@ -1,34 +1,23 @@
 import { defineStore } from 'pinia';
 import Swal from 'sweetalert2';
 import api from '~/services/api'
-import { Product, ProductEdit, StockProduct} from '~~/models/Products';
+import { Consumption } from '~~/models/Consumption';
+import { Product, ProductEdit } from '~~/models/Products';
 
-export const useProductStore = defineStore('product', () => {
+export const useProductStore = defineStore('choop', () => {
     const entity = reactive(new Product());
     const entities = ref(new Array<Product>());
     const productPath = entity.path;
+    const consumption = reactive(new Consumption());
     const loading = ref(true);
-    
-    const stock = ref(new Array<StockProduct>());
-    const stockPath = new StockProduct().path;
-    
-    const errors = ref("");
+    const isEdit = ref(false);
+    const success = ref(true);
+    const errors = ref(false);
 
-    const getAll = async () => {
+    const getAll = async (type:number) => {
         loading.value = true;
-        await api.get(productPath).then((response) => {
+        await api.get(productPath + "type/" + type).then((response) => {
             entities.value = response.data;
-        })
-        .catch((error) => {
-            errors.value = error.message;
-        })
-        .finally(() => loading.value = false);
-    }
-
-    const getAllStock = async () => {
-        loading.value = true;
-        await api.get(stockPath).then((response) => {
-            stock.value = response.data;
         })
         .catch((error) => {
             errors.value = error.message;
@@ -39,19 +28,80 @@ export const useProductStore = defineStore('product', () => {
     const getById = async (id:any) => {
         const response = await api.get(productPath + id );
         Object.assign(entity,response.data);
-    }
-
-    const getByBarcode = async () => {
-        const response = await api.get(productPath + "barcode/" + entity.barcode );
-        Object.assign(entity,{
-            name: response.data.name,
-            cost: response.data.cost
-        });
         return response;
     }
 
-    const saveAllInStock = async (data:any) => {
-        await api.post(stockPath, data);
+    const makeConsumption = async (customerRfid:string, productRfid:string, qtd:number) => {
+        await Swal.fire({
+            title: 'Tem certeza que deseja realizar este pedido?',
+            text: "Esta ação não pode ser revertida e a cobrança será gerada automaticamente ao seu cartão!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c57e',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, realizar pedido!'
+        }).then(async (result) => {
+            await getById(productRfid).then(async (response) => {
+                consumption.product = entity;
+            }).catch(async (err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Produto não encontrado!',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                success.value = false;
+            });
+
+            if(!success.value) return false;
+
+            await api.get('/check-in/' + customerRfid).then(async (response) => {
+                consumption.checkin = response.data;
+            }).catch(async (err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'CheckIn não encontrado!',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                success.value = false;
+            });
+
+            if(!success.value) return false;
+
+            consumption.qtd = qtd;
+
+            consumption.price = qtd * consumption.product.saleCost;
+
+            if (result.isConfirmed) {
+                await api.post(consumption.path, consumption).then(async (response) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pedido realizado com sucesso!',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }).catch((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }).finally(async () => {
+                    // await getAll();
+                });
+            }
+        });
+        success.value = true;
     }
 
     const destroy = async (id:any, elem:any = undefined) => {
@@ -85,7 +135,7 @@ export const useProductStore = defineStore('product', () => {
                         timer: 3000
                     });
                 }).finally(async () => {
-                    await getAll();
+                    // await getAll();
                 });
             }
         });
@@ -102,19 +152,104 @@ export const useProductStore = defineStore('product', () => {
         }, {});
     }
 
-    const save = async (data:any) => {
-        await api.post(productPath, data).then((response) => {
-            return response.data;
+    const saveAllInStock = async (data:any) => {
+        await api.post(productPath + "stock", data).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Produtos inseridos com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         }).catch((error) => {
-            errors.value = error.message;
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            success.value = false;
         });
+        return success;
+
+    }
+
+    const save = async (data:any) => {
+
+        data.priceCost = parseMoney(data.priceCost);
+        data.saleCost = parseMoney(data.saleCost);
+
+        await api.post(productPath, data).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Produto cadastrado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            success.value = false;
+        });
+        return success;
+
     }
 
     const update = async (data:any, id:any) => {
+        
         let object = getSubSet(data, Object.getOwnPropertyNames(new ProductEdit()));
-        await api.put(productPath + id, object);
+        
+        object.priceCost = parseMoney(object.priceCost);
+        object.saleCost = parseMoney(object.saleCost);
+
+        await api.put(productPath + id, object).then((response) => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Produto alterado com sucesso!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            success.value = false;
+        });
+        
+        return success;
     }
   
-    return { entity, entities, errors, getAll, loading, getById, destroy, resetEntity, save, update, getAllStock, getByBarcode, stock, saveAllInStock };
+    return { 
+        entity,
+        entities,
+        errors,
+        getAll,
+        loading,
+        getById,
+        destroy,
+        resetEntity,
+        save,
+        update,
+        makeConsumption,
+        isEdit,
+        saveAllInStock
+    };
   })
-  

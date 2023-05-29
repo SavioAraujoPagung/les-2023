@@ -15,7 +15,7 @@
                 <tbody>
                     <DefaultTableTrow v-for="(user, i) in entities" :key="i" :id="'user'+user.id" @delete="deleteElement(user.id)" @edit="showFormEdit(user.id)">
                         <td>{{ user.name }}</td>
-                        <td>{{ user.office }}</td>
+                        <td>{{ UserType[user.office] }}</td>
                     </DefaultTableTrow>
                 </tbody>
             </DefaultTable>
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia';
-import { Cargos } from '~~/models/Usuario';
+import { UserType } from '~~/models/Usuario';
 import { useUserStore } from '~~/stores/UserStore';
 
 definePageMeta({
@@ -89,7 +89,7 @@ export default defineComponent({
 
         onMounted(getAll);
 
-        return { entities, Cargos, modalForm, isOpen, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm, title };
+        return { entities, UserType, modalForm, isOpen, loading, cancelChange, refreshList, deleteElement, showFormEdit, showForm, title };
 
     },
 })

@@ -15,16 +15,25 @@
                     </div>
                 </div>
 
-                <div class="col-sm-3">
-                    <div class="form-floating mb-3">
-                        <input type="text" name="cost" id="cost" disabled class="form-control" v-model="entity.cost" placeholder="cost" required>
-                        <label for="cost" class="form-label">Valor unidade</label>
+                <div class="col-sm-6 mb-3">
+                        <label for="cost" class="form-label">Valor de compra</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" name="cost" id="cost" class="form-control money" v-model="entity.priceCost" placeholder="Valor de compra" required disabled>
+                        </div>
                     </div>
-                </div>
+                    
+                    <div class="col-sm-6 mb-3">
+                        <label for="sale" class="form-label">Valor de venda</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" name="sale" id="sale" class="form-control money" v-model="entity.saleCost" placeholder="Valor de venda" required disabled>
+                        </div>
+                    </div>
                 
                 <div class="col-sm-12 mb-3">
                     <div class="input-group mb-3">
-                        <input type="text" ref="numberRfid" class="form-control" v-model="entity.rfid" aria-label="RFID" placeholder="RFID" id="numberRfid" aria-describedby="buttonBarCode">
+                        <input type="text" ref="numberRfid" class="form-control" v-model="entity.id" aria-label="RFID" placeholder="RFID" id="numberRfid" aria-describedby="buttonBarCode">
                         <button class="btn btn-primary fw-bold text-white" type="submit">Adicionar</button>
                     </div>
                 </div>
@@ -37,8 +46,8 @@
                             <th class="col-sm-4">Qtd(L)</th>
                         </thead>
                         <tbody>
-                            <tr v-for="(choop, i) in newItens" :key="i" :id="'newChoop'+choop.rfid">
-                                <td>{{ choop.rfid }}</td>
+                            <tr v-for="(choop, i) in newItens" :key="i" :id="'newChoop'+choop.id">
+                                <td>{{ choop.id }}</td>
                                 <td>{{ choop.name }}</td>
                                 <td>{{ choop.qtd }}</td>
                             </tr>
@@ -58,9 +67,9 @@
 
 <script setup lang="ts">
     
-    import { useChoopStore } from "~/stores/ChoopStore";
     import { storeToRefs } from "pinia";
-    import { Choop, SavedStockChoop } from "~/models/Choop";
+import { Product } from "~~/models/Products";
+    import { useProductStore } from "~~/stores/ProductStore";
 
     const props = defineProps({
         isIncrement:{
@@ -71,16 +80,16 @@
 
     const emit = defineEmits(['saved', 'close']);
 
-    const { save, update, resetEntity, getByRFID, saveAllInStock } = useChoopStore();
-    const { errors, entity } = storeToRefs(useChoopStore());
+    const { save, update, resetEntity, getById, saveAllInStock } = useProductStore();
+    const { errors, entity } = storeToRefs(useProductStore());
 
     const { $swal } = useNuxtApp();
     const rfid = ref(null);
     const numberRfid = ref(null);
-    const newItens = ref(new Array<Choop>());
+    const newItens = ref(new Array<Product>());
 
     const changeQtd = () => {
-        if(!entity.value.rfid.length){
+        if(!entity.value.id?.length){
             $swal.fire({
                 icon: 'error',
                 title: 'Nenhum código de barras inserido',
@@ -92,34 +101,33 @@
             return false;
         }
 
-        let index = newItens.value.findIndex(obj => obj.rfid === entity.value.rfid);
+        let index = newItens.value.findIndex(obj => obj.id === entity.value.id);
         
         
         if(index >= 0) {
             if(props.isIncrement) newItens.value[index].qtd += 100;
             else newItens.value[index].qtd -= 100;
-            entity.value.rfid = "";
+            entity.value.id = "";
         }
         else{
-            const newItem = getByRFID();
+            const newItem = getById(entity.value.id);
             newItem.then((response) => {
                 newItens.value.push({
-                    rfid: response.data.rfid,
+                    id: response.data.id,
                     name: response.data.name,
-                    cost: response.data.cost,
                     qtd: props.isIncrement ? 100 : -100
                 });
             }).catch((error) => {
                 $swal.fire({
                     icon: 'error',
-                    title: error.response.data.message,
+                    title: "Não foi possível encontrar o produto!",
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 1500
                 });
             });
-            entity.value.rfid = "";
+            entity.value.id = "";
         
         }
 
