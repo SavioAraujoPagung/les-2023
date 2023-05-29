@@ -23,6 +23,9 @@ export class Product {
   @Column({type: 'float'})
   qtd: number;
 
+  @Column({nullable: true})
+  minQtd: number;
+
   @Column({enum: ProductType})
   type: ProductType;
 

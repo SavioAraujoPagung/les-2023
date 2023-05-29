@@ -75,7 +75,7 @@ export class ReportController {
   }
 
   @Get('products-online')
-  async findByproductsOnline(): Promise<ReportProduct[]> 
+  async findByproductsOnline(): Promise<Product[]> 
   {
     return this.service.getProductsOnline()
   }
