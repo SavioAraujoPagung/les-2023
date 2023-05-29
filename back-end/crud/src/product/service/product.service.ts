@@ -26,6 +26,10 @@ export class ProductService {
         )
     }
 
+    async getAll(): Promise<Product[]> {
+        return this.repository.find()
+    }
+
     async getSolicitations(start: Date, end: Date): Promise<NewProduct[]> {
         return this.repositoryNP.find(
             {

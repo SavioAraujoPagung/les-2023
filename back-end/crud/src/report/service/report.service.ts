@@ -164,7 +164,7 @@ export class ReportService {
 
                 let expense = 0 //gastos
                 for (let k = 0; k < solicitations.length; k++) {
-                    if ((solicitations[k].created.getDay() == day.getDay()) && 
+                    if ((solicitations[k].created.getDate() == day.getDate()) && 
                         (solicitations[k].created.getMonth() == day.getMonth()) &&
                         (solicitations[k].created.getFullYear() == day.getFullYear())) {
                         expense += solicitations[k].totalPrice
@@ -292,11 +292,16 @@ export class ReportService {
         return report
     }
 
-    async getProductsOnline(): Promise<ReportProduct[]> {
-        var report: ReportProduct[]
+    async getProductsOnline(): Promise<Product[]> {
+        let products = await this.productService.getAll()
+        var report: Product[]
         report = []
-        report.push(new ReportProduct("chopps", await this.productService.getGenericyOnline(1)))
-        report.push(new ReportProduct("products", await this.productService.getGenericyOnline(3)))
+        for (let i=0; i<products.length; i++) {
+            if (products[i].qtd <= products[i].minQtd) {
+                report.push(products[i])
+            }
+        }
+
         return report
     }
 }
