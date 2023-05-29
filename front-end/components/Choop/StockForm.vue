@@ -19,7 +19,7 @@
                         <label for="cost" class="form-label">Valor de compra</label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1">R$</span>
-                            <input type="text" name="cost" id="cost" class="form-control money" v-model="entity.priceCost" placeholder="Valor de compra" required>
+                            <input type="text" name="cost" id="cost" class="form-control money" v-model="entity.priceCost" placeholder="Valor de compra" required disabled>
                         </div>
                     </div>
                     
@@ -27,7 +27,7 @@
                         <label for="sale" class="form-label">Valor de venda</label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1">R$</span>
-                            <input type="text" name="sale" id="sale" class="form-control money" v-model="entity.saleCost" placeholder="Valor de venda" required>
+                            <input type="text" name="sale" id="sale" class="form-control money" v-model="entity.saleCost" placeholder="Valor de venda" required disabled>
                         </div>
                     </div>
                 
