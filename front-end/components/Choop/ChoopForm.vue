@@ -10,17 +10,24 @@
                 
                 <div class="row">
                     
-                    <div class="col-sm-6  mb-3">
+                    <div class="col-sm-4  mb-3">
                         <div class="form-floating">
                             <input type="text" name="nome" id="nome" class="form-control" v-model="entity.name" placeholder="nome" required>
                             <label for="nome" class="form-label">Nome</label>
                         </div>
                     </div>
 
-                    <div class="col-sm-6 mb-3">
+                    <div class="col-sm-4 mb-3">
                         <div class="form-floating">
                             <input type="text" name="ident" id="ident" class="form-control" v-model="id" placeholder="ident" :disabled="entity.id !== null" required>
                             <label for="ident" class="form-label">RFID</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 mb-3">
+                        <div class="form-floating">
+                            <input type="text" name="qtdMin" id="qtdMin" class="form-control" v-model="entity.minQtd" placeholder="quantidade" required>
+                            <label for="qtdMin" class="form-label">Quantidade mínima</label>
                         </div>
                     </div>
                     

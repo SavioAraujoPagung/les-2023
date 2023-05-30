@@ -68,11 +68,25 @@
             </div>
         </article>
 
+        <article class="col">
+            <div class="card">
+                
+                <div class="card-body">
+                    <h5 class="card-title">Relatório dos produtos que estão no limite de estoque</h5>
+                    <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde molestiae tenetur laudantium rerum consectetur eligendi aperiam eaque dolore, qui temporibus officiis, at eum obcaecati similique reprehenderit. Nulla reprehenderit iure quasi.
+                    </p>
+                    <a href="#" class="card-link stretched-link" @click="toggleModalProductOnline"></a>
+                </div>
+            
+            </div>
+        </article>
+
         <component :is="isOpen ? modalForm : 'div'" @close="cancelChange" @saved="reportSent" />
         <component :is="isOpenUser ? modalFormUser : 'div'" @close="cancelChangeUser" @saved="reportSentUser" />
         <component :is="isOpenChopp ? modalFormChopp : 'div'" @close="toggleModalChopp" @saved="toggleModalChopp" />
         <component :is="isOpenExpense ? modalFormExpense : 'div'" @close="toggleModalExpense" @saved="toggleModalExpense" />
         <component :is="isOpenProducts ? modalFormProduct : 'div'" @close="toggleModalExpense" @saved="toggleModalExpense" />
+        <component :is="isOpenProductsOnline ? modalFormProductOnline: 'div'" @close="toggleModalProductOnline" @saved="toggleModalProductOnline" />
 
     </div>
 </template>
@@ -91,18 +105,21 @@
     const isOpenChopp = ref(false);
     const isOpenExpense = ref(false);
     const isOpenProducts = ref(false);
+    const isOpenProductsOnline = ref(false);
 
     const modalForm = shallowRef(resolveComponent('ReportsReportForCustomer'));
     const modalFormUser = shallowRef(resolveComponent('ReportsReportForUser'));
     const modalFormChopp = shallowRef(resolveComponent('ReportsChoppReport'));
     const modalFormExpense = shallowRef(resolveComponent('ReportsExpensesReport'));
     const modalFormProduct = shallowRef(resolveComponent('ReportsProductReport'));
+    const modalFormProductOnline = shallowRef(resolveComponent('ReportsProductOnlineReport'));
 
     const toggleModal = () => isOpen.value = !isOpen.value;
     const toggleModalUser = () => isOpenUser.value = !isOpenUser.value;
     const toggleModalChopp = () => isOpenChopp.value = !isOpenChopp.value;
     const toggleModalExpense = () => isOpenExpense.value = !isOpenExpense.value;
     const toggleModalProduct = () => isOpenProducts.value = !isOpenProducts.value;
+    const toggleModalProductOnline = () => isOpenProductsOnline.value = !isOpenProductsOnline.value;
 
     const reportSent = (success = true) => {
         if(success){

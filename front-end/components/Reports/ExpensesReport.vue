@@ -39,9 +39,9 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th colspan="3" class="text-center h5 fw-bold bg-light">
-                                        <p>Ganhos e gastos no período de {{ formatDate(new Date(reportStart)) }} - {{ formatDate(new Date(reportEnd)) }}</p>
-                                        <p>Saldo anterior a data {{ formatDate(new Date(reportStart)) }}: R${{ unparseMoney(Number((dataExpense.revenue).toFixed(2))) }}</p>
+                                    <th colspan="4" class="text-center h5 bg-light">
+                                        <p class="fw-bold mb-5">Ganhos e gastos no período de {{ formatDate(new Date(reportStart)) }} - {{ formatDate(new Date(reportEnd)) }}</p>
+                                        <p>Saldo anterior a data {{ formatDate(new Date(reportStart)) }}: <span class="fw-bold">R${{ unparseMoney(Number((dataExpense.revenue).toFixed(2))) }}</span></p>
                                     </th>
                                 </tr>
                                 <tr>

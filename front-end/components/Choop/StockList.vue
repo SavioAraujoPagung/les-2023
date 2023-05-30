@@ -49,7 +49,7 @@ import { useProductStore } from '~~/stores/ProductStore';
 
     const { $swal } = useNuxtApp()
 
-    const { destroy, getAll, getById } = useProductStore();
+    const { destroy, getAll, getById, resetEntity } = useProductStore();
     const { entities, loading } = storeToRefs(useProductStore());
 
     const cancelChange = () => open.value = false;
@@ -64,6 +64,7 @@ import { useProductStore } from '~~/stores/ProductStore';
             showConfirmButton: false,
             timer: 3000
         });
+        resetEntity();
         await getAll(1);
     }
 

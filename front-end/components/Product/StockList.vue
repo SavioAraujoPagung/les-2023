@@ -3,8 +3,8 @@
         <header class="d-flex align-items-center justify-content-between mb-5">
             <h1 class="text-primary fw-bold">Estoque</h1>
             <div class="d-flex align-items-center gap-2">
-                <a href="javascript:;" class="btn btn-danger text-white" @click="showForm(false)"><i class="bi bi-border-all"></i>Remover Choops</a>
-                <a href="javascript:;" class="btn btn-primary text-white" @click="showForm(true)"><i class="bi bi-border-all"></i>Adicionar Choops</a>
+                <a href="javascript:;" class="btn btn-danger text-white" @click="showForm(false)"><i class="bi bi-border-all"></i>Remover produtos</a>
+                <a href="javascript:;" class="btn btn-primary text-white" @click="showForm(true)"><i class="bi bi-border-all"></i>Adicionar produtos</a>
             </div>
         </header>
         
@@ -49,7 +49,7 @@ import { useProductStore } from '~~/stores/ProductStore';
 
     const { $swal } = useNuxtApp()
 
-    const { destroy, getAll, getById } = useProductStore();
+    const { destroy, getAll, getById, resetEntity } = useProductStore();
     const { entities, loading } = storeToRefs(useProductStore());
 
     const cancelChange = () => open.value = false;
@@ -64,6 +64,7 @@ import { useProductStore } from '~~/stores/ProductStore';
             showConfirmButton: false,
             timer: 3000
         });
+        resetEntity();
         await getAll(3);
     }
 

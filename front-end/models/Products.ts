@@ -16,6 +16,8 @@ export class Product {
 
     saleCost: number;
 
+    minQtd: number;
+
     qtd: number;
 
     type: ProductType;
@@ -25,6 +27,7 @@ export class Product {
         this.name = "";
         this.path = "/products/";
         this.priceCost = 0.0;
+        this.minQtd = 0;
         this.saleCost = 0.0;
         this.qtd = 0.0;
         this.type = 1;
@@ -40,11 +43,14 @@ export class ProductEdit {
 
     saleCost: number;
 
+    minQtd: number;
+
     type: ProductType;
 
     constructor(){
         this.name = "";
         this.priceCost = 0.0;
+        this.minQtd = 0;
         this.saleCost = 0.0;
         this.type = 1;
     }

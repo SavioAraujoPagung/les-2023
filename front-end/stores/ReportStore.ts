@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import Swal from 'sweetalert2';
 import api from '~/services/api'
+import { Product } from '~~/models/Products';
 import { ChoppReport, ExpenseProfitReport, ProductsBalanceReport, ReportForCostumer, ReportForUser } from '~~/models/Report';
 
 export const useReportStore = defineStore('report', () => {
@@ -11,6 +12,7 @@ export const useReportStore = defineStore('report', () => {
     const dataChopp = ref(new Array<ChoppReport>());
     const dataProducts = ref(new Array<ProductsBalanceReport>());
     const dataExpense = ref(new ExpenseProfitReport());
+    const dataProductsOnline = ref(new Array<Product>());
 
     const getReportForCustomers = async (start:string, end:string) => {
         await api.get(path + `chopp/?start=${start}&end=${end}`).then((response) => {
@@ -91,6 +93,22 @@ export const useReportStore = defineStore('report', () => {
             success.value = false;
         });
     }
+
+    const getReportForProductsOnline = async () => {
+        await api.get(path + `products-online`).then((response) => {
+            dataProductsOnline.value = response.data;
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: error.response.data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            success.value = false;
+        });
+    }
     
     const sendReportForCustomers = async (start:string, end:string) => {
         await api.get(path + `?start=${start}&end=${end}&user=1`).then((response) => {
@@ -122,9 +140,11 @@ export const useReportStore = defineStore('report', () => {
         sendReportForCustomers,
         getReportForExpense,
         getReportForUsers,
+        getReportForProductsOnline,
         success,
         dataChopp,
         dataProducts,
+        dataProductsOnline,
         dataExpense,
         dataUser,
         data

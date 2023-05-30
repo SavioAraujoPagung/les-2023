@@ -10,17 +10,24 @@
                 
                 <div class="row">
                     
-                    <div class="col-sm-12  mb-3">
+                    <div class="col-sm-8  mb-3">
                         <div class="form-floating">
                             <input type="text" name="nome" id="nome" class="form-control" v-model="entity.name" placeholder="nome" required>
                             <label for="nome" class="form-label">Nome</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 mb-3">
+                        <div class="form-floating">
+                            <input type="text" name="qtdMin" id="qtdMin" class="form-control" v-model="entity.minQtd" placeholder="quantidade" required>
+                            <label for="qtdMin" class="form-label">Quantidade mínima</label>
                         </div>
                     </div>
                     
                     <div class="col-sm-6 mb-3">
                         <label for="cost" class="form-label">Valor de compra</label>
                         <div class="input-group">
-                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <span class="input-group-text">R$</span>
                             <input type="text" name="cost" id="cost" class="form-control money" v-model="(entity.priceCost)" placeholder="Valor de compra" required>
                         </div>
                     </div>
@@ -28,7 +35,7 @@
                     <div class="col-sm-6 mb-3">
                         <label for="sale" class="form-label">Valor de venda</label>
                         <div class="input-group">
-                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <span class="input-group-text">R$</span>
                             <input type="text" name="sale" id="sale" class="form-control money" v-model="entity.saleCost" placeholder="Valor de venda" required>
                         </div>
                     </div>
