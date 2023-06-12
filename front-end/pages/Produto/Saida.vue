@@ -8,7 +8,7 @@
 
             <div class="d-flex flex-column align-items-center mb-5">
                 <div class="form-floating col-sm-6">
-                    <input type="text" class="form-control money" id="peso" name="peso" placeholder="peso" v-model="peso">
+                    <input type="text" class="form-control" id="peso" name="peso" placeholder="peso" v-model="peso">
                     <label for="peso">Peso(Kg)</label>
                 </div>
             </div>
@@ -34,6 +34,7 @@
     
     import { storeToRefs } from 'pinia';
     import { useProductStore } from '~~/stores/ProductStore';
+    import api from '~/services/api'
     
     const peso = ref(0.0);
 
@@ -77,19 +78,30 @@
         makeConsumption(
             (<HTMLInputElement> document.getElementById('rfid'))?.value,
             '1',
-            parseMoney(peso.value)
+            peso.value
         );
         e.target.reset();
     }
 
-    onMounted(() => {
-
-        const inputs = document.querySelectorAll('.money');
-
-        inputs.forEach((input) => {
-            input.addEventListener('keyup', () =>  peso.value = maskMoney(input) );
+    const getWeight = async () => {
+        await api.get('http://192.168.110.121/peso').then((response) => {
+            peso.value = Number(response.data.lastWeight);
+        })
+        .catch((error) => {
+            $swal.fire({
+                icon: 'error',
+                title: 'Não foi possível obter o peso',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
         });
+    }
+
+    onMounted(() => {
         getAll(1);
+        setInterval(() => getWeight(), 2000);
     });
 
 </script>

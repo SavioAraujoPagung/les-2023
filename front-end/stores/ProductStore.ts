@@ -32,8 +32,44 @@ export const useProductStore = defineStore('choop', () => {
     }
 
     const makeConsumption = async (customerRfid:string, productRfid:string, qtd:number) => {
+        await getById(productRfid).then(async (response) => {
+            consumption.product = entity;
+        }).catch(async (err) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Produto não encontrado!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            success.value = false;
+        });
+
+        if(!success.value) return false;
+
+        await api.get('/check-in/' + customerRfid).then(async (response) => {
+            consumption.checkin = response.data;
+        }).catch(async (err) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'CheckIn não encontrado!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            success.value = false;
+        });
+
+        if(!success.value) return false;
+
+        consumption.qtd = qtd;
+        
+        consumption.price = qtd * consumption.product.saleCost;
+
         await Swal.fire({
-            title: 'Tem certeza que deseja realizar este pedido?',
+            title: 'O total do pedido é: R$ ' + (consumption.product.saleCost * qtd).toFixed(2) + '<br>Tem certeza que deseja realizar este pedido?',
             text: "Esta ação não pode ser revertida e a cobrança será gerada automaticamente ao seu cartão!",
             icon: 'warning',
             showCancelButton: true,
@@ -41,42 +77,6 @@ export const useProductStore = defineStore('choop', () => {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sim, realizar pedido!'
         }).then(async (result) => {
-            await getById(productRfid).then(async (response) => {
-                consumption.product = entity;
-            }).catch(async (err) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Produto não encontrado!',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-                success.value = false;
-            });
-
-            if(!success.value) return false;
-
-            await api.get('/check-in/' + customerRfid).then(async (response) => {
-                consumption.checkin = response.data;
-            }).catch(async (err) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'CheckIn não encontrado!',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-                success.value = false;
-            });
-
-            if(!success.value) return false;
-
-            consumption.qtd = qtd;
-
-            consumption.price = qtd * consumption.product.saleCost;
-
             if (result.isConfirmed) {
                 await api.post(consumption.path, consumption).then(async (response) => {
                     Swal.fire({
@@ -101,6 +101,7 @@ export const useProductStore = defineStore('choop', () => {
                 });
             }
         });
+
         success.value = true;
     }
 
