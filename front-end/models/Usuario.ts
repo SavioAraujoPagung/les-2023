@@ -26,7 +26,7 @@ export const acceptedPages = {
     },
     4: (page:string) => {
         var page = page.toLowerCase();
-        if(page === 'produto') return true;
+        if(page === 'produto' || page === 'choop' || page === 'solicitacaocozinha') return true;
         return false;
     },
     5: (page:string) => {

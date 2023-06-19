@@ -10,6 +10,10 @@ export const useUserStore = defineStore('user', () => {
     const errors = ref("");
     const loading = ref(true);
 
+    const getFunction = () => {
+        return localStorage.getItem('session');
+    }
+
     const getAll = async () => {
         loading.value = true;
         await api.get(path).then((response) => {
@@ -88,6 +92,6 @@ export const useUserStore = defineStore('user', () => {
         await api.put(path + id, object);
     }
   
-    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, loading, update };
+    return { entity, entities, errors, getAll, getById, destroy, resetEntity, save, loading, update, getFunction };
   })
   

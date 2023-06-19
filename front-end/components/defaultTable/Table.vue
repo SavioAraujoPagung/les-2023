@@ -1,7 +1,9 @@
 <template>
-    <table class="table col-sm-12 text-dark">
-        <slot></slot>
-    </table>
+    <div class="table-responsive">
+        <table class="table align-middle table-row-dashed">
+            <slot></slot>
+        </table>
+    </div>
 </template>
 <style>
     td, th{

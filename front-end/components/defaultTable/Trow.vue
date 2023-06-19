@@ -1,21 +1,19 @@
 <template>
     <tr>
         <slot></slot>
-        <td class="align-middle">
-            <DropdownActionDropdown>
-                <DropdownItem @click="emit('delete')">
-                    <i class="icon icon-16">
+        <td>
+            <div class="d-flex align-items-center justify-content-center gap-3">
+                <a href="javascript:;" @click="emit('edit')">
+                    <i class="icon icon-16 text-primary">
+                        <IconsEdit/>
+                    </i>
+                </a>
+                <a href="javascript:;" @click="emit('delete')">
+                    <i class="icon icon-16 text-danger">
                         <IconsTrash/>
                     </i>
-                    Excluir
-                </DropdownItem>
-                <DropdownItem @click="emit('edit')">
-                    <i class="icon icon-16">
-                        <IconsEdit />
-                    </i>
-                    Editar
-                </DropdownItem>
-            </DropdownActionDropdown>
+                </a>
+            </div>
         </td>
     </tr>
 </template>

@@ -1,24 +1,25 @@
 <template>
-  <nav class="navbar navbar-ligh bg-gradient-primary">
-    <div class="container-fluid">
-      <NuxtLink @click=toggle class="navbar-brand p-4" to="/">
-        <img src="@/assets/img/brand.webp" alt="logo" class="img-fluid">
-      </NuxtLink>
-      <button class="navbar-toggler text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
-        aria-controls="sidebar">
-        <i class="icon icon-32"><IconsMenu/></i>
-      </button>
-      <div class="offcanvas offcanvas-end bg-gradient-primary" tabindex="-1" id="sidebar"
+  <nav class="py-4 border-bottom border-light border-opacity-25 mb-5">
+    <div class="container-xxl d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <a class="navbar-brand fw-bold text-white fs-1" href="#">LES GROUP</a>
+        <a class="nav-link bg-light bg-opacity-25 rounded-2 px-3 py-2" aria-current="page" href="#" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+  <div class="offcanvas offcanvas-start bg-light" tabindex="-1" id="sidebar"
         aria-labelledby="sidebarLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title text-dark fw-bold h3" id="sidebarLabel">Admnistrador</h5>
-          <button type="button" ref="closeBtn" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <h5 class="offcanvas-title text-primary fw-bold h3" id="sidebarLabel">LES GROUP</h5>
+          <button type="button" ref="closeBtn" class="btn-close btn-close-dark" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end">
             
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/usuarios">
+            <li class="nav-item" v-if='userFunc == 1'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/usuarios">
                 <i class="icon icon-16">
                   <IconsPersonFill/>
                 </i>
@@ -26,8 +27,8 @@
               </NuxtLink>
             </li>
 
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/clientes">
+            <li class="nav-item" v-if='userFunc == 1 || userFunc == 2 || userFunc == 3'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/clientes">
                 <i class="icon icon-16">
                   <IconsCustomer/>
                 </i>
@@ -35,8 +36,8 @@
               </NuxtLink>
             </li>
 
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/produto">
+            <li class="nav-item" v-if='userFunc == 1 || userFunc == 4'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/produto">
                 <i class="icon icon-16">
                   <IconsBag/>
                 </i>
@@ -44,8 +45,8 @@
               </NuxtLink>
             </li>
             
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/choop">
+            <li class="nav-item" v-if='userFunc == 1 || userFunc == 4'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/choop">
                 <i class="icon icon-16">
                   <IconsBeer/>
                 </i>
@@ -54,7 +55,7 @@
             </li>
             
             <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/choop/saida">
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/choop/saida">
                 <i class="icon icon-16">
                   <IconsBeer/>
                 </i>
@@ -62,8 +63,8 @@
               </NuxtLink>
             </li>
             
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/selfservice">
+            <li class="nav-item" v-if='userFunc == 1 || userFunc == 7 || userFunc == 8'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/selfservice">
                 <i class="icon icon-16">
                   <IconsDish/>
                 </i>
@@ -72,7 +73,7 @@
             </li>
 
             <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/produto/saida">
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/produto/saida">
                 <i class="icon icon-16">
                   <IconsDish/>
                 </i>
@@ -80,8 +81,8 @@
               </NuxtLink>
             </li>
             
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/solicitacaocozinha">
+            <li class="nav-item" v-if='userFunc == 1 || userFunc == 4 || userFunc == 7'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/solicitacaocozinha">
                 <i class="icon icon-16">
                   <IconsKitchen/>
                 </i>
@@ -89,8 +90,8 @@
               </NuxtLink>
             </li>
             
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/caixa">
+            <li class="nav-item" v-if='userFunc == 1 || userFunc == 5'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/caixa">
                 <i class="icon icon-16">
                   <IconsWallet/>
                 </i>
@@ -98,8 +99,8 @@
               </NuxtLink>
             </li>
             
-            <li class="nav-item">
-              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" to="/relatorio">
+            <li class="nav-item" v-if='userFunc == 1'>
+              <NuxtLink @click=toggle class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" to="/relatorio">
                 <i class="icon icon-16">
                   <icons-file-graph/>
                 </i>
@@ -107,8 +108,8 @@
               </NuxtLink>
             </li>
             
-            <li class="nav-item">
-              <a @click="toggleModal" class="nav-link d-flex align-items-center gap-2 text-white" aria-current="page" href="javascript:;">
+            <li class="nav-item" v-if='userFunc == 1'>
+              <a @click="toggleModal" class="nav-link d-flex align-items-center gap-2 text-hover-primary" aria-current="page" href="javascript:;">
                 <i class="icon icon-16">
                   <IconsDollar/>
                 </i>
@@ -117,7 +118,7 @@
             </li>
 
             <li class="nav-item">
-              <a href="javascript:;" @click="logout" class="nav-link d-flex align-items-center gap-2 text-white">
+              <a href="javascript:;" @click="logout" class="nav-link d-flex align-items-center gap-2 text-hover-primary">
                 <i class="icon icon-16"><IconsBoxArrowLeft/></i>
                 Sair
               </a>
@@ -125,16 +126,21 @@
           </ul>
         </div>
       </div>
-    </div>
-  </nav>
   <component :is="openSelfService ? modalForm : 'div'" @close="toggleModal" @saved="toggleModal" />
 </template>
 
 <script setup>
+import { onMounted } from "nuxt/dist/app/compat/capi";
+import { useUserStore } from "~~/stores/UserStore";
+
 
   const openSelfService = ref(false);
   const closeBtn = ref(null);
   const isOpen = ref(false);
+
+  const userFunc = ref(0);
+
+  const { getFunction } = useUserStore();
 
   const modalForm = shallowRef(resolveComponent('SelfServiceChangeSelfServiceValue'));
 
@@ -149,6 +155,8 @@
     navigateTo('login');
     localStorage.removeItem("isLogged");
   }
+
+  onMounted(() => userFunc.value = localStorage.getItem("session"));
 
 
 </script>

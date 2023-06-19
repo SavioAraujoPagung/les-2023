@@ -1,10 +1,20 @@
+$font-family-base: "Poppins", Sans-serif;
 
-$primary: #00c57e;
-$secondary: #005235;
-$dark: #003723;
+$primary: #009EF7; 
+$secondary: #F1FAFF;
+$success: #2e9f3d;
+$light: #F9F9F9;
+$dark: #181C32;
+$black: #222; 
+$body-color: #333; 
 
-$btn-padding-x: 2rem;
-$btn-padding-y: 1rem;
+$btn-padding-x: 1.5rem;
+$btn-padding-y: 0.75rem;
+
+$table-cell-padding-y: 1.25rem !default;
+$table-cell-padding-x: .75rem !default;
+
+$prefix: "lev-";
 
 @import "/node_modules/bootstrap/scss/bootstrap";
 @import url(font-poppins.min.css);
@@ -12,10 +22,6 @@ $btn-padding-y: 1rem;
 // $navbar-dark-toggler-border-color:  rgba($white, .1) !default;
 
 html,body,#__nuxt,main{ height: 100% !important;width: 100%; }
-
-body{
-    font-family: "Poppins", sans-serif;
-}
 
 .bg-gradient-primary{
     background: rgb(0,197,126);
@@ -97,4 +103,123 @@ html body.swal2-height-auto{ height: 100% !important }
     #btnControlPrintAndSend{
         display: none !important;
     }
+}
+
+body{ background: url(../img/header-bg.jpg) no-repeat center top; background-color: var(--lev-light); background-size: 100% 350px;}
+
+@media (max-width: 991.98px){
+    body {
+        background-size: 100% 200px;
+    }
+}
+
+.nav-link{ color: #fff; }
+
+.profile-picture img{
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+
+.btn.btn-custom {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn.btn-color-white {
+    color: var(--lev-white);
+}
+
+.btn.btn-light-primary {
+    color: var(--lev-primary);
+    border-color: rgba(var(--lev-primary-rgb),.1);
+    background-color: rgba(var(--lev-primary-rgb),.1);
+}
+
+.form-control.form-control-solid {
+    background-color: var(--lev-gray-100);
+    border-color: var(--lev-gray-100);
+    color: var(--lev-gray-700);
+    transition: color 0.2s ease;
+}
+
+.form-control{
+    padding: 0.775rem 1rem !important;
+}
+
+.form-control.form-control-solid::placeholder{
+    color: var(--lev-gray-500);
+}
+
+.form-group:has(> .form-control-search){
+    position: relative;
+}
+
+.form-control-search{
+    padding-left: 3.25rem !important;
+    color: var(--lev-gray-500) !important;
+}
+
+.form-group:has(> .form-control-search)::after{
+    content: "\f002";
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    font-weight: 900;
+    top: 50%;
+    left: 1.25rem;
+    color: var(--lev-gray-500);
+    transform: translateY(-50%);
+}
+
+.btn-check:checked + .btn.btn-light-primary, .btn-check:active + .btn.btn-light-primary, .btn.btn-light-primary:focus:not(.btn-active), .btn.btn-light-primary:hover:not(.btn-active), .btn.btn-light-primary:active:not(.btn-active), .btn.btn-light-primary.active, .btn.btn-light-primary.show, .show > .btn.btn-light-primary {
+    color: var(--lev-white);
+    border-color: var(--lev-primary);
+    background-color: var(--lev-primary) !important;
+}
+
+.table:not(.table-bordered).table-row-dashed tr {
+    border-bottom-width: 1px;
+    border-bottom-style: dashed;
+    border-bottom-color: var(--lev-gray-200);
+}
+
+.table td, .table th{ border-bottom: none !important; white-space: nowrap; }
+
+.table th{ color: var(--lev-gray-500); font-weight: 500;}
+
+.table{ font-size:14px }
+
+.table tbody td{ color: var(--lev-gray-600); }
+
+.text-hover-primary:hover {
+    transition: color 0.2s ease;
+    color: var(--lev-primary) !important;
+}
+
+.text-hover-primary{
+    transition: color 0.2s ease;
+    color: var(--lev-gray-800) !important;
+}
+
+.btn-check:checked + .btn.btn-active-light-primary, .btn-check:active + .btn.btn-active-light-primary, .btn.btn-active-light-primary:focus:not(.btn-active), .btn.btn-active-light-primary:hover:not(.btn-active), .btn.btn-active-light-primary:active:not(.btn-active), .btn.btn-active-light-primary.active, .btn.btn-active-light-primary.show, .show > .btn.btn-active-light-primary {
+    color: var(--lev-primary);
+    border-color:rgba(var(--lev-primary-rgb),.1);
+    background-color: rgba(var(--lev-primary-rgb),.1) !important;
+}
+
+.page-link{
+    padding: .25rem .75rem;
+    border-radius: .25rem;
+    transition: all .2s ease-in-out;
+}
+
+.page-link.disabled{
+    color: var(--lev-gray-500);
+    cursor: default;
+    pointer-events: none;
+}
+
+.page-link.active, .page-link:hover, .page-link:active{
+    background-color: var(--lev-primary);
+    color: var(--lev-white);
+    transition: all .2s ease-in-out;
 }
