@@ -3,8 +3,8 @@
     <div class="container-xxl d-flex align-items-center justify-content-between">
       <div class="d-flex align-items-center gap-3">
         <a class="navbar-brand fw-bold text-white fs-1" href="#">LES GROUP</a>
-        <a class="nav-link bg-light bg-opacity-25 rounded-2 px-3 py-2" aria-current="page" href="#" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
-          <i class="fa-solid fa-bars-staggered"></i>
+        <a class="nav-link bg-light text-white bg-opacity-25 rounded-2 px-3 py-2" aria-current="page" href="#" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+          Menu
         </a>
       </div>
     </div>
@@ -130,7 +130,6 @@
 </template>
 
 <script setup>
-import { onMounted } from "nuxt/dist/app/compat/capi";
 import { useUserStore } from "~~/stores/UserStore";
 
 
@@ -156,7 +155,7 @@ import { useUserStore } from "~~/stores/UserStore";
     localStorage.removeItem("isLogged");
   }
 
-  onMounted(() => userFunc.value = localStorage.getItem("session"));
+  onMounted(() => userFunc.value = getFunction());
 
 
 </script>

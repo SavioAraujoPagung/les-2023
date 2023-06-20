@@ -31,8 +31,8 @@
                         </CheckinTRow>
                     </tbody>
                 </DefaultTable>
-                <div v-else>
-                    <h5 class="text-dak">Nenhum registro encontrado</h5>
+                <div class="alert alert-info" v-else>
+                    <h5 class="fw-normal mb-0">Nenhum registro encontrado</h5>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-center p-5" v-else>
