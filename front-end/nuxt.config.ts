@@ -10,6 +10,6 @@ export default defineNuxtConfig({
         }
     },
 
-    css: ["~/assets/styles/style.scss", "sweetalert2/dist/sweetalert2.min.css" ], // add
+    css: ["~/assets/styles/style.scss", "sweetalert2/dist/sweetalert2.min.css", '@fortawesome/fontawesome-svg-core/styles.css' ], // add
 
 })
