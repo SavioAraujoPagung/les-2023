@@ -10,6 +10,10 @@ export default defineNuxtConfig({
         }
     },
 
+    plugins: [
+        { src: '~/plugins/font-awesome.ts' },
+    ],
+
     css: ["~/assets/styles/style.scss", "sweetalert2/dist/sweetalert2.min.css", '@fortawesome/fontawesome-svg-core/styles.css' ], // add
 
 })

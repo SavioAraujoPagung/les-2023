@@ -1,23 +1,38 @@
 <template>
-    <main class="d-flex align-items-center justify-content-center bg-gradient-primary">
+    <main id="loginPage" class="bg-gradient-animate p-0 min-vh-100 d-flex align-items-center">
         <Head><Title>{{ title }}</Title></Head>
-        <div class="d-flex align-items-center justify-content-center h-100 w-100">
+        <div class="container p-0">
 
-            <form class="bg-gradient-primary h-100 col-sm-6 rounded-4 p-5 d-flex align-items-center flex-column justify-content-center">
-                <h1 class="fw-bold text-white display-6">Faça seu login</h1>
-                <div class="mt-5 col-sm-10">
-                    <div class="mb-3">
-                        <label for="usuario" class="form-label text-white">E-mail</label>
-                        <input type="text" name="usuario" id="usuario" class="form-control p-3" placeholder="Ex: usuarioteste" v-model="user.email">
+            <div class="rounded-3 overflow-hidden" id="loginContent" >
+                <div class="bg-gradient-login ps-0 ps-xl-5">
+                    <div class="p-5 h-100 col-xl-6">
+                        <form v-on:submit.prevent="submitLogin(user)">
+
+                            <div class="d-flex align-items-center my-md-5 pb-5">
+                                <h2 class="text-white display-5 fw-bold">LES GROUP</h2>
+                            </div>
+                            <h1 class="h1 text-primary fw-bold lh-1">BEM VINDO DE VOLTA<span class=" text-white">!</span></h1>
+                            <p class="text-white small mb-3 mb-md-5">Bem vindo de volta, por favor entre com seus dados.</p>
+
+                            <div class="">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="usuario" id="usuario" class="form-control" placeholder="seu dado aqui" v-model="user.email" required>
+                                    <label for="login" class="form-label">E-mail*</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <input type="password" name="senha" id="senha" class="form-control" placeholder="seu dado aqui" data-type="togglePassword" v-model="user.password" required>
+                                    <label for="senha" class="form-label">Senha*</label>
+                                </div>
+                                
+                                <div class="d-flex flex-wrap-reverse flex-lg-nowrap align-items-center gap-3 pb-5">
+                                    <button type="submit" class="m-0 mt-3 btn btn-grad text-white shadow-none text-dark flex-fill">Entrar</button>
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
-                    <div>
-                        <label for="senha" class="form-label text-white">Senha</label>
-                        <input type="password" name="senha" id="senha" class="form-control p-3" placeholder="Ex: senhateste" v-model="user.password">
-                    </div>
-                    <button type="button" class="btn btn-dark text-white fw-bold mt-5 col-sm-12" @click="submitLogin(user)">Entrar</button>
                 </div>
-            </form>
-
+            </div>
         </div>
     </main>
 </template>
@@ -50,6 +65,7 @@ export default defineComponent({
                     showConfirmButton: false,
                     timer: 1500
                 });
+
             }
             else{
                 $swal.fire({
@@ -71,3 +87,7 @@ export default defineComponent({
     },
 })
 </script>
+
+<style scoped>
+ #loginContent{ background-image:url(https://www.flexpoint.com.br/shared/gg/img/bg6.jpg) }
+</style>

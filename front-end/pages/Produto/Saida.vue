@@ -36,6 +36,7 @@
     import { useProductStore } from '~~/stores/ProductStore';
     import api from '~/services/api'
     
+    let interval:NodeJS.Timeout;
     const peso = ref(0.0);
 
     useHead({
@@ -83,25 +84,17 @@
         e.target.reset();
     }
 
-    const getWeight = async () => {
-        await api.get('http://192.168.110.121/peso').then((response) => {
+    const getWeight = () => {
+        api.get('http://192.168.110.121/peso').then((response) => {
             peso.value = Number(response.data.lastWeight);
-        })
-        .catch((error) => {
-            $swal.fire({
-                icon: 'error',
-                title: 'Não foi possível obter o peso',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
         });
     }
 
     onMounted(() => {
         getAll(1);
-        setInterval(() => getWeight(), 2000);
+        interval = setInterval(() => getWeight(), 2000);
     });
+
+    onUnmounted(() => clearInterval(interval))
 
 </script>

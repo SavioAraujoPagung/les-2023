@@ -113,8 +113,6 @@ body{ background: url(../img/header-bg.jpg) no-repeat center top; background-col
     }
 }
 
-.nav-link{ color: #fff; }
-
 .profile-picture img{
     width: 48px;
     height: 48px;
@@ -140,10 +138,6 @@ body{ background: url(../img/header-bg.jpg) no-repeat center top; background-col
     border-color: var(--lev-gray-100);
     color: var(--lev-gray-700);
     transition: color 0.2s ease;
-}
-
-.form-control{
-    padding: 0.775rem 1rem !important;
 }
 
 .form-control.form-control-solid::placeholder{
@@ -223,3 +217,104 @@ body{ background: url(../img/header-bg.jpg) no-repeat center top; background-col
     color: var(--lev-white);
     transition: all .2s ease-in-out;
 }
+
+.text-gradient{
+    color: var(--lev-secondary); background-image: -webkit-linear-gradient(45deg, var(--lev-secondary) 0%, #fff 98%); background-clip: text; -webkit-background-clip: text; text-fill-color: transparent; -webkit-text-fill-color: transparent;
+  }
+  
+           
+  .btn-grad {
+    background-image: linear-gradient(
+      to right,
+      $primary 0%,
+      #79ceff 51%,
+      $primary 100%
+    );
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+  }
+  
+  .btn-grad:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .bg-gradient-primary{
+    background-image: linear-gradient(
+      45deg,
+      hsl(216deg 18% 16%) 0%,
+      hsl(199deg 59% 26%) 50%,
+      hsl(183deg 100% 35%) 100%
+    );
+  }
+  
+  .bg-gradient-primary.bg-opacity-50{
+    background-image: linear-gradient( 45deg, rgba(33, 39, 48, 0.50) 0%, rgba(27, 81, 105, 0.50) 50%, rgba(0, 170, 179, 0.50) 100% );
+  }
+
+  .bg-gradient-animate {
+    background-image: linear-gradient(
+    70deg,
+    #002235 0%,
+    #00324f 10%,
+    #014369 20%,
+    #005586 30%,
+    #006ba9 40%,
+    #009cf6 50%,
+    #2aadfa 60%,
+    #2aadfa 70%,
+    #4dbeff 80%,
+    #8dd5ff 90%,
+    #d9f1ff 100%,
+    hsl(183deg 100% 87%) 90%,
+  );
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+  
+    50% {
+      background-position: 100% 50%;
+    }
+  
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  #loginContent{
+    box-shadow: 5px 5px 100px #4c4c4c75, -5px -5px 100px #3333337d;
+    border: 2px solid var(--lev-primary);
+  }
+  
+  .bg-gradient-login{
+    background: rgba(34, 40, 49, 0.502);
+    background-image: linear-gradient(to right top, #222831, #262c35, #2a3039, #2f343d, #333841, #38424e, #3c4c5b, rgba(59, 88, 105, 0.75), rgba(62, 112, 140, 0.75), rgba(44, 129, 179, 0.75), rgba(28, 145, 212, 0.75), rgb(0, 158, 247, .75));
+    backdrop-filter: grayscale(1);
+  }
+  
+  .bg-gradient-secondary{
+    background: rgb(0,173,181);
+  background: -moz-radial-gradient(circle, rgba(0,173,181,1) 0%, rgba(7,144,152,1) 17%, rgba(14,117,125,1) 35%, rgba(24,77,86,1) 65%, rgba(34,40,49,1) 100%);
+  background: -webkit-radial-gradient(circle, rgba(0,173,181,1) 0%, rgba(7,144,152,1) 17%, rgba(14,117,125,1) 35%, rgba(24,77,86,1) 65%, rgba(34,40,49,1) 100%);
+  background: radial-gradient(circle, rgba(0,173,181,1) 0%, rgba(7,144,152,1) 17%, rgba(14,117,125,1) 35%, rgba(24,77,86,1) 65%, rgba(34,40,49,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00adb5",endColorstr="#222831",GradientType=1);
+  }
+  
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
