@@ -1,14 +1,14 @@
 <template>
     <div>
         <Head><Title>{{ title }}</Title></Head>
-        <header class="d-flex align-items-center justify-content-between mb-5">
-            <h1 class="text-primary fw-bold">Clientes</h1>
-            <div class="d-flex align-items-center justify-content-between gap-3">
+        <header class="d-flex flex-wrap align-items-center justify-content-between mb-5">
+            <h1 class="h3 text-primary">Clientes</h1>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                 <div class="d-flex align-items-center gap-2">
-                    <a href="javascript:;" aria-label="Realizar checkout" class="btn btn-danger text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Realizar Check-Out</a>
-                    <a href="javascript:;" aria-label="Realizar checkin" class="btn btn-dark text-white" @click="doCheckin"><i class="bi bi-border-all"></i>Realizar Check-In</a>
+                    <a href="javascript:;" aria-label="Realizar checkout" class="btn btn-dark text-white" @click="doCheckout"><i class="bi bi-border-all"></i>Check-Out</a>
+                    <a href="javascript:;" aria-label="Realizar checkin" class="btn btn-light-primary" @click="doCheckin"><i class="bi bi-border-all"></i>Check-In</a>
                 </div>
-                <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar Cliente</a>
+                <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
             </div>
         </header>
         

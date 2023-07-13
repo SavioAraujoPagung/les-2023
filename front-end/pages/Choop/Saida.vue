@@ -11,7 +11,7 @@
                         <div v-if="entities.length" class="d-flex align-items-center flex-wrap gap-3">
                             <div v-for="(choop, i) in entities" :key="i">
                                 <input type="radio" class="btn-check" name="choop" :id="'choop-'+choop.id" autocomplete="off" :value="choop.id" checked placeholder="choop">
-                                <label class="btn btn-outline-secondary" :for="'choop-'+choop.id">{{choop.name}}</label>
+                                <label class="btn btn-outline-primary" :for="'choop-'+choop.id">{{choop.name}}</label>
                             </div>
                         </div>
                         

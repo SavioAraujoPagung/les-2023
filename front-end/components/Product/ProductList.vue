@@ -2,8 +2,8 @@
     <div class="p-5">
         <header class="d-flex align-items-center justify-content-between mb-5">
             <h1 class="text-primary fw-bold">Produtos</h1>
-            <div class="d-flex align-items-center gap-2">
-                <a href="javascript:;" class="btn btn-dark" @click="toggleModalBarcode">Gerar códigos de barras</a>
+            <div class="d-flex align-items-center flex-wrap gap-2">
+                <a href="javascript:;" class="btn btn-light-primary" @click="toggleModalBarcode">Gerar códigos de barras</a>
                 <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
             </div>
         </header>
