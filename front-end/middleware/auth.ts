@@ -23,4 +23,3 @@ export default defineNuxtRouteMiddleware((to, from) => {
         return { name: "login" }
     }
   })
-  

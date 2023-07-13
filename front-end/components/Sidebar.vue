@@ -2,7 +2,7 @@
   <nav class="py-4 border-bottom border-light border-opacity-25 mb-5">
     <div class="container-xxl d-flex align-items-center justify-content-between">
       <div class="d-flex align-items-center gap-3">
-        <a class="navbar-brand fw-bold text-white fs-1" href="#">LES GROUP</a>
+        <a class="text-decoration-none fw-bold text-white fs-1" href="#">LES GROUP</a>
         <a class="nav-link bg-light text-white bg-opacity-25 rounded-2 px-3 py-2" aria-current="page" href="#" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
           <i class="icon icon-16">
             <font-awesome-icon :icon="['fas', 'champagne-glasses']" />

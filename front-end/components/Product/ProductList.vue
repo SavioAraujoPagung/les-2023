@@ -2,7 +2,7 @@
     <div class="p-5">
         <header class="d-flex align-items-center justify-content-between mb-5">
             <h1 class="text-primary fw-bold">Produtos</h1>
-            <div class="d-flex align-items-center flex-wrap gap-2">
+            <div class="d-flex flex-wrap align-items-center gap-2">
                 <a href="javascript:;" class="btn btn-light-primary" @click="toggleModalBarcode">Gerar códigos de barras</a>
                 <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
             </div>
@@ -24,7 +24,7 @@
                 </tbody>
             </DefaultTable>
             <div class="alert alert-info" v-else>
-                <h5 class="fw-normal mb-0">Nenhum registro encontrado</h5>
+                <p class="fw-normal mb-0">Nenhum registro encontrado</p>
             </div>
         </div>
         

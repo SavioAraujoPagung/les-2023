@@ -3,7 +3,7 @@
         <Head><Title>{{ title }}</Title></Head>
         <header class="d-flex align-items-center justify-content-between mb-5">
             <h1 class="text-primary fw-bold">Usu&aacute;rios</h1>
-            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><i class="bi bi-border-all"></i>Adicionar</a>
+            <a href="javascript:;" class="btn btn-primary text-white" @click="showForm"><font-awesome-icon icon="plus" /> Adicionar</a>
         </header>
         
         <div v-if="!loading">
@@ -20,7 +20,7 @@
                 </tbody>
             </DefaultTable>
             <div class="alert alert-info" v-else>
-                <h5 class="fw-normal mb-0">Nenhum registro encontrado</h5>
+                <p class="fw-normal mb-0">Nenhum registro encontrado</p>
             </div>
         </div>
         
